@@ -1,0 +1,57 @@
+﻿@model List<kinetix.Models.Factura>
+
+<h2>Facturas</h2>
+
+<a href="/Factura/Create">
+    Nueva Factura
+</a>
+
+<br />
+<br />
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Pedido</th>
+        <th>Fecha</th>
+        <th>Total</th>
+        <th>Metodo Pago</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.IdFactura</td>
+
+            <td>@item.IdPedido</td>
+
+            <td>@item.Fecha</td>
+
+            <td>@item.Total</td>
+
+            <td>@item.MetodoPago</td>
+
+            <td>@item.Estado</td>
+
+            <td>
+
+                <a href="/Factura/Edit/@item.IdFactura">
+                    Editar
+                </a>
+
+                |
+
+                <a href="/Factura/Delete/@item.IdFactura">
+                    Eliminar
+                </a>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

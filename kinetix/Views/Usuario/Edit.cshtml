@@ -1,0 +1,40 @@
+﻿@model kinetix.Models.Usuario
+
+<h2>Editar Usuario</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.IdUsuario)
+
+    <div>
+        Nombre:
+        @Html.TextBoxFor(x => x.Nombre)
+    </div>
+
+    <br />
+
+    <div>
+        Correo:
+        @Html.TextBoxFor(x => x.Correo)
+    </div>
+
+    <br />
+
+    <div>
+        Telefono:
+        @Html.TextBoxFor(x => x.Telefono)
+    </div>
+
+    <br />
+
+    <div>
+        Password:
+        @Html.PasswordFor(x => x.Password)
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Actualizar
+    </button>
+}

@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-4">
+
+            <div class="card p-4 mt-5 shadow">
+
+                <h2 class="text-center">
+                    KINETIX
+                </h2>
+
+                <hr />
+
+                <form method="post">
+
+                    <div class="mb-3">
+
+                        <label>
+                            Correo
+                        </label>
+
+                        <input type="email"
+                               name="correo"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Contraseña
+                        </label>
+
+                        <input type="password"
+                               name="password"
+                               class="form-control" />
+
+                    </div>
+
+                    <button class="btn btn-dark w-100">
+
+                        Iniciar Sesión
+
+                    </button>
+
+                </form>
+
+                <br />
+
+                <a href="/Registro">
+                    ¿No tienes cuenta? Regístrate
+                </a>
+
+                <br />
+
+                <span style="color:red">
+
+                    @ViewBag.Error
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

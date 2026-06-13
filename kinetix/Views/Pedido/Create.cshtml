@@ -1,0 +1,51 @@
+﻿@model kinetix.Models.Pedido
+
+<h2>Nuevo Pedido</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        ID Usuario:
+        @Html.DropDownListFor(
+            x => x.IdUsuario,
+            (List<SelectListItem>)ViewBag.Usuarios
+        )
+    </div>
+
+    <br />
+
+    <div>
+        ID Conductor:
+        @Html.DropDownListFor(
+            x => x.IdConductor,
+            (List<SelectListItem>)ViewBag.Conductores
+        )
+    </div>
+
+    <br />
+
+    <div>
+        Origen:
+        @Html.TextBoxFor(x => x.Origen)
+    </div>
+
+    <br />
+
+    <div>
+        Destino:
+        @Html.TextBoxFor(x => x.Destino)
+    </div>
+
+    <br />
+
+    <div>
+        Valor:
+        @Html.TextBoxFor(x => x.Valor)
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Guardar Pedido
+    </button>
+}

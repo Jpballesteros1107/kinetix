@@ -1,0 +1,51 @@
+﻿@model List<kinetix.Models.Conductor>
+
+<h2>Conductores</h2>
+
+<a href="/Conductor/Create">
+    Nuevo Conductor
+</a>
+
+<br />
+<br />
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Licencia</th>
+        <th>Telefono</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.IdConductor</td>
+
+            <td>@item.Nombre</td>
+
+            <td>@item.Licencia</td>
+
+            <td>@item.Telefono</td>
+
+            <td>
+
+                <a href="/Conductor/Edit/@item.IdConductor">
+                    Editar
+                </a>
+
+                |
+
+                <a href="/Conductor/Delete/@item.IdConductor">
+                    Eliminar
+                </a>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,63 @@
+﻿@model List<kinetix.Models.Usuario>
+
+<h2>Usuarios</h2>
+
+<a href="/Usuario/Create">
+    Nuevo Usuario
+</a>
+
+<br />
+<br />
+
+@using (Html.BeginForm("Buscar", "Usuario"))
+{
+    <input type="text"
+           name="texto"
+           placeholder="Buscar usuario" />
+
+    <button type="submit">
+        Buscar
+    </button>
+}
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Telefono</th>
+        <th>Rol</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.IdUsuario</td>
+            <td>@item.Nombre</td>
+            <td>@item.Correo</td>
+            <td>@item.Telefono</td>
+            <td>@item.Rol</td>
+            <td>@item.Estado</td>
+
+            <td>
+
+                <a href="/Usuario/Edit/@item.IdUsuario">
+                    Editar
+                </a>
+
+                |
+
+                <a href="/Usuario/Delete/@item.IdUsuario">
+                    Eliminar
+                </a>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

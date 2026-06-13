@@ -1,0 +1,243 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        @ViewBag.Title - Kinetix
+    </title>
+
+    @Styles.Render("~/Content/css")
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+
+        .navbar {
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .body-content {
+            margin-top: 30px;
+        }
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            color: gray;
+        }
+
+        .nav-link {
+            color: white !important;
+            margin-right: 10px;
+        }
+
+            .nav-link:hover {
+                color: #00c853 !important;
+            }
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+        <div class="container">
+
+            <a class="navbar-brand"
+               href="/">
+
+                KINETIX
+
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse"
+                 id="menu">
+
+                <!-- MENU IZQUIERDA -->
+                <ul class="navbar-nav me-auto">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/Home">
+
+                            Inicio
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/Usuario">
+
+                            Usuarios
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/Conductor">
+
+                            Conductores
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/Vehiculo">
+
+                            Vehículos
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/Pedido">
+
+                            Pedidos
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           href="/Factura">
+
+                            Facturas
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+
+                <!-- MENU DERECHA -->
+                <ul class="navbar-nav ms-auto">
+
+                    @if (Session["Usuario"] == null)
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="/Login">
+
+                                Iniciar Sesión
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="/Registro">
+
+                                Registro
+
+                            </a>
+
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="#">
+
+                                Hola @Session["Usuario"]
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               href="/Login/Logout">
+
+                                Cerrar Sesión
+
+                            </a>
+
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- CONTENIDO -->
+    <div class="container body-content">
+
+        @RenderBody()
+
+        <hr />
+
+        <footer>
+
+            <p>
+
+                © @DateTime.Now.Year
+                Kinetix - Plataforma Inteligente de Transporte
+
+            </p>
+
+        </footer>
+
+    </div>
+
+
+    @Scripts.Render("~/bundles/jquery")
+
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>

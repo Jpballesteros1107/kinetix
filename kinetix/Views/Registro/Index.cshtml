@@ -1,0 +1,92 @@
+﻿@model kinetix.Models.Usuario
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-5">
+
+            <div class="card p-4 mt-5 shadow">
+
+                <h2 class="text-center">
+                    Registro Kinetix
+                </h2>
+
+                <hr />
+
+                @using (Html.BeginForm())
+                {
+                    <div class="mb-3">
+
+                        <label>
+                            Nombre
+                        </label>
+
+                        @Html.TextBoxFor(
+                            x => x.Nombre,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Correo
+                        </label>
+
+                        @Html.TextBoxFor(
+                            x => x.Correo,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Teléfono
+                        </label>
+
+                        @Html.TextBoxFor(
+                            x => x.Telefono,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Contraseña
+                        </label>
+
+                        @Html.PasswordFor(
+                            x => x.Password,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <button class="btn btn-dark w-100">
+
+                        Registrarse
+
+                    </button>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

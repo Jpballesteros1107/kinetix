@@ -1,0 +1,41 @@
+﻿@model List<kinetix.Models.Pedido>
+
+<h2>Pedidos</h2>
+
+<a href="/Pedido/Create">
+    Nuevo Pedido
+</a>
+
+<br />
+<br />
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Conductor</th>
+        <th>Origen</th>
+        <th>Destino</th>
+        <th>Estado</th>
+        <th>Valor</th>
+        <th>Fecha</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.IdPedido</td>
+            <td>@item.NombreUsuario</td>
+            <td>@item.NombreConductor</td>
+            <td>@item.Origen</td>
+            <td>@item.Destino</td>
+            <td>@item.Estado</td>
+            <td>@item.Valor</td>
+            <td>@item.Fecha</td>
+
+        </tr>
+    }
+
+</table>

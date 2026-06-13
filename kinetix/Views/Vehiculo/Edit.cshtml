@@ -1,0 +1,43 @@
+﻿@model kinetix.Models.Vehiculo
+
+<h2>Editar Vehiculo</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.IdVehiculo)
+
+    <div>
+        Placa:
+        @Html.TextBoxFor(x => x.Placa)
+    </div>
+
+    <br />
+
+    <div>
+        Modelo:
+        @Html.TextBoxFor(x => x.Modelo)
+    </div>
+
+    <br />
+
+    <div>
+        Marca:
+        @Html.TextBoxFor(x => x.Marca)
+    </div>
+
+    <br />
+
+    <div>
+        ID Conductor:
+        @Html.DropDownListFor(
+            x => x.IdConductor,
+            (List<SelectListItem>)ViewBag.Conductores
+        )
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Actualizar
+    </button>
+}

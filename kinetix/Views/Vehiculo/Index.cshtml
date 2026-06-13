@@ -1,0 +1,54 @@
+﻿@model List<kinetix.Models.Vehiculo>
+
+<h2>Vehiculos</h2>
+
+<a href="/Vehiculo/Create">
+    Nuevo Vehiculo
+</a>
+
+<br />
+<br />
+
+<table border="1">
+
+    <tr>
+        <th>ID</th>
+        <th>Placa</th>
+        <th>Modelo</th>
+        <th>Marca</th>
+        <th>Conductor</th>
+        <th>Acciones</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>@item.IdVehiculo</td>
+
+            <td>@item.Placa</td>
+
+            <td>@item.Modelo</td>
+
+            <td>@item.Marca</td>
+
+            <td>@item.NombreConductor</td>
+
+            <td>
+
+                <a href="/Vehiculo/Edit/@item.IdVehiculo">
+                    Editar
+                </a>
+
+                |
+
+                <a href="/Vehiculo/Delete/@item.IdVehiculo">
+                    Eliminar
+                </a>
+
+            </td>
+
+        </tr>
+    }
+
+</table>

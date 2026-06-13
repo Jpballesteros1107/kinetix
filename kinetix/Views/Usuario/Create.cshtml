@@ -1,0 +1,65 @@
+﻿@model kinetix.Models.Usuario
+
+<h2>Nuevo Usuario</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        Nombre:
+        @Html.TextBoxFor(x => x.Nombre)
+    </div>
+
+    <br />
+
+    <div>
+        Correo:
+        @Html.TextBoxFor(x => x.Correo)
+    </div>
+
+    <br />
+
+    <div>
+        Telefono:
+        @Html.TextBoxFor(x => x.Telefono)
+    </div>
+
+    <br />
+
+    <div>
+        Password:
+        @Html.PasswordFor(x => x.Password)
+    </div>
+
+    <div>
+        Rol:
+        @Html.DropDownListFor(
+            x => x.Rol,
+            new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "Administrador",
+                    Value = "Admin"
+                },
+
+                new SelectListItem
+                {
+                    Text = "Cliente",
+                    Value = "Cliente"
+                },
+
+                new SelectListItem
+                {
+                    Text = "Conductor",
+                    Value = "Conductor"
+                }
+            }
+        )
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Guardar
+    </button>
+}

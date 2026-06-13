@@ -1,0 +1,33 @@
+﻿@model kinetix.Models.Conductor
+
+<h2>Editar Conductor</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.IdConductor)
+
+    <div>
+        Nombre:
+        @Html.TextBoxFor(x => x.Nombre)
+    </div>
+
+    <br />
+
+    <div>
+        Licencia:
+        @Html.TextBoxFor(x => x.Licencia)
+    </div>
+
+    <br />
+
+    <div>
+        Telefono:
+        @Html.TextBoxFor(x => x.Telefono)
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Actualizar
+    </button>
+}

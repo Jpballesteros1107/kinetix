@@ -1,0 +1,38 @@
+﻿@model kinetix.Models.Factura
+
+<h2>Nueva Factura</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        ID Pedido:
+        @Html.TextBoxFor(x => x.IdPedido)
+    </div>
+
+    <br />
+
+    <div>
+        Total:
+        @Html.TextBoxFor(x => x.Total)
+    </div>
+
+    <br />
+
+    <div>
+        Metodo Pago:
+        @Html.TextBoxFor(x => x.MetodoPago)
+    </div>
+
+    <br />
+
+    <div>
+        Estado:
+        @Html.TextBoxFor(x => x.Estado)
+    </div>
+
+    <br />
+
+    <button type="submit">
+        Guardar
+    </button>
+}
