@@ -2,67 +2,60 @@
     ViewBag.Title = "Login";
 }
 
-<div class="container">
+<div class="container mt-5">
 
     <div class="row justify-content-center">
 
         <div class="col-md-4">
 
-            <div class="card p-4 mt-5 shadow">
+            <div class="card shadow p-4">
 
-                <h2 class="text-center">
-                    KINETIX
+                <h2 class="text-center mb-4">
+
+                    Iniciar Sesión
+
                 </h2>
 
-                <hr />
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">
+
+                        @ViewBag.Error
+
+                    </div>
+                }
 
                 <form method="post">
 
                     <div class="mb-3">
 
-                        <label>
-                            Correo
-                        </label>
+                        <label>Correo</label>
 
                         <input type="email"
                                name="correo"
-                               class="form-control" />
+                               class="form-control"
+                               required />
 
                     </div>
 
                     <div class="mb-3">
 
-                        <label>
-                            Contraseña
-                        </label>
+                        <label>Contraseña</label>
 
                         <input type="password"
                                name="password"
-                               class="form-control" />
+                               class="form-control"
+                               required />
 
                     </div>
 
                     <button class="btn btn-dark w-100">
 
-                        Iniciar Sesión
+                        Entrar
 
                     </button>
 
                 </form>
-
-                <br />
-
-                <a href="/Registro">
-                    ¿No tienes cuenta? Regístrate
-                </a>
-
-                <br />
-
-                <span style="color:red">
-
-                    @ViewBag.Error
-
-                </span>
 
             </div>
 

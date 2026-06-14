@@ -1,4 +1,5 @@
 ﻿using kinetix.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Web.Mvc;
@@ -7,222 +8,288 @@ namespace kinetix.Controllers
 {
     public class UsuarioController : Controller
     {
+        // =========================
         // LISTAR
+        // =========================
         public ActionResult Index()
         {
-            List<Usuario> lista = new List<Usuario>();
-
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                "SELECT * FROM Usuarios",
-                cn);
-
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            while (dr.Read())
-            {
-                Usuario u = new Usuario();
-
-                u.IdUsuario = int.Parse(dr["IdUsuario"].ToString());
-                u.Nombre = dr["Nombre"].ToString();
-                u.Correo = dr["Correo"].ToString();
-                u.Telefono = dr["Telefono"].ToString();
-                u.Rol = dr["Rol"].ToString();
-                u.Estado = dr["Estado"].ToString();
-
-                lista.Add(u);
-            }
-
-            cn.Close();
+            List<Usuario> lista =
+                ObtenerUsuarios(
+                    "SELECT * FROM Usuarios");
 
             return View(lista);
         }
 
 
+        // =========================
+        // BUSCAR
+        // =========================
+        public ActionResult Buscar(string texto)
+        {
+            string consulta =
+                @"SELECT * FROM Usuarios
+                WHERE Nombre LIKE @txt
+                OR Correo LIKE @txt";
+
+            List<Usuario> lista =
+                new List<Usuario>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        consulta,
+                        cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@txt",
+                    "%" + texto + "%");
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    lista.Add(MapearUsuario(dr));
+                }
+            }
+
+            return View("Index", lista);
+        }
+
+
+        // =========================
         // VISTA CREAR
+        // =========================
         public ActionResult Create()
         {
             return View();
         }
 
 
+        // =========================
         // GUARDAR
+        // =========================
         [HttpPost]
         public ActionResult Create(Usuario u)
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cn.Open();
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"INSERT INTO Usuarios
+                        (
+                            Nombre,
+                            Correo,
+                            Telefono,
+                            Password,
+                            Rol,
+                            Estado
+                        )
+                        VALUES
+                        (
+                            @n,
+                            @c,
+                            @t,
+                            @p,
+                            @r,
+                            @e
+                        )",
+                        cn);
 
-            SqlCommand cmd = new SqlCommand(
-                @"INSERT INTO Usuarios
-                    (
-                        Nombre,
-                        Correo,
-                        Telefono,
-                        Password,
-                        Rol,
-                        Estado
-                    )
-                    VALUES
-                    (
-                        @n,
-                        @c,
-                        @t,
-                        @p,
-                        @r,
-                        @e
-                    )",
-                cn);
+                cmd.Parameters.AddWithValue("@n", u.Nombre);
+                cmd.Parameters.AddWithValue("@c", u.Correo);
+                cmd.Parameters.AddWithValue("@t", u.Telefono);
+                cmd.Parameters.AddWithValue("@p", u.Password);
 
-            cmd.Parameters.AddWithValue("@n", u.Nombre);
-            cmd.Parameters.AddWithValue("@c", u.Correo);
-            cmd.Parameters.AddWithValue("@t", u.Telefono);
-            cmd.Parameters.AddWithValue("@p", u.Password);
-            cmd.Parameters.AddWithValue("@r", u.Rol);
-            cmd.Parameters.AddWithValue("@e", "Activo");
+                cmd.Parameters.AddWithValue(
+                    "@r",
+                    string.IsNullOrEmpty(u.Rol)
+                    ? "Cliente"
+                    : u.Rol);
 
-            cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue(
+                    "@e",
+                    "Activo");
 
-            cn.Close();
+                cmd.ExecuteNonQuery();
+            }
 
             return RedirectToAction("Index");
         }
 
 
+        // =========================
         // VISTA EDITAR
+        // =========================
         public ActionResult Edit(int id)
         {
-            Usuario u = new Usuario();
+            Usuario u =
+                new Usuario();
 
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                "SELECT * FROM Usuarios WHERE IdUsuario=@id",
-                cn);
-
-            cmd.Parameters.AddWithValue("@id", id);
-
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            if (dr.Read())
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
             {
-                u.IdUsuario = int.Parse(dr["IdUsuario"].ToString());
-                u.Nombre = dr["Nombre"].ToString();
-                u.Correo = dr["Correo"].ToString();
-                u.Telefono = dr["Telefono"].ToString();
-                u.Password = dr["Password"].ToString();
-            }
+                cn.Open();
 
-            cn.Close();
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT *
+                        FROM Usuarios
+                        WHERE IdUsuario=@id",
+                        cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@id",
+                    id);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    u = MapearUsuario(dr);
+
+                    u.Password =
+                        dr["Password"].ToString();
+                }
+            }
 
             return View(u);
         }
 
 
+        // =========================
         // ACTUALIZAR
+        // =========================
         [HttpPost]
         public ActionResult Edit(Usuario u)
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                @"UPDATE Usuarios
-                  SET Nombre=@n,
-                      Correo=@c,
-                      Telefono=@t,
-                      Password=@p,
-                      Rol=@r,
-                      Estado=@e
-                  WHERE IdUsuario=@id",
-                cn);
-
-            cmd.Parameters.AddWithValue("@n", u.Nombre);
-            cmd.Parameters.AddWithValue("@c", u.Correo);
-            cmd.Parameters.AddWithValue("@t", u.Telefono);
-            cmd.Parameters.AddWithValue("@p", u.Password);
-            cmd.Parameters.AddWithValue("@id", u.IdUsuario);
-            cmd.Parameters.AddWithValue("@r", u.Rol);
-            cmd.Parameters.AddWithValue("@e", u.Estado);
-
-            cmd.ExecuteNonQuery();
-
-            cn.Close();
-
-            return RedirectToAction("Index");
-        }
-
-
-        // ELIMINAR
-        public ActionResult Delete(int id)
-        {
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                "DELETE FROM Usuarios WHERE IdUsuario=@id",
-                cn);
-
-            cmd.Parameters.AddWithValue("@id", id);
-
-            cmd.ExecuteNonQuery();
-
-            cn.Close();
-
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult Buscar(string texto)
-        {
-            List<Usuario> lista = new List<Usuario>();
-
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                @"SELECT * FROM Usuarios
-        WHERE Nombre LIKE @txt
-        OR Correo LIKE @txt",
-                cn);
-
-            cmd.Parameters.AddWithValue(
-                "@txt",
-                "%" + texto + "%");
-
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            while (dr.Read())
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
             {
-                Usuario u = new Usuario();
+                cn.Open();
 
-                u.IdUsuario =
-                    int.Parse(dr["IdUsuario"].ToString());
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"UPDATE Usuarios
+                        SET Nombre=@n,
+                            Correo=@c,
+                            Telefono=@t,
+                            Password=@p,
+                            Rol=@r,
+                            Estado=@e
+                        WHERE IdUsuario=@id",
+                        cn);
 
-                u.Nombre = dr["Nombre"].ToString();
+                cmd.Parameters.AddWithValue("@n", u.Nombre);
+                cmd.Parameters.AddWithValue("@c", u.Correo);
+                cmd.Parameters.AddWithValue("@t", u.Telefono);
+                cmd.Parameters.AddWithValue("@p", u.Password);
+                cmd.Parameters.AddWithValue("@r", u.Rol);
+                cmd.Parameters.AddWithValue("@e", u.Estado);
+                cmd.Parameters.AddWithValue("@id", u.IdUsuario);
 
-                u.Correo = dr["Correo"].ToString();
-
-                u.Telefono = dr["Telefono"].ToString();
-
-                u.Rol = dr["Rol"].ToString();
-
-                u.Estado = dr["Estado"].ToString();
-
-                lista.Add(u);
+                cmd.ExecuteNonQuery();
             }
 
-            cn.Close();
+            return RedirectToAction("Index");
+        }
 
-            return View("Index", lista);
+
+        // =========================
+        // ELIMINAR
+        // =========================
+        public ActionResult Delete(int id)
+        {
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"DELETE FROM Usuarios
+                        WHERE IdUsuario=@id",
+                        cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@id",
+                    id);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+        // =========================
+        // METODO LISTAR
+        // =========================
+        private List<Usuario> ObtenerUsuarios(
+            string consulta)
+        {
+            List<Usuario> lista =
+                new List<Usuario>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        consulta,
+                        cn);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    lista.Add(
+                        MapearUsuario(dr));
+                }
+            }
+
+            return lista;
+        }
+
+
+        // =========================
+        // MAPEAR USUARIO
+        // =========================
+        private Usuario MapearUsuario(
+            SqlDataReader dr)
+        {
+            return new Usuario
+            {
+                IdUsuario =
+                    Convert.ToInt32(
+                        dr["IdUsuario"]),
+
+                Nombre =
+                    dr["Nombre"].ToString(),
+
+                Correo =
+                    dr["Correo"].ToString(),
+
+                Telefono =
+                    dr["Telefono"].ToString(),
+
+                Rol =
+                    dr["Rol"].ToString(),
+
+                Estado =
+                    dr["Estado"].ToString()
+            };
         }
     }
 }

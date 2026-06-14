@@ -1,150 +1,120 @@
-﻿@{
+﻿@model kinetix.Models.Dashboard
+
+@{
     ViewBag.Title = "Kinetix";
 }
 
-<main>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <section class="text-center mb-5">
+<div class="container-fluid p-0">
 
-        <h1 class="display-4">
-            KINETIX
-        </h1>
+    <!-- HERO -->
+    <section class="bg-dark text-white text-center py-5">
 
-        <p class="lead">
-            Plataforma inteligente de transporte urbano inspirada en servicios tipo Uber.
-        </p>
+        <div class="container">
 
-        <p>
-            Gestiona usuarios, conductores, vehículos, pedidos y facturas desde una sola plataforma MVC.
-        </p>
+            <h1 class="display-2 fw-bold mb-3">
+                KINETIX
+            </h1>
 
-        <br />
+            <p class="lead mb-4">
 
-        <a href="/Usuario" class="btn btn-primary btn-lg">
-            Gestionar Usuarios
-        </a>
+                La nueva generación del transporte urbano.
 
-        <a href="/Pedido" class="btn btn-success btn-lg">
-            Ver Pedidos
-        </a>
+            </p>
+
+            <p class="mb-5">
+
+                Solicita viajes, administra conductores
+                y controla toda la operación desde una sola plataforma.
+
+            </p>
+
+            <a href="/Registro"
+               class="btn btn-success btn-lg px-5 me-3">
+
+                Comenzar
+
+            </a>
+
+            <a href="/Login"
+               class="btn btn-outline-light btn-lg px-5">
+
+                Iniciar Sesión
+
+            </a>
+
+        </div>
 
     </section>
 
 
-    <div class="row text-center">
+    <!-- STATS -->
+    <section class="container mt-5">
 
-        <section class="col-md-3">
+        <div class="row text-center">
 
-            <div class="card p-3 shadow-sm">
+            <div class="col-md-3 mb-4">
 
-                <h2>
-                    Usuarios
-                </h2>
+                <div class="card shadow border-0 p-4 rounded-4">
 
-                <p>
-                    Administración completa de clientes registrados en Kinetix.
-                </p>
+                    <h5 class="text-muted">
+                        Usuarios
+                    </h5>
 
-                <a class="btn btn-outline-primary"
-                   href="/Usuario">
-                    Ir al módulo
-                </a>
+                    <h1 class="display-5 fw-bold">
+                        @Model.TotalUsuarios
+                    </h1>
 
-            </div>
-
-        </section>
-
-
-        <section class="col-md-3">
-
-            <div class="card p-3 shadow-sm">
-
-                <h2>
-                    Conductores
-                </h2>
-
-                <p>
-                    Gestión de conductores, licencias y datos de contacto.
-                </p>
-
-                <a class="btn btn-outline-success"
-                   href="/Conductor">
-                    Ir al módulo
-                </a>
+                </div>
 
             </div>
 
-        </section>
+            <div class="col-md-3 mb-4">
 
+                <div class="card shadow border-0 p-4 rounded-4">
 
-        <section class="col-md-3">
+                    <h5 class="text-muted">
+                        Conductores
+                    </h5>
 
-            <div class="card p-3 shadow-sm">
+                    <h1 class="display-5 fw-bold">
+                        @Model.TotalConductores
+                    </h1>
 
-                <h2>
-                    Vehículos
-                </h2>
-
-                <p>
-                    Registro y control de vehículos asociados a conductores.
-                </p>
-
-                <a class="btn btn-outline-dark"
-                   href="/Vehiculo">
-                    Ir al módulo
-                </a>
+                </div>
 
             </div>
 
-        </section>
+            <div class="col-md-3 mb-4">
 
+                <div class="card shadow border-0 p-4 rounded-4">
 
-        <section class="col-md-3">
+                    <h5 class="text-muted">
+                        Vehículos
+                    </h5>
 
-            <div class="card p-3 shadow-sm">
+                    <h1 class="display-5 fw-bold">
+                        @Model.TotalVehiculos
+                    </h1>
 
-                <h2>
-                    Facturas
-                </h2>
-
-                <p>
-                    Consulta y administración de pagos y facturación.
-                </p>
-
-                <a class="btn btn-outline-danger"
-                   href="/Factura">
-                    Ir al módulo
-                </a>
+                </div>
 
             </div>
 
-        </section>
+            <div class="col-md-3 mb-4">
 
-    </div>
+                <div class="card shadow border-0 p-4 rounded-4">
 
+                    <h5 class="text-muted">
+                        Viajes
+                    </h5>
 
-    <br />
-    <br />
+                    <h1 class="display-5 fw-bold">
+                        @Model.TotalPedidos
+                    </h1>
 
-    <section class="row text-center">
-
-        <div class="col-md-12">
-
-            <div class="card p-4 bg-light">
-
-                <h2>
-                    Acerca de Kinetix
-                </h2>
-
-                <p>
-                    Kinetix es una plataforma desarrollada en ASP.NET MVC utilizando arquitectura MVC,
-                    SQL Server y ADO.NET para la gestión integral de transporte urbano.
-                </p>
-
-                <p>
-                    El sistema permite administrar pedidos, usuarios, conductores, vehículos y facturación
-                    en tiempo real.
-                </p>
+                </div>
 
             </div>
 
@@ -152,4 +122,243 @@
 
     </section>
 
-</main>
+
+    <!-- GANANCIAS -->
+    <section class="container mt-5">
+
+        <div class="row text-center">
+
+            <div class="col-md-4 mb-4">
+
+                <div class="card bg-success text-white border-0 shadow p-5 rounded-4">
+
+                    <h4>
+                        Ganancias
+                    </h4>
+
+                    <h1 class="display-5 fw-bold">
+                        $@Model.Ganancias
+                    </h1>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 mb-4">
+
+                <div class="card bg-primary text-white border-0 shadow p-5 rounded-4">
+
+                    <h4>
+                        Viajes Finalizados
+                    </h4>
+
+                    <h1 class="display-5 fw-bold">
+                        @Model.ViajesFinalizados
+                    </h1>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4 mb-4">
+
+                <div class="card bg-danger text-white border-0 shadow p-5 rounded-4">
+
+                    <h4>
+                        Cancelados
+                    </h4>
+
+                    <h1 class="display-5 fw-bold">
+                        @Model.ViajesCancelados
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- MODULOS -->
+    <section class="container mt-5">
+
+        <h2 class="text-center mb-5 fw-bold">
+
+            Módulos del Sistema
+
+        </h2>
+
+        <div class="row">
+
+            <div class="col-md-3 mb-4">
+
+                <div class="card shadow border-0 rounded-4 p-4 h-100">
+
+                    <h3>
+                        Usuarios
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Gestión de clientes registrados.
+
+                    </p>
+
+                    <a href="/Usuario"
+                       class="btn btn-outline-dark mt-auto">
+
+                        Administrar
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-4">
+
+                <div class="card shadow border-0 rounded-4 p-4 h-100">
+
+                    <h3>
+                        Conductores
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Control de conductores y licencias.
+
+                    </p>
+
+                    <a href="/Conductor"
+                       class="btn btn-outline-dark mt-auto">
+
+                        Administrar
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-4">
+
+                <div class="card shadow border-0 rounded-4 p-4 h-100">
+
+                    <h3>
+                        Vehículos
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Gestión completa de vehículos.
+
+                    </p>
+
+                    <a href="/Vehiculo"
+                       class="btn btn-outline-dark mt-auto">
+
+                        Administrar
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-3 mb-4">
+
+                <div class="card shadow border-0 rounded-4 p-4 h-100">
+
+                    <h3>
+                        Facturación
+                    </h3>
+
+                    <p class="text-muted">
+
+                        Consulta y control de pagos.
+
+                    </p>
+
+                    <a href="/Factura"
+                       class="btn btn-outline-dark mt-auto">
+
+                        Administrar
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- GRAFICA -->
+    <section class="container mt-5 mb-5">
+
+        <div class="card shadow border-0 rounded-4 p-5">
+
+            <h2 class="mb-4 text-center">
+
+                Estadísticas Generales
+
+            </h2>
+
+            <canvas id="grafica"></canvas>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+var ctx =
+    document.getElementById('grafica');
+
+new Chart(ctx,
+{
+    type: 'bar',
+
+    data:
+    {
+        labels:
+        [
+            'Usuarios',
+            'Conductores',
+            'Vehículos',
+            'Pedidos',
+            'Facturas'
+        ],
+
+        datasets:
+        [{
+            label: 'Kinetix',
+
+            data:
+            [
+                @Model.TotalUsuarios,
+                @Model.TotalConductores,
+                @Model.TotalVehiculos,
+                @Model.TotalPedidos,
+                @Model.TotalFacturas
+            ],
+
+            borderWidth: 1
+        }]
+    },
+
+    options:
+    {
+        responsive: true
+    }
+});
+
+</script>
+```

@@ -133,6 +133,7 @@
     </Compile>
     <Compile Include="Models\Conductor.cs" />
     <Compile Include="Models\Conexion.cs" />
+    <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Models\Factura.cs" />
     <Compile Include="Models\Pedido.cs" />
     <Compile Include="Models\Usuario.cs" />
@@ -211,6 +212,12 @@
     <Content Include="Views\Conductor\Create.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Registro\Index.cshtml" />
+    <Content Include="Views\Home\DashboardCliente.cshtml" />
+    <Content Include="Views\Home\DashboardConductor.cshtml" />
+    <Content Include="Views\Home\DashboardAdmin.cshtml" />
+    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
+    <Content Include="Views\Shared\_LayoutCliente.cshtml" />
+    <Content Include="Views\Shared\_LayoutConductor.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

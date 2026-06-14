@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Dashboard Cliente";
+}
+
+<div class="container mt-5">
+
+    <div class="bg-dark text-white p-5 rounded-4 shadow mb-5">
+
+        <h1 class="display-5 fw-bold">
+
+            Hola @Session["Usuario"]
+
+        </h1>
+
+        <p class="lead">
+
+            Bienvenido a Kinetix.
+
+        </p>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow border-0 rounded-4 p-4 text-center h-100">
+
+                <h3>
+
+                    Solicitar Viaje
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Pide un conductor en tiempo real.
+
+                </p>
+
+                <a href="/Pedido/Create"
+                   class="btn btn-dark">
+
+                    Solicitar
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow border-0 rounded-4 p-4 text-center h-100">
+
+                <h3>
+
+                    Historial
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Consulta tus viajes realizados.
+
+                </p>
+
+                <a href="/Pedido"
+                   class="btn btn-primary">
+
+                    Ver Viajes
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow border-0 rounded-4 p-4 text-center h-100">
+
+                <h3>
+
+                    Facturas
+
+                </h3>
+
+                <p class="text-muted">
+
+                    Revisa tus pagos y recibos.
+
+                </p>
+
+                <a href="/Factura"
+                   class="btn btn-success">
+
+                    Ver Facturas
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```

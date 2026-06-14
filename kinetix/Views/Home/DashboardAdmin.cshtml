@@ -1,0 +1,269 @@
+﻿@model kinetix.Models.Dashboard
+
+@{
+    ViewBag.Title = "Dashboard Admin";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">
+
+        Dashboard Administrativo
+
+    </h1>
+
+    <h4>
+
+        Bienvenido @Session["Usuario"]
+
+    </h4>
+
+    <hr />
+
+    <div class="row">
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h5>
+
+                    Usuarios
+
+                </h5>
+
+                <h1>
+
+                    @Model.TotalUsuarios
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h5>
+
+                    Conductores
+
+                </h5>
+
+                <h1>
+
+                    @Model.TotalConductores
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h5>
+
+                    Vehículos
+
+                </h5>
+
+                <h1>
+
+                    @Model.TotalVehiculos
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h5>
+
+                    Viajes
+
+                </h5>
+
+                <h1>
+
+                    @Model.TotalPedidos
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h4>
+
+                    Ganancias
+
+                </h4>
+
+                <h1>
+
+                    $@Model.Ganancias
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h4>
+
+                    Finalizados
+
+                </h4>
+
+                <h1>
+
+                    @Model.ViajesFinalizados
+
+                </h1>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow p-4 text-center">
+
+                <h4>
+
+                    Cancelados
+
+                </h4>
+
+                <h1>
+
+                    @Model.ViajesCancelados
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card shadow p-4 mb-5">
+
+        <h3 class="mb-4">
+
+            Estadísticas Generales
+
+        </h3>
+
+        <canvas id="grafica"></canvas>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3 mb-3">
+
+            <a href="/Usuario"
+               class="btn btn-primary w-100">
+
+                Usuarios
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <a href="/Conductor"
+               class="btn btn-success w-100">
+
+                Conductores
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <a href="/Vehiculo"
+               class="btn btn-dark w-100">
+
+                Vehículos
+
+            </a>
+
+        </div>
+
+        <div class="col-md-3 mb-3">
+
+            <a href="/Pedido"
+               class="btn btn-warning w-100">
+
+                Pedidos
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    var ctx =
+        document.getElementById('grafica');
+
+    new Chart(ctx,
+    {
+        type: 'bar',
+
+        data:
+        {
+            labels:
+            [
+                'Usuarios',
+                'Conductores',
+                'Vehículos',
+                'Viajes'
+            ],
+
+            datasets:
+            [{
+                label: 'Kinetix',
+
+                data:
+                [
+                    @Model.TotalUsuarios,
+                    @Model.TotalConductores,
+                    @Model.TotalVehiculos,
+                    @Model.TotalPedidos
+                ]
+            }]
+        }
+    });
+
+</script>

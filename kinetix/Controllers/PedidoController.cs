@@ -1,7 +1,6 @@
 ﻿using kinetix.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 
@@ -9,17 +8,22 @@ namespace kinetix.Controllers
 {
     public class PedidoController : Controller
     {
-        // LISTAR
+
+        // LISTAR PEDIDOS
         public ActionResult Index()
         {
-            List<Pedido> lista = new List<Pedido>();
+            List<Pedido> lista =
+                new List<Pedido>();
 
-            SqlConnection cn = Conexion.ObtenerConexion();
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                 @"SELECT
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+                    SELECT
                         p.*,
                         u.Nombre AS NombreUsuario,
                         c.Nombre AS NombreConductor
@@ -27,206 +31,391 @@ namespace kinetix.Controllers
                     INNER JOIN Usuarios u
                         ON p.IdUsuario = u.IdUsuario
                     INNER JOIN Conductores c
-                        ON p.IdConductor = c.IdConductor",
-                cn);
+                        ON p.IdConductor = c.IdConductor
+                    ",
+                    cn);
 
-            SqlDataReader dr = cmd.ExecuteReader();
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
 
-            while (dr.Read())
-            {
-                Pedido p = new Pedido();
+                while (dr.Read())
+                {
+                    Pedido p = new Pedido();
 
-                p.IdPedido = int.Parse(dr["IdPedido"].ToString());
+                    p.IdPedido =
+                        Convert.ToInt32(
+                            dr["IdPedido"]);
 
-                p.IdUsuario = int.Parse(dr["IdUsuario"].ToString());
+                    p.IdUsuario =
+                        Convert.ToInt32(
+                            dr["IdUsuario"]);
 
-                p.IdConductor = int.Parse(dr["IdConductor"].ToString());
+                    p.IdConductor =
+                        Convert.ToInt32(
+                            dr["IdConductor"]);
 
-                p.NombreUsuario = dr["NombreUsuario"].ToString();
+                    p.NombreUsuario =
+                        dr["NombreUsuario"].ToString();
 
-                p.NombreConductor = dr["NombreConductor"].ToString();
+                    p.NombreConductor =
+                        dr["NombreConductor"].ToString();
 
-                p.Origen = dr["Origen"].ToString();
+                    p.Origen =
+                        dr["Origen"].ToString();
 
-                p.Destino = dr["Destino"].ToString();
+                    p.Destino =
+                        dr["Destino"].ToString();
 
-                p.Estado = dr["Estado"].ToString();
+                    p.Estado =
+                        dr["Estado"].ToString();
 
-                p.Valor = decimal.Parse(dr["Valor"].ToString());
+                    p.Valor =
+                        Convert.ToDecimal(
+                            dr["Valor"]);
 
-                p.Fecha = DateTime.Parse(dr["Fecha"].ToString());
+                    p.Fecha =
+                        Convert.ToDateTime(
+                            dr["Fecha"]);
 
-                lista.Add(p);
+                    lista.Add(p);
+                }
             }
-
-            cn.Close();
 
             return View(lista);
         }
 
 
+        // =========================
         // VISTA CREAR
+        // =========================
         public ActionResult Create()
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            // USUARIOS
-            SqlCommand cmdUsuarios = new SqlCommand(
-                "SELECT * FROM Usuarios",
-                cn);
-
-            SqlDataReader drUsuarios = cmdUsuarios.ExecuteReader();
-
-            List<SelectListItem> usuarios =
-                new List<SelectListItem>();
-
-            while (drUsuarios.Read())
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
             {
-                usuarios.Add(new SelectListItem
+                cn.Open();
+
+                // USUARIOS
+                SqlCommand usuariosCmd =
+                    new SqlCommand(
+                        "SELECT * FROM Usuarios",
+                        cn);
+
+                SqlDataReader usuariosDr =
+                    usuariosCmd.ExecuteReader();
+
+                List<SelectListItem> usuarios =
+                    new List<SelectListItem>();
+
+                while (usuariosDr.Read())
                 {
-                    Text = drUsuarios["Nombre"].ToString(),
+                    usuarios.Add(
+                        new SelectListItem
+                        {
+                            Text =
+                                usuariosDr["Nombre"]
+                                .ToString(),
 
-                    Value = drUsuarios["IdUsuario"].ToString()
-                });
-            }
+                            Value =
+                                usuariosDr["IdUsuario"]
+                                .ToString()
+                        });
+                }
 
-            drUsuarios.Close();
+                usuariosDr.Close();
 
 
-            // CONDUCTORES
-            SqlCommand cmdConductores = new SqlCommand(
-                "SELECT * FROM Conductores",
-                cn);
+                // CONDUCTORES DISPONIBLES
+                SqlCommand conductoresCmd =
+                    new SqlCommand(
+                        @"SELECT *
+                        FROM Conductores
+                        WHERE Estado='Disponible'",
+                        cn);
 
-            SqlDataReader drConductores =
-                cmdConductores.ExecuteReader();
+                SqlDataReader conductoresDr =
+                    conductoresCmd.ExecuteReader();
 
-            List<SelectListItem> conductores =
-                new List<SelectListItem>();
+                List<SelectListItem> conductores =
+                    new List<SelectListItem>();
 
-            while (drConductores.Read())
-            {
-                conductores.Add(new SelectListItem
+                while (conductoresDr.Read())
                 {
-                    Text = drConductores["Nombre"].ToString(),
+                    conductores.Add(
+                        new SelectListItem
+                        {
+                            Text =
+                                conductoresDr["Nombre"]
+                                .ToString(),
 
-                    Value = drConductores["IdConductor"].ToString()
-                });
+                            Value =
+                                conductoresDr["IdConductor"]
+                                .ToString()
+                        });
+                }
+
+                ViewBag.Usuarios =
+                    usuarios;
+
+                ViewBag.Conductores =
+                    conductores;
             }
-
-            drConductores.Close();
-
-            cn.Close();
-
-            ViewBag.Usuarios = usuarios;
-
-            ViewBag.Conductores = conductores;
 
             return View();
         }
 
 
-        // GUARDAR
+        // =========================
+        // GUARDAR PEDIDO
+        // =========================
         [HttpPost]
         public ActionResult Create(Pedido p)
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cn.Open();
+                // CALCULO AUTOMATICO
+                Random r = new Random();
 
-            SqlCommand cmd = new SqlCommand(
-                @"INSERT INTO Pedidos
-                (
-                    IdUsuario,
-                    IdConductor,
-                    Origen,
-                    Destino,
-                    Estado,
-                    Valor,
-                    Fecha
-                )
-                VALUES
-                (
-                    @idu,
-                    @idc,
-                    @ori,
-                    @des,
-                    @est,
-                    @val,
-                    @fec
-                )",
-                cn);
+                decimal valor =
+                    r.Next(8000, 50000);
 
-            cmd.Parameters.AddWithValue("@idu", p.IdUsuario);
-
-            cmd.Parameters.AddWithValue("@idc", p.IdConductor);
-
-            cmd.Parameters.AddWithValue("@ori", p.Origen);
-
-            cmd.Parameters.AddWithValue("@des", p.Destino);
-
-            cmd.Parameters.AddWithValue("@est", "Pendiente");
-
-            cmd.Parameters.AddWithValue("@val", p.Valor);
-
-            cmd.Parameters.AddWithValue("@fec", DateTime.Now);
-
-            cmd.ExecuteNonQuery();
-
-            // OBTENER EL ÚLTIMO PEDIDO INSERTADO
-            SqlCommand cmdUltimo = new SqlCommand(
-                "SELECT MAX(IdPedido) FROM Pedidos",
-                cn);
-
-            int idPedido =
-                int.Parse(cmdUltimo.ExecuteScalar().ToString());
-
-
-            // CREAR FACTURA AUTOMÁTICA
-            SqlCommand cmdFactura = new SqlCommand(
-                @"INSERT INTO Facturas
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+                    INSERT INTO Pedidos
                     (
-                        IdPedido,
-                        Fecha,
-                        Total,
-                        MetodoPago,
-                        Estado
+                        IdUsuario,
+                        IdConductor,
+                        Origen,
+                        Destino,
+                        Estado,
+                        Valor,
+                        Fecha
                     )
                     VALUES
                     (
-                        @idp,
-                        @fec,
-                        @tot,
-                        @met,
-                        @est
-                    )",
-                cn);
+                        @idu,
+                        @idc,
+                        @ori,
+                        @des,
+                        'Pendiente',
+                        @val,
+                        @fec
+                    )
+                    ",
+                    cn);
 
-            cmdFactura.Parameters.AddWithValue("@idp", idPedido);
+                cmd.Parameters.AddWithValue(
+                    "@idu",
+                    p.IdUsuario);
 
-            cmdFactura.Parameters.AddWithValue(
-                "@fec",
-                DateTime.Now);
+                cmd.Parameters.AddWithValue(
+                    "@idc",
+                    p.IdConductor);
 
-            cmdFactura.Parameters.AddWithValue(
-                "@tot",
-                p.Valor);
+                cmd.Parameters.AddWithValue(
+                    "@ori",
+                    p.Origen);
 
-            cmdFactura.Parameters.AddWithValue(
-                "@met",
-                "Efectivo");
+                cmd.Parameters.AddWithValue(
+                    "@des",
+                    p.Destino);
 
-            cmdFactura.Parameters.AddWithValue(
-                "@est",
-                "Pendiente");
+                cmd.Parameters.AddWithValue(
+                    "@val",
+                    valor);
 
-            cmdFactura.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue(
+                    "@fec",
+                    DateTime.Now);
 
-            cn.Close();
+                cmd.ExecuteNonQuery();
+            }
 
             return RedirectToAction("Index");
+        }
+
+
+        // =========================
+        // CAMBIAR ESTADO
+        // =========================
+        [HttpPost]
+        public ActionResult CambiarEstado(
+            int id,
+            string estado)
+        {
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                // ACTUALIZAR ESTADO
+                SqlCommand estadoCmd =
+                    new SqlCommand(
+                    @"
+                    UPDATE Pedidos
+                    SET Estado=@est
+                    WHERE IdPedido=@id
+                    ",
+                    cn);
+
+                estadoCmd.Parameters.AddWithValue(
+                    "@est",
+                    estado);
+
+                estadoCmd.Parameters.AddWithValue(
+                    "@id",
+                    id);
+
+                estadoCmd.ExecuteNonQuery();
+
+
+                // CONDUCTOR OCUPADO
+                if (estado == "Aceptado")
+                {
+                    SqlCommand ocupadoCmd =
+                        new SqlCommand(
+                        @"
+                        UPDATE Conductores
+                        SET Estado='Ocupado'
+                        WHERE IdConductor=
+                        (
+                            SELECT IdConductor
+                            FROM Pedidos
+                            WHERE IdPedido=@id
+                        )
+                        ",
+                        cn);
+
+                    ocupadoCmd.Parameters
+                        .AddWithValue(
+                            "@id",
+                            id);
+
+                    ocupadoCmd.ExecuteNonQuery();
+                }
+
+
+                // CONDUCTOR DISPONIBLE
+                if (estado == "Finalizado"
+                 || estado == "Cancelado")
+                {
+                    SqlCommand disponibleCmd =
+                        new SqlCommand(
+                        @"
+                        UPDATE Conductores
+                        SET Estado='Disponible'
+                        WHERE IdConductor=
+                        (
+                            SELECT IdConductor
+                            FROM Pedidos
+                            WHERE IdPedido=@id
+                        )
+                        ",
+                        cn);
+
+                    disponibleCmd.Parameters
+                        .AddWithValue(
+                            "@id",
+                            id);
+
+                    disponibleCmd.ExecuteNonQuery();
+                }
+
+
+                // FACTURA AUTOMATICA
+                if (estado == "Finalizado")
+                {
+                    // VALIDAR SI YA EXISTE
+                    SqlCommand existeCmd =
+                        new SqlCommand(
+                        @"
+                        SELECT COUNT(*)
+                        FROM Facturas
+                        WHERE IdPedido=@id
+                        ",
+                        cn);
+
+                    existeCmd.Parameters
+                        .AddWithValue(
+                            "@id",
+                            id);
+
+                    int existe =
+                        Convert.ToInt32(
+                            existeCmd.ExecuteScalar());
+
+                    if (existe == 0)
+                    {
+                        SqlCommand totalCmd =
+                            new SqlCommand(
+                            @"
+                            SELECT Valor
+                            FROM Pedidos
+                            WHERE IdPedido=@id
+                            ",
+                            cn);
+
+                        totalCmd.Parameters
+                            .AddWithValue(
+                                "@id",
+                                id);
+
+                        decimal total =
+                            Convert.ToDecimal(
+                                totalCmd.ExecuteScalar());
+
+                        SqlCommand facturaCmd =
+                            new SqlCommand(
+                            @"
+                            INSERT INTO Facturas
+                            (
+                                IdPedido,
+                                Fecha,
+                                Total,
+                                MetodoPago,
+                                Estado
+                            )
+                            VALUES
+                            (
+                                @idp,
+                                @fec,
+                                @tot,
+                                'Tarjeta',
+                                'Pagada'
+                            )
+                            ",
+                            cn);
+
+                        facturaCmd.Parameters
+                            .AddWithValue(
+                                "@idp",
+                                id);
+
+                        facturaCmd.Parameters
+                            .AddWithValue(
+                                "@fec",
+                                DateTime.Now);
+
+                        facturaCmd.Parameters
+                            .AddWithValue(
+                                "@tot",
+                                total);
+
+                        facturaCmd.ExecuteNonQuery();
+                    }
+                }
+            }
+
+            return Json(
+                new
+                {
+                    success = true
+                },
+                JsonRequestBehavior.AllowGet);
         }
     }
 }

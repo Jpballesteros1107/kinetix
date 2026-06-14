@@ -1,41 +1,268 @@
 ﻿@model List<kinetix.Models.Pedido>
 
-<h2>Pedidos</h2>
+@{
+    ViewBag.Title = "Pedidos";
+}
 
-<a href="/Pedido/Create">
-    Nuevo Pedido
-</a>
+<div class="container mt-4">
 
-<br />
-<br />
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-<table border="1">
+        <div>
 
-    <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Conductor</th>
-        <th>Origen</th>
-        <th>Destino</th>
-        <th>Estado</th>
-        <th>Valor</th>
-        <th>Fecha</th>
-    </tr>
+            <h2 class="fw-bold">
+                Gestión de Viajes
+            </h2>
 
-    @foreach (var item in Model)
-    {
-        <tr>
+            <p class="text-muted">
 
-            <td>@item.IdPedido</td>
-            <td>@item.NombreUsuario</td>
-            <td>@item.NombreConductor</td>
-            <td>@item.Origen</td>
-            <td>@item.Destino</td>
-            <td>@item.Estado</td>
-            <td>@item.Valor</td>
-            <td>@item.Fecha</td>
+                Administra pedidos y estados en tiempo real.
 
-        </tr>
-    }
+            </p>
 
-</table>
+        </div>
+
+        <a href="/Pedido/Create"
+           class="btn btn-dark">
+
+            Nuevo Pedido
+
+        </a>
+
+    </div>
+
+
+    <!-- TABLA -->
+    <div class="card shadow border-0">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>#</th>
+
+                            <th>Cliente</th>
+
+                            <th>Conductor</th>
+
+                            <th>Origen</th>
+
+                            <th>Destino</th>
+
+                            <th>Estado</th>
+
+                            <th>Valor</th>
+
+                            <th>Fecha</th>
+
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr id="fila-@item.IdPedido">
+
+                                <td>
+
+                                    <strong>
+                                        #@item.IdPedido
+                                    </strong>
+
+                                </td>
+
+                                <td>
+                                    @item.NombreUsuario
+                                </td>
+
+                                <td>
+                                    @item.NombreConductor
+                                </td>
+
+                                <td>
+                                    @item.Origen
+                                </td>
+
+                                <td>
+                                    @item.Destino
+                                </td>
+
+                                <td>
+
+                                    @if (item.Estado == "Pendiente")
+                                    {
+                                        <span class="badge bg-warning text-dark">
+                                            Pendiente
+                                        </span>
+                                    }
+
+                                    else if (item.Estado == "Aceptado")
+                                    {
+                                        <span class="badge bg-info text-dark">
+                                            Aceptado
+                                        </span>
+                                    }
+
+                                    else if (item.Estado == "En Camino")
+                                    {
+                                        <span class="badge bg-primary">
+                                            En Camino
+                                        </span>
+                                    }
+
+                                    else if (item.Estado == "Finalizado")
+                                    {
+                                        <span class="badge bg-success">
+                                            Finalizado
+                                        </span>
+                                    }
+
+                                    else if (item.Estado == "Cancelado")
+                                    {
+                                        <span class="badge bg-danger">
+                                            Cancelado
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <strong>
+
+                                        $@String.Format("{0:N0}", item.Valor)
+
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    @item.Fecha.ToString("dd/MM/yyyy HH:mm")
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.Estado != "Finalizado"
+                                     && item.Estado != "Cancelado")
+                                    {
+                                        <div class="d-flex flex-wrap gap-1">
+
+                                            <button class="btn btn-sm btn-info estado"
+                                                    data-id="@item.IdPedido"
+                                                    data-estado="Aceptado">
+
+                                                Aceptar
+
+                                            </button>
+
+                                            <button class="btn btn-sm btn-primary estado"
+                                                    data-id="@item.IdPedido"
+                                                    data-estado="En Camino">
+
+                                                En Camino
+
+                                            </button>
+
+                                            <button class="btn btn-sm btn-success estado"
+                                                    data-id="@item.IdPedido"
+                                                    data-estado="Finalizado">
+
+                                                Finalizar
+
+                                            </button>
+
+                                            <button class="btn btn-sm btn-danger estado"
+                                                    data-id="@item.IdPedido"
+                                                    data-estado="Cancelado">
+
+                                                Cancelar
+
+                                            </button>
+
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+
+                                            Sin acciones
+
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    $(".estado").click(function () {
+
+        var boton = $(this);
+
+        var id = boton.data("id");
+
+        var estado = boton.data("estado");
+
+        boton.prop("disabled", true);
+
+        $.ajax({
+
+            url: "/Pedido/CambiarEstado",
+
+            type: "POST",
+
+            data:
+            {
+                id: id,
+                estado: estado
+            },
+
+            success: function () {
+
+                location.reload();
+
+            },
+
+            error: function () {
+
+                alert("Error al actualizar estado");
+
+                boton.prop("disabled", false);
+
+            }
+
+        });
+
+    });
+
+</script>

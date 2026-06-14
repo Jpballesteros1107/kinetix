@@ -6,62 +6,114 @@ namespace kinetix.Controllers
 {
     public class RegistroController : Controller
     {
-        // VIEW
+        // =========================
+        // VISTA
+        // =========================
         public ActionResult Index()
         {
             return View();
         }
 
+
+        // =========================
         // REGISTRAR
+        // =========================
         [HttpPost]
         public ActionResult Index(Usuario u)
         {
-            SqlConnection cn =
-                Conexion.ObtenerConexion();
+            // VALIDAR CAMPOS
+            if (
+                string.IsNullOrEmpty(u.Nombre) ||
+                string.IsNullOrEmpty(u.Correo) ||
+                string.IsNullOrEmpty(u.Telefono) ||
+                string.IsNullOrEmpty(u.Password)
+               )
+            {
+                ViewBag.Error =
+                    "Todos los campos son obligatorios";
 
-            cn.Open();
+                return View();
+            }
 
-            SqlCommand cmd =
-                new SqlCommand(
-                    @"INSERT INTO Usuarios
-                    (
-                        Nombre,
-                        Correo,
-                        Telefono,
-                        Password,
-                        Rol,
-                        Estado
-                    )
-                    VALUES
-                    (
-                        @n,
-                        @c,
-                        @t,
-                        @p,
-                        'Cliente',
-                        'Activo'
-                    )",
-                    cn);
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cmd.Parameters.AddWithValue(
-                "@n",
-                u.Nombre);
+                // =========================
+                // VALIDAR CORREO
+                // =========================
 
-            cmd.Parameters.AddWithValue(
-                "@c",
-                u.Correo);
+                SqlCommand validar =
+                    new SqlCommand(
+                        @"SELECT COUNT(*)
+                        FROM Usuarios
+                        WHERE Correo=@c",
+                        cn);
 
-            cmd.Parameters.AddWithValue(
-                "@t",
-                u.Telefono);
+                validar.Parameters.AddWithValue(
+                    "@c",
+                    u.Correo);
 
-            cmd.Parameters.AddWithValue(
-                "@p",
-                u.Password);
+                int existe =
+                    int.Parse(
+                        validar.ExecuteScalar().ToString());
 
-            cmd.ExecuteNonQuery();
+                if (existe > 0)
+                {
+                    ViewBag.Error =
+                        "El correo ya está registrado";
 
-            cn.Close();
+                    return View();
+                }
+
+                // =========================
+                // INSERTAR USUARIO
+                // =========================
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"INSERT INTO Usuarios
+                        (
+                            Nombre,
+                            Correo,
+                            Telefono,
+                            Password,
+                            Rol,
+                            Estado
+                        )
+                        VALUES
+                        (
+                            @n,
+                            @c,
+                            @t,
+                            @p,
+                            'Cliente',
+                            'Activo'
+                        )",
+                        cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@n",
+                    u.Nombre);
+
+                cmd.Parameters.AddWithValue(
+                    "@c",
+                    u.Correo);
+
+                cmd.Parameters.AddWithValue(
+                    "@t",
+                    u.Telefono);
+
+                cmd.Parameters.AddWithValue(
+                    "@p",
+                    u.Password);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            TempData["Success"] =
+                "Registro exitoso";
 
             return RedirectToAction(
                 "Index",

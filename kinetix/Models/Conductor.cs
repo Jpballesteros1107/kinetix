@@ -11,5 +11,6 @@ namespace kinetix.Models
         public string Nombre { get; set; }
         public string Licencia { get; set; }
         public string Telefono { get; set; }
+        public string Estado { get; set; }
     }
 }
