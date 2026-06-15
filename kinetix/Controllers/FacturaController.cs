@@ -8,187 +8,269 @@ namespace kinetix.Controllers
 {
     public class FacturaController : Controller
     {
+        // =========================
         // LISTAR
-        public ActionResult Index()
+        // =========================
+        public ActionResult Index(string buscar = "")
         {
-            List<Factura> lista = new List<Factura>();
+            List<Factura> lista =
+                new List<Factura>();
 
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                "SELECT * FROM Facturas",
-                cn);
-
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            while (dr.Read())
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
             {
-                Factura f = new Factura();
+                cn.Open();
 
-                f.IdFactura = int.Parse(dr["IdFactura"].ToString());
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT
+                            f.*,
+                            u.Nombre AS Cliente
+                          FROM Facturas f
+                          INNER JOIN Pedidos p
+                            ON f.IdPedido = p.IdPedido
+                          INNER JOIN Usuarios u
+                            ON p.IdUsuario = u.IdUsuario
+                          WHERE
+                            u.Nombre LIKE @txt
+                            OR f.MetodoPago LIKE @txt
+                            OR f.Estado LIKE @txt
+                          ORDER BY f.IdFactura DESC",
+                        cn);
 
-                f.IdPedido = int.Parse(dr["IdPedido"].ToString());
+                cmd.Parameters.AddWithValue(
+                    "@txt",
+                    "%" + buscar + "%");
 
-                f.Fecha = DateTime.Parse(dr["Fecha"].ToString());
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
 
-                f.Total = decimal.Parse(dr["Total"].ToString());
+                while (dr.Read())
+                {
+                    lista.Add(new Factura
+                    {
+                        IdFactura =
+                            Convert.ToInt32(
+                                dr["IdFactura"]),
 
-                f.MetodoPago = dr["MetodoPago"].ToString();
+                        IdPedido =
+                            Convert.ToInt32(
+                                dr["IdPedido"]),
 
-                f.Estado = dr["Estado"].ToString();
+                        Fecha =
+                            Convert.ToDateTime(
+                                dr["Fecha"]),
 
-                lista.Add(f);
+                        Total =
+                            Convert.ToDecimal(
+                                dr["Total"]),
+
+                        MetodoPago =
+                            dr["MetodoPago"].ToString(),
+
+                        Estado =
+                            dr["Estado"].ToString(),
+
+                        Cliente =
+                            dr["Cliente"].ToString()
+                    });
+                }
             }
-
-            cn.Close();
 
             return View(lista);
         }
 
 
+        // =========================
         // VISTA CREAR
+        // =========================
         public ActionResult Create()
         {
             return View();
         }
 
 
+        // =========================
         // GUARDAR
+        // =========================
         [HttpPost]
         public ActionResult Create(Factura f)
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cn.Open();
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"INSERT INTO Facturas
+                        (
+                            IdPedido,
+                            Fecha,
+                            Total,
+                            MetodoPago,
+                            Estado
+                        )
+                        VALUES
+                        (
+                            @idp,
+                            @fec,
+                            @tot,
+                            @met,
+                            @est
+                        )",
+                        cn);
 
-            SqlCommand cmd = new SqlCommand(
-                @"INSERT INTO Facturas
-                (
-                    IdPedido,
-                    Fecha,
-                    Total,
-                    MetodoPago,
-                    Estado
-                )
-                VALUES
-                (
-                    @idp,
-                    @fec,
-                    @tot,
-                    @met,
-                    @est
-                )",
-                cn);
+                cmd.Parameters.AddWithValue(
+                    "@idp",
+                    f.IdPedido);
 
-            cmd.Parameters.AddWithValue("@idp", f.IdPedido);
+                cmd.Parameters.AddWithValue(
+                    "@fec",
+                    DateTime.Now);
 
-            cmd.Parameters.AddWithValue("@fec", DateTime.Now);
+                cmd.Parameters.AddWithValue(
+                    "@tot",
+                    f.Total);
 
-            cmd.Parameters.AddWithValue("@tot", f.Total);
+                cmd.Parameters.AddWithValue(
+                    "@met",
+                    f.MetodoPago);
 
-            cmd.Parameters.AddWithValue("@met", f.MetodoPago);
+                cmd.Parameters.AddWithValue(
+                    "@est",
+                    f.Estado);
 
-            cmd.Parameters.AddWithValue("@est", f.Estado);
-
-            cmd.ExecuteNonQuery();
-
-            cn.Close();
+                cmd.ExecuteNonQuery();
+            }
 
             return RedirectToAction("Index");
         }
 
 
+        // =========================
         // VISTA EDITAR
+        // =========================
         public ActionResult Edit(int id)
         {
-            Factura f = new Factura();
+            Factura f =
+                new Factura();
 
-            SqlConnection cn = Conexion.ObtenerConexion();
-
-            cn.Open();
-
-            SqlCommand cmd = new SqlCommand(
-                "SELECT * FROM Facturas WHERE IdFactura=@id",
-                cn);
-
-            cmd.Parameters.AddWithValue("@id", id);
-
-            SqlDataReader dr = cmd.ExecuteReader();
-
-            if (dr.Read())
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
             {
-                f.IdFactura = int.Parse(dr["IdFactura"].ToString());
+                cn.Open();
 
-                f.IdPedido = int.Parse(dr["IdPedido"].ToString());
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"SELECT *
+                          FROM Facturas
+                          WHERE IdFactura=@id",
+                        cn);
 
-                f.Fecha = DateTime.Parse(dr["Fecha"].ToString());
+                cmd.Parameters.AddWithValue(
+                    "@id",
+                    id);
 
-                f.Total = decimal.Parse(dr["Total"].ToString());
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
 
-                f.MetodoPago = dr["MetodoPago"].ToString();
+                if (dr.Read())
+                {
+                    f.IdFactura =
+                        Convert.ToInt32(
+                            dr["IdFactura"]);
 
-                f.Estado = dr["Estado"].ToString();
+                    f.IdPedido =
+                        Convert.ToInt32(
+                            dr["IdPedido"]);
+
+                    f.Fecha =
+                        Convert.ToDateTime(
+                            dr["Fecha"]);
+
+                    f.Total =
+                        Convert.ToDecimal(
+                            dr["Total"]);
+
+                    f.MetodoPago =
+                        dr["MetodoPago"].ToString();
+
+                    f.Estado =
+                        dr["Estado"].ToString();
+                }
             }
-
-            cn.Close();
 
             return View(f);
         }
 
 
+        // =========================
         // ACTUALIZAR
+        // =========================
         [HttpPost]
         public ActionResult Edit(Factura f)
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cn.Open();
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"UPDATE Facturas
+                          SET
+                              Total=@tot,
+                              MetodoPago=@met,
+                              Estado=@est
+                          WHERE IdFactura=@id",
+                        cn);
 
-            SqlCommand cmd = new SqlCommand(
-                @"UPDATE Facturas
-                SET IdPedido=@idp,
-                    Total=@tot,
-                    MetodoPago=@met,
-                    Estado=@est
-                WHERE IdFactura=@id",
-                cn);
+                cmd.Parameters.AddWithValue(
+                    "@tot",
+                    f.Total);
 
-            cmd.Parameters.AddWithValue("@idp", f.IdPedido);
+                cmd.Parameters.AddWithValue(
+                    "@met",
+                    f.MetodoPago);
 
-            cmd.Parameters.AddWithValue("@tot", f.Total);
+                cmd.Parameters.AddWithValue(
+                    "@est",
+                    f.Estado);
 
-            cmd.Parameters.AddWithValue("@met", f.MetodoPago);
+                cmd.Parameters.AddWithValue(
+                    "@id",
+                    f.IdFactura);
 
-            cmd.Parameters.AddWithValue("@est", f.Estado);
-
-            cmd.Parameters.AddWithValue("@id", f.IdFactura);
-
-            cmd.ExecuteNonQuery();
-
-            cn.Close();
+                cmd.ExecuteNonQuery();
+            }
 
             return RedirectToAction("Index");
         }
 
 
+        // =========================
         // ELIMINAR
+        // =========================
         public ActionResult Delete(int id)
         {
-            SqlConnection cn = Conexion.ObtenerConexion();
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
 
-            cn.Open();
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"DELETE FROM Facturas
+                          WHERE IdFactura=@id",
+                        cn);
 
-            SqlCommand cmd = new SqlCommand(
-                "DELETE FROM Facturas WHERE IdFactura=@id",
-                cn);
+                cmd.Parameters.AddWithValue(
+                    "@id",
+                    id);
 
-            cmd.Parameters.AddWithValue("@id", id);
-
-            cmd.ExecuteNonQuery();
-
-            cn.Close();
+                cmd.ExecuteNonQuery();
+            }
 
             return RedirectToAction("Index");
         }

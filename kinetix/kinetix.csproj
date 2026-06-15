@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ConductorController.cs" />
+    <Compile Include="Controllers\ConductorRegistroController.cs" />
     <Compile Include="Controllers\FacturaController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -136,6 +137,7 @@
     <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Models\Factura.cs" />
     <Compile Include="Models\Pedido.cs" />
+    <Compile Include="Models\SolicitudConductor.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Vehiculo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -218,6 +220,8 @@
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Shared\_LayoutCliente.cshtml" />
     <Content Include="Views\Shared\_LayoutConductor.cshtml" />
+    <Content Include="Views\Conductor\Solicitar.cshtml" />
+    <Content Include="Views\ConductorRegistro\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

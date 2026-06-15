@@ -4,37 +4,51 @@
     ViewBag.Title = "Dashboard Admin";
 }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="container-fluid py-4">
 
-<div class="container mt-4">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
 
-    <h1 class="mb-4">
+        <div>
 
-        Dashboard Administrativo
+            <h1 class="fw-bold mb-1">
 
-    </h1>
+                Dashboard Administrativo
 
-    <h4>
+            </h1>
 
-        Bienvenido @Session["Usuario"]
+            <p class="text-muted mb-0">
 
-    </h4>
+                Bienvenido @Session["Usuario"]
 
-    <hr />
+            </p>
 
-    <div class="row">
+        </div>
 
-        <div class="col-md-3 mb-4">
+        <a href="/Login/Logout"
+           class="btn btn-dark">
 
-            <div class="card shadow p-4 text-center">
+            Cerrar Sesión
 
-                <h5>
+        </a>
+
+    </div>
+
+
+    <!-- CARDS -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+
+            <div class="card border-0 shadow-lg rounded-4 p-4">
+
+                <h6 class="text-muted">
 
                     Usuarios
 
-                </h5>
+                </h6>
 
-                <h1>
+                <h1 class="fw-bold">
 
                     @Model.TotalUsuarios
 
@@ -44,17 +58,17 @@
 
         </div>
 
-        <div class="col-md-3 mb-4">
+        <div class="col-md-3">
 
-            <div class="card shadow p-4 text-center">
+            <div class="card border-0 shadow-lg rounded-4 p-4">
 
-                <h5>
+                <h6 class="text-muted">
 
                     Conductores
 
-                </h5>
+                </h6>
 
-                <h1>
+                <h1 class="fw-bold">
 
                     @Model.TotalConductores
 
@@ -64,17 +78,17 @@
 
         </div>
 
-        <div class="col-md-3 mb-4">
+        <div class="col-md-3">
 
-            <div class="card shadow p-4 text-center">
+            <div class="card border-0 shadow-lg rounded-4 p-4">
 
-                <h5>
+                <h6 class="text-muted">
 
                     Vehículos
 
-                </h5>
+                </h6>
 
-                <h1>
+                <h1 class="fw-bold">
 
                     @Model.TotalVehiculos
 
@@ -84,17 +98,17 @@
 
         </div>
 
-        <div class="col-md-3 mb-4">
+        <div class="col-md-3">
 
-            <div class="card shadow p-4 text-center">
+            <div class="card border-0 shadow-lg rounded-4 p-4">
 
-                <h5>
+                <h6 class="text-muted">
 
                     Viajes
 
-                </h5>
+                </h6>
 
-                <h1>
+                <h1 class="fw-bold">
 
                     @Model.TotalPedidos
 
@@ -106,19 +120,21 @@
 
     </div>
 
-    <div class="row">
 
-        <div class="col-md-4 mb-4">
+    <!-- RESUMEN -->
+    <div class="row g-4 mb-5">
 
-            <div class="card shadow p-4 text-center">
+        <div class="col-md-4">
 
-                <h4>
+            <div class="card bg-success text-white border-0 shadow-lg rounded-4 p-4">
 
-                    Ganancias
+                <h5>
 
-                </h4>
+                    Ganancias Totales
 
-                <h1>
+                </h5>
+
+                <h1 class="fw-bold">
 
                     $@Model.Ganancias
 
@@ -128,17 +144,17 @@
 
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4">
 
-            <div class="card shadow p-4 text-center">
+            <div class="card bg-primary text-white border-0 shadow-lg rounded-4 p-4">
 
-                <h4>
+                <h5>
 
-                    Finalizados
+                    Viajes Finalizados
 
-                </h4>
+                </h5>
 
-                <h1>
+                <h1 class="fw-bold">
 
                     @Model.ViajesFinalizados
 
@@ -148,17 +164,17 @@
 
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4">
 
-            <div class="card shadow p-4 text-center">
+            <div class="card bg-danger text-white border-0 shadow-lg rounded-4 p-4">
 
-                <h4>
+                <h5>
 
-                    Cancelados
+                    Viajes Cancelados
 
-                </h4>
+                </h5>
 
-                <h1>
+                <h1 class="fw-bold">
 
                     @Model.ViajesCancelados
 
@@ -170,24 +186,114 @@
 
     </div>
 
-    <div class="card shadow p-4 mb-5">
 
-        <h3 class="mb-4">
+    <!-- SOLICITUDES -->
+    <div class="card border-0 shadow-lg rounded-4 p-4 mb-5">
 
-            Estadísticas Generales
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-        </h3>
+            <h3 class="fw-bold mb-0">
 
-        <canvas id="grafica"></canvas>
+                Solicitudes de Conductores
+
+            </h3>
+
+            <span class="badge bg-dark fs-6">
+
+                @Model.Solicitudes.Count Pendientes
+
+            </span>
+
+        </div>
+
+        @if (Model.Solicitudes.Count > 0)
+        {
+            <div class="table-responsive">
+
+                <table class="table align-middle">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Nombre</th>
+
+                            <th>Correo</th>
+
+                            <th>Teléfono</th>
+
+                            <th>Licencia</th>
+
+                            <th>Vehículo</th>
+
+                            <th>Acción</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model.Solicitudes)
+                        {
+                            <tr>
+
+                                <td>@item.Nombre</td>
+
+                                <td>@item.Correo</td>
+
+                                <td>@item.Telefono</td>
+
+                                <td>@item.Licencia</td>
+
+                                <td>@item.Vehiculo</td>
+
+                                <td class="d-flex gap-2">
+
+                                    <a href="/Conductor/Aprobar/@item.IdSolicitud"
+                                       class="btn btn-success btn-sm rounded-pill">
+
+                                        Aprobar
+
+                                    </a>
+
+                                    <a href="/Conductor/Rechazar/@item.IdSolicitud"
+                                       class="btn btn-danger btn-sm rounded-pill">
+
+                                        Rechazar
+
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-light border text-center">
+
+                No hay solicitudes pendientes.
+
+            </div>
+        }
 
     </div>
 
-    <div class="row">
 
-        <div class="col-md-3 mb-3">
+    <!-- ACCESOS -->
+    <div class="row g-3">
+
+        <div class="col-md-3">
 
             <a href="/Usuario"
-               class="btn btn-primary w-100">
+               class="btn btn-dark w-100 py-3 rounded-4">
 
                 Usuarios
 
@@ -195,10 +301,10 @@
 
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
 
             <a href="/Conductor"
-               class="btn btn-success w-100">
+               class="btn btn-success w-100 py-3 rounded-4">
 
                 Conductores
 
@@ -206,10 +312,10 @@
 
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
 
             <a href="/Vehiculo"
-               class="btn btn-dark w-100">
+               class="btn btn-primary w-100 py-3 rounded-4">
 
                 Vehículos
 
@@ -217,10 +323,10 @@
 
         </div>
 
-        <div class="col-md-3 mb-3">
+        <div class="col-md-3">
 
             <a href="/Pedido"
-               class="btn btn-warning w-100">
+               class="btn btn-warning w-100 py-3 rounded-4">
 
                 Pedidos
 
@@ -231,39 +337,3 @@
     </div>
 
 </div>
-
-<script>
-
-    var ctx =
-        document.getElementById('grafica');
-
-    new Chart(ctx,
-    {
-        type: 'bar',
-
-        data:
-        {
-            labels:
-            [
-                'Usuarios',
-                'Conductores',
-                'Vehículos',
-                'Viajes'
-            ],
-
-            datasets:
-            [{
-                label: 'Kinetix',
-
-                data:
-                [
-                    @Model.TotalUsuarios,
-                    @Model.TotalConductores,
-                    @Model.TotalVehiculos,
-                    @Model.TotalPedidos
-                ]
-            }]
-        }
-    });
-
-</script>

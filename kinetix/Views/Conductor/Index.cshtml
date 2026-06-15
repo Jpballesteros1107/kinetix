@@ -43,6 +43,16 @@
                     Eliminar
                 </a>
 
+                @if (item.Estado == "Pendiente")
+                {
+                    <a href="/Conductor/Aprobar/@item.IdConductor"
+                       class="btn btn-success">
+
+                        Aprobar
+
+                    </a>
+                }
+
             </td>
 
         </tr>

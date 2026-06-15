@@ -1,0 +1,127 @@
+﻿@model kinetix.Models.SolicitudConductor
+
+@{
+    ViewBag.Title = "Registro Conductor";
+}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6">
+
+            <div class="card shadow border-0 rounded-4 p-5">
+
+                <h1 class="mb-4 text-center">
+
+                    Conducir con Kinetix
+
+                </h1>
+
+                <p class="text-muted text-center mb-5">
+
+                    Completa tu solicitud para convertirte
+                    en conductor de la plataforma.
+
+                </p>
+
+                @if (ViewBag.Mensaje != null)
+                {
+                    <div class="alert alert-success">
+
+                        @ViewBag.Mensaje
+
+                    </div>
+                }
+
+                @using (Html.BeginForm())
+                {
+                    <div class="mb-3">
+
+                        <label>
+                            Nombre completo
+                        </label>
+
+                        @Html.TextBoxFor(
+                            m => m.Nombre,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Correo
+                        </label>
+
+                        @Html.TextBoxFor(
+                            m => m.Correo,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Teléfono
+                        </label>
+
+                        @Html.TextBoxFor(
+                            m => m.Telefono,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label>
+                            Licencia
+                        </label>
+
+                        @Html.TextBoxFor(
+                            m => m.Licencia,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <div class="mb-4">
+
+                        <label>
+                            Vehículo
+                        </label>
+
+                        @Html.TextBoxFor(
+                            m => m.Vehiculo,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                    </div>
+
+                    <button class="btn btn-success w-100 btn-lg">
+
+                        Enviar Solicitud
+
+                    </button>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

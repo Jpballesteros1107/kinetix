@@ -15,5 +15,6 @@ namespace kinetix.Models
         public int ViajesFinalizados { get; set; }
         public int ViajesCancelados { get; set; }
         public decimal Ganancias { get; set; }
+        public List<SolicitudConductor> Solicitudes { get; set; }
     }
 }

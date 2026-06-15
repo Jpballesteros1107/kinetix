@@ -11,6 +11,13 @@ namespace kinetix.Controllers
         // =========================
         public ActionResult Index()
         {
+            // Si ya inició sesión
+            if (Session["Usuario"] != null)
+            {
+                return RedireccionarPorRol(
+                    Session["Rol"].ToString());
+            }
+
             return View();
         }
 
@@ -23,6 +30,15 @@ namespace kinetix.Controllers
             string correo,
             string password)
         {
+            if (string.IsNullOrEmpty(correo)
+                || string.IsNullOrEmpty(password))
+            {
+                ViewBag.Error =
+                    "Completa todos los campos";
+
+                return View();
+            }
+
             using (SqlConnection cn =
                 Conexion.ObtenerConexion())
             {
@@ -30,7 +46,11 @@ namespace kinetix.Controllers
 
                 SqlCommand cmd =
                     new SqlCommand(
-                        @"SELECT *
+                        @"SELECT
+                            IdUsuario,
+                            Nombre,
+                            Rol,
+                            Estado
                         FROM Usuarios
                         WHERE Correo=@c
                         AND Password=@p",
@@ -49,36 +69,30 @@ namespace kinetix.Controllers
 
                 if (dr.Read())
                 {
+                    // VALIDAR ESTADO
+                    if (dr["Estado"].ToString()
+                        != "Activo")
+                    {
+                        ViewBag.Error =
+                            "Tu cuenta está inactiva";
+
+                        return View();
+                    }
+
+                    // SESIONES
+                    Session["IdUsuario"] =
+                        dr["IdUsuario"].ToString();
+
                     Session["Usuario"] =
                         dr["Nombre"].ToString();
 
                     Session["Rol"] =
                         dr["Rol"].ToString();
 
-                    Session["IdUsuario"] =
-                        dr["IdUsuario"].ToString();
-
                     string rol =
                         dr["Rol"].ToString();
 
-                    // REDIRECCIÓN
-                    if (rol == "Admin")
-                    {
-                        return RedirectToAction(
-                            "DashboardAdmin",
-                            "Home");
-                    }
-
-                    if (rol == "Conductor")
-                    {
-                        return RedirectToAction(
-                            "DashboardConductor",
-                            "Home");
-                    }
-
-                    return RedirectToAction(
-                        "DashboardCliente",
-                        "Home");
+                    return RedireccionarPorRol(rol);
                 }
             }
 
@@ -96,9 +110,40 @@ namespace kinetix.Controllers
         {
             Session.Clear();
 
+            Session.Abandon();
+
             return RedirectToAction(
                 "Index",
                 "Home");
+        }
+
+
+        // =========================
+        // REDIRECCIÓN POR ROL
+        // =========================
+        private ActionResult RedireccionarPorRol(
+            string rol)
+        {
+            switch (rol)
+            {
+                case "Admin":
+
+                    return RedirectToAction(
+                        "DashboardAdmin",
+                        "Home");
+
+                case "Conductor":
+
+                    return RedirectToAction(
+                        "DashboardConductor",
+                        "Home");
+
+                default:
+
+                    return RedirectToAction(
+                        "DashboardCliente",
+                        "Home");
+            }
         }
     }
 }

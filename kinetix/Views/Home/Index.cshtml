@@ -1,118 +1,166 @@
-﻿@model kinetix.Models.Dashboard
-
-@{
+﻿@{
     ViewBag.Title = "Kinetix";
 }
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<div class="container-fluid p-0">
+<main class="bg-white text-dark">
 
     <!-- HERO -->
-    <section class="bg-dark text-white text-center py-5">
+    <section class="bg-black text-white">
+
+        <div class="container py-5">
+
+            <div class="row align-items-center min-vh-100">
+
+                <div class="col-md-6">
+
+                    <h1 class="display-2 fw-bold mb-4">
+
+                        Muévete
+                        por la ciudad
+                        con Kinetix.
+
+                    </h1>
+
+                    <p class="lead text-light mb-4">
+
+                        Solicita viajes rápidos, seguros y confiables
+                        desde cualquier lugar de la ciudad.
+
+                    </p>
+
+                    <p class="mb-5 text-secondary">
+
+                        Una plataforma moderna inspirada en las
+                        mejores aplicaciones de movilidad urbana.
+
+                    </p>
+
+                    <a href="/Registro"
+                       class="btn btn-success btn-lg px-5 me-3 rounded-pill">
+
+                        Empezar Ahora
+
+                    </a>
+
+                    <a href="/ConductorRegistro"
+                       class="btn btn-outline-light btn-lg px-5 rounded-pill">
+
+                        Conducir con Kinetix
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-6 text-center">
+
+                    <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=1200"
+                         class="img-fluid rounded-4 shadow-lg"
+                         style="max-height:600px; object-fit:cover;" />
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- COMO FUNCIONA -->
+    <section class="py-5 bg-light">
 
         <div class="container">
 
-            <h1 class="display-2 fw-bold mb-3">
-                KINETIX
-            </h1>
+            <div class="text-center mb-5">
 
-            <p class="lead mb-4">
+                <h2 class="fw-bold display-5">
 
-                La nueva generación del transporte urbano.
+                    ¿Cómo funciona?
 
-            </p>
+                </h2>
 
-            <p class="mb-5">
+                <p class="text-muted">
 
-                Solicita viajes, administra conductores
-                y controla toda la operación desde una sola plataforma.
+                    Solicitar un viaje nunca fue tan fácil.
 
-            </p>
-
-            <a href="/Registro"
-               class="btn btn-success btn-lg px-5 me-3">
-
-                Comenzar
-
-            </a>
-
-            <a href="/Login"
-               class="btn btn-outline-light btn-lg px-5">
-
-                Iniciar Sesión
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- STATS -->
-    <section class="container mt-5">
-
-        <div class="row text-center">
-
-            <div class="col-md-3 mb-4">
-
-                <div class="card shadow border-0 p-4 rounded-4">
-
-                    <h5 class="text-muted">
-                        Usuarios
-                    </h5>
-
-                    <h1 class="display-5 fw-bold">
-                        @Model.TotalUsuarios
-                    </h1>
-
-                </div>
+                </p>
 
             </div>
 
-            <div class="col-md-3 mb-4">
+            <div class="row text-center">
 
-                <div class="card shadow border-0 p-4 rounded-4">
+                <div class="col-md-4 mb-4">
 
-                    <h5 class="text-muted">
-                        Conductores
-                    </h5>
+                    <div class="p-4">
 
-                    <h1 class="display-5 fw-bold">
-                        @Model.TotalConductores
-                    </h1>
+                        <div class="display-4 mb-3">
+                            📍
+                        </div>
 
-                </div>
+                        <h3 class="fw-bold">
 
-            </div>
+                            Elige tu destino
 
-            <div class="col-md-3 mb-4">
+                        </h3>
 
-                <div class="card shadow border-0 p-4 rounded-4">
+                        <p class="text-muted">
 
-                    <h5 class="text-muted">
-                        Vehículos
-                    </h5>
+                            Ingresa el punto de recogida
+                            y hacia dónde deseas ir.
 
-                    <h1 class="display-5 fw-bold">
-                        @Model.TotalVehiculos
-                    </h1>
+                        </p>
+
+                    </div>
 
                 </div>
 
-            </div>
+                <div class="col-md-4 mb-4">
 
-            <div class="col-md-3 mb-4">
+                    <div class="p-4">
 
-                <div class="card shadow border-0 p-4 rounded-4">
+                        <div class="display-4 mb-3">
+                            🚘
+                        </div>
 
-                    <h5 class="text-muted">
-                        Viajes
-                    </h5>
+                        <h3 class="fw-bold">
 
-                    <h1 class="display-5 fw-bold">
-                        @Model.TotalPedidos
-                    </h1>
+                            Encuentra un conductor
+
+                        </h3>
+
+                        <p class="text-muted">
+
+                            Kinetix conecta automáticamente
+                            con conductores disponibles.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-4">
+
+                    <div class="p-4">
+
+                        <div class="display-4 mb-3">
+                            ⭐
+                        </div>
+
+                        <h3 class="fw-bold">
+
+                            Disfruta el viaje
+
+                        </h3>
+
+                        <p class="text-muted">
+
+                            Viajes cómodos,
+                            rápidos y seguros.
+
+                        </p>
+
+                    </div>
 
                 </div>
 
@@ -123,170 +171,73 @@
     </section>
 
 
-    <!-- GANANCIAS -->
-    <section class="container mt-5">
+    <!-- BENEFICIOS -->
+    <section class="py-5">
 
-        <div class="row text-center">
+        <div class="container">
 
-            <div class="col-md-4 mb-4">
+            <div class="row align-items-center">
 
-                <div class="card bg-success text-white border-0 shadow p-5 rounded-4">
+                <div class="col-md-6">
 
-                    <h4>
-                        Ganancias
-                    </h4>
-
-                    <h1 class="display-5 fw-bold">
-                        $@Model.Ganancias
-                    </h1>
+                    <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200"
+                         class="img-fluid rounded-4 shadow" />
 
                 </div>
 
-            </div>
+                <div class="col-md-6">
 
-            <div class="col-md-4 mb-4">
+                    <h2 class="display-5 fw-bold mb-4">
 
-                <div class="card bg-primary text-white border-0 shadow p-5 rounded-4">
+                        Seguridad y confianza
+                        en cada trayecto.
 
-                    <h4>
-                        Viajes Finalizados
-                    </h4>
+                    </h2>
 
-                    <h1 class="display-5 fw-bold">
-                        @Model.ViajesFinalizados
-                    </h1>
+                    <div class="mb-4">
 
-                </div>
+                        <h5 class="fw-bold">
+                            ✔ Conductores verificados
+                        </h5>
 
-            </div>
+                        <p class="text-muted">
 
-            <div class="col-md-4 mb-4">
+                            Todos los conductores pasan
+                            por validaciones y aprobación.
 
-                <div class="card bg-danger text-white border-0 shadow p-5 rounded-4">
+                        </p>
 
-                    <h4>
-                        Cancelados
-                    </h4>
+                    </div>
 
-                    <h1 class="display-5 fw-bold">
-                        @Model.ViajesCancelados
-                    </h1>
+                    <div class="mb-4">
 
-                </div>
+                        <h5 class="fw-bold">
+                            ✔ Viajes en tiempo real
+                        </h5>
 
-            </div>
+                        <p class="text-muted">
 
-        </div>
+                            Consulta el estado de tu viaje
+                            en cualquier momento.
 
-    </section>
+                        </p>
 
+                    </div>
 
-    <!-- MODULOS -->
-    <section class="container mt-5">
+                    <div class="mb-4">
 
-        <h2 class="text-center mb-5 fw-bold">
+                        <h5 class="fw-bold">
+                            ✔ Plataforma moderna
+                        </h5>
 
-            Módulos del Sistema
+                        <p class="text-muted">
 
-        </h2>
+                            Desarrollada con tecnologías
+                            modernas y escalables.
 
-        <div class="row">
+                        </p>
 
-            <div class="col-md-3 mb-4">
-
-                <div class="card shadow border-0 rounded-4 p-4 h-100">
-
-                    <h3>
-                        Usuarios
-                    </h3>
-
-                    <p class="text-muted">
-
-                        Gestión de clientes registrados.
-
-                    </p>
-
-                    <a href="/Usuario"
-                       class="btn btn-outline-dark mt-auto">
-
-                        Administrar
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-3 mb-4">
-
-                <div class="card shadow border-0 rounded-4 p-4 h-100">
-
-                    <h3>
-                        Conductores
-                    </h3>
-
-                    <p class="text-muted">
-
-                        Control de conductores y licencias.
-
-                    </p>
-
-                    <a href="/Conductor"
-                       class="btn btn-outline-dark mt-auto">
-
-                        Administrar
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-3 mb-4">
-
-                <div class="card shadow border-0 rounded-4 p-4 h-100">
-
-                    <h3>
-                        Vehículos
-                    </h3>
-
-                    <p class="text-muted">
-
-                        Gestión completa de vehículos.
-
-                    </p>
-
-                    <a href="/Vehiculo"
-                       class="btn btn-outline-dark mt-auto">
-
-                        Administrar
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <div class="col-md-3 mb-4">
-
-                <div class="card shadow border-0 rounded-4 p-4 h-100">
-
-                    <h3>
-                        Facturación
-                    </h3>
-
-                    <p class="text-muted">
-
-                        Consulta y control de pagos.
-
-                    </p>
-
-                    <a href="/Factura"
-                       class="btn btn-outline-dark mt-auto">
-
-                        Administrar
-
-                    </a>
+                    </div>
 
                 </div>
 
@@ -297,68 +248,67 @@
     </section>
 
 
-    <!-- GRAFICA -->
-    <section class="container mt-5 mb-5">
+    <!-- CONDUCTORES -->
+    <section class="bg-dark text-white py-5">
 
-        <div class="card shadow border-0 rounded-4 p-5">
+        <div class="container text-center">
 
-            <h2 class="mb-4 text-center">
+            <h2 class="display-5 fw-bold mb-4">
 
-                Estadísticas Generales
+                Genera ingresos
+                conduciendo con Kinetix
 
             </h2>
 
-            <canvas id="grafica"></canvas>
+            <p class="lead text-light mb-5">
+
+                Únete a nuestra red de conductores
+                y comienza a generar ganancias.
+
+            </p>
+
+            <a href="/ConductorRegistro"
+               class="btn btn-success btn-lg px-5 rounded-pill">
+
+                Registrarme como conductor
+
+            </a>
 
         </div>
 
     </section>
 
-</div>
 
+    <!-- CTA FINAL -->
+    <section class="py-5">
 
-<script>
+        <div class="container">
 
-var ctx =
-    document.getElementById('grafica');
+            <div class="bg-success text-white rounded-4 p-5 text-center shadow-lg">
 
-new Chart(ctx,
-{
-    type: 'bar',
+                <h2 class="display-5 fw-bold mb-3">
 
-    data:
-    {
-        labels:
-        [
-            'Usuarios',
-            'Conductores',
-            'Vehículos',
-            'Pedidos',
-            'Facturas'
-        ],
+                    ¿Listo para comenzar?
 
-        datasets:
-        [{
-            label: 'Kinetix',
+                </h2>
 
-            data:
-            [
-                @Model.TotalUsuarios,
-                @Model.TotalConductores,
-                @Model.TotalVehiculos,
-                @Model.TotalPedidos,
-                @Model.TotalFacturas
-            ],
+                <p class="lead mb-4">
 
-            borderWidth: 1
-        }]
-    },
+                    Regístrate y comienza a usar Kinetix hoy mismo.
 
-    options:
-    {
-        responsive: true
-    }
-});
+                </p>
 
-</script>
-```
+                <a href="/Registro"
+                   class="btn btn-light btn-lg px-5 rounded-pill">
+
+                    Crear Cuenta
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>

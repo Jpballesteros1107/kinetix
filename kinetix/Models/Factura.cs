@@ -13,5 +13,6 @@ namespace kinetix.Models
         public decimal Total { get; set; }
         public string MetodoPago { get; set; }
         public string Estado { get; set; }
+        public string Cliente { get; set; }
     }
 }

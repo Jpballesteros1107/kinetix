@@ -1,0 +1,48 @@
+﻿@model kinetix.Models.Conductor
+
+<h2>Solicitud para Conductor</h2>
+
+<hr />
+
+@using (Html.BeginForm())
+{
+    <div class="mb-3">
+
+        <label>
+            Nombre
+        </label>
+
+        @Html.TextBoxFor(
+            x => x.Nombre,
+            new { @class = "form-control" })
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Licencia
+        </label>
+
+        @Html.TextBoxFor(
+            x => x.Licencia,
+            new { @class = "form-control" })
+
+    </div>
+
+    <div class="mb-3">
+
+        <label>
+            Teléfono
+        </label>
+
+        @Html.TextBoxFor(
+            x => x.Telefono,
+            new { @class = "form-control" })
+
+    </div>
+
+    <button class="btn btn-dark">
+        Enviar Solicitud
+    </button>
+}
