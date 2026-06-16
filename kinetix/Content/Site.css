@@ -1,20 +1,61 @@
-﻿/* Set padding to keep content from hitting the edges */
-.body-content {
-    margin-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+﻿body {
+    background: linear-gradient( 135deg, #f5f7fa, #e4e8eb );
+    font-family: 'Poppins', sans-serif;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+/* CARDS */
+
+.card {
+    transition: .3s;
+    overflow: hidden;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+    .card:hover {
+        transform: translateY(-6px);
+    }
+
+/* TITULOS */
+
+.dashboard-title {
+    font-weight: 700;
+    letter-spacing: -.5px;
+}
+
+/* ICONOS */
+
+.icon-box {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+/* BOTONES */
+
+.btn {
+    border-radius: 14px;
+    font-weight: 600;
+}
+
+/* HERO */
+
+.hero-gradient {
+    background: linear-gradient( 135deg, #111827, #1f2937 );
+}
+
+/* TABLAS */
+
+.table thead {
+    background: #111827;
+    color: white;
+}
+
+/* BADGES */
+
+.badge {
+    padding: 10px 15px;
+    border-radius: 20px;
 }

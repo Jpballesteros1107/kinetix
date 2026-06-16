@@ -1,1 +1,1 @@
-﻿SELECT * FROM PEDIDOS;
+﻿SELECT * FROM Usuarios;

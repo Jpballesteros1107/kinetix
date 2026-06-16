@@ -108,9 +108,9 @@ namespace kinetix.Controllers
         }
 
 
-        // =========================
+
         // DASHBOARD CLIENTE
-        // =========================
+
         public ActionResult DashboardCliente()
         {
             if (!ValidarRol("Cliente"))
@@ -136,33 +136,66 @@ namespace kinetix.Controllers
                     "Login");
             }
 
-            return View();
+            List<Pedido> pedidos =
+                new List<Pedido>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+                    SELECT *
+                    FROM Pedidos
+                    WHERE IdConductor =
+                    (
+                        SELECT IdConductor
+                        FROM Conductores
+                        WHERE Nombre=@nom
+                    )
+                    ORDER BY IdPedido DESC
+                    ",
+                    cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@nom",
+                    Session["Usuario"]);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    pedidos.Add(new Pedido
+                    {
+                        IdPedido =
+                            Convert.ToInt32(
+                                dr["IdPedido"]),
+
+                        Origen =
+                            dr["Origen"].ToString(),
+
+                        Destino =
+                            dr["Destino"].ToString(),
+
+                        Estado =
+                            dr["Estado"].ToString(),
+
+                        Valor =
+                            Convert.ToDecimal(
+                                dr["Valor"]),
+
+                        Fecha =
+                            Convert.ToDateTime(
+                                dr["Fecha"])
+                    });
+                }
+            }
+
+            return View(pedidos);
         }
-
-
-        // =========================
-        // ABOUT
-        // =========================
-        public ActionResult About()
-        {
-            ViewBag.Message =
-                "Acerca de Kinetix";
-
-            return View();
-        }
-
-
-        // =========================
-        // CONTACT
-        // =========================
-        public ActionResult Contact()
-        {
-            ViewBag.Message =
-                "Contacto Kinetix";
-
-            return View();
-        }
-
 
         // =========================
         // OBTENER ESTADISTICAS

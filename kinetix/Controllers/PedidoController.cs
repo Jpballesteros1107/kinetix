@@ -410,12 +410,9 @@ namespace kinetix.Controllers
                 }
             }
 
-            return Json(
-                new
-                {
-                    success = true
-                },
-                JsonRequestBehavior.AllowGet);
+            return RedirectToAction(
+            "DashboardConductor",
+            "Home");
         }
     }
 }

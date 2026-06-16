@@ -1,7 +1,176 @@
-﻿
-@{
-    ViewBag.Title = "_LayoutCliente";
-}
+﻿<!DOCTYPE html>
 
-<h2>_LayoutCliente</h2>
+<html>
 
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>
+
+        @ViewBag.Title - Kinetix
+
+    </title>
+
+    <!-- BOOTSTRAP -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <!-- ICONOS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- GOOGLE FONT -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link href="~/Content/Site.css"
+          rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold"
+               href="/Home/DashboardCliente">
+
+                <i class="bi bi-car-front-fill me-2"></i>
+
+                Kinetix
+
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menu">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse"
+                 id="menu">
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                    <li class="nav-item me-2">
+
+                        <a class="nav-link"
+                           href="/Home/DashboardCliente">
+
+                            <i class="bi bi-house-fill me-1"></i>
+
+                            Inicio
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item me-2">
+
+                        <a class="nav-link"
+                           href="/Pedido/Create">
+
+                            <i class="bi bi-geo-alt-fill me-1"></i>
+
+                            Solicitar Viaje
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item me-2">
+
+                        <a class="nav-link"
+                           href="/Pedido">
+
+                            <i class="bi bi-clock-history me-1"></i>
+
+                            Historial
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item me-3">
+
+                        <a class="nav-link"
+                           href="/Factura">
+
+                            <i class="bi bi-receipt-cutoff me-1"></i>
+
+                            Facturas
+
+                        </a>
+
+                    </li>
+
+                    <li class="nav-item me-3">
+
+                        <span class="fw-semibold">
+
+                            Hola,
+                            @Session["Usuario"]
+
+                        </span>
+
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a href="/Login/Logout"
+                           class="btn btn-dark rounded-pill px-4">
+
+                            <i class="bi bi-box-arrow-right me-1"></i>
+
+                            Salir
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- CONTENIDO -->
+    <main class="container py-4">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="text-center py-4 text-muted">
+
+        © @DateTime.Now.Year Kinetix
+
+    </footer>
+
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+</body>
+
+</html>

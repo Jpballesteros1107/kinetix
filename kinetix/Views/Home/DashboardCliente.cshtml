@@ -1,119 +1,417 @@
 ﻿@{
     ViewBag.Title = "Dashboard Cliente";
+
+    Layout =
+    "~/Views/Shared/_LayoutCliente.cshtml";
 }
 
-<div class="container mt-5">
+<div class="container py-4">
 
-    <div class="bg-dark text-white p-5 rounded-4 shadow mb-5">
+    <!-- HERO -->
+    <div class="hero-gradient text-white rounded-4 shadow-lg p-5 mb-5 overflow-hidden">
 
-        <h1 class="display-5 fw-bold">
+        <div class="row align-items-center">
 
-            Hola @Session["Usuario"]
+            <div class="col-lg-7">
 
-        </h1>
+                <span class="badge bg-light text-dark px-3 py-2 mb-4">
 
-        <p class="lead">
+                    <i class="bi bi-lightning-charge-fill me-2"></i>
 
-            Bienvenido a Kinetix.
+                    Transporte rápido y seguro
 
-        </p>
+                </span>
+
+                <h1 class="display-4 fw-bold mb-3">
+
+                    Hola,
+                    @Session["Usuario"] 👋
+
+                </h1>
+
+                <p class="lead mb-4">
+
+                    Solicita viajes cómodos y seguros
+                    desde cualquier lugar de la ciudad.
+
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+
+                    <a href="/Pedido/Create"
+                       class="btn btn-light btn-lg px-4">
+
+                        <i class="bi bi-geo-alt-fill me-2"></i>
+
+                        Solicitar Viaje
+
+                    </a>
+
+                    <a href="/Pedido"
+                       class="btn btn-outline-light btn-lg px-4">
+
+                        <i class="bi bi-clock-history me-2"></i>
+
+                        Ver Historial
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="col-lg-5 text-center mt-5 mt-lg-0">
+
+                <i class="bi bi-car-front-fill"
+                   style="font-size:140px; opacity:.9;">
+                </i>
+
+            </div>
+
+        </div>
 
     </div>
 
 
-    <div class="row">
+    <!-- ESTADISTICAS -->
+    <div class="row g-4 mb-5">
 
-        <div class="col-md-4 mb-4">
+        <!-- VIAJES -->
+        <div class="col-md-4">
 
-            <div class="card shadow border-0 rounded-4 p-4 text-center h-100">
+            <div class="card shadow-lg rounded-4 p-4 h-100">
 
-                <h3>
+                <div class="d-flex align-items-center">
 
-                    Solicitar Viaje
+                    <div class="icon-box bg-dark text-white me-3">
 
-                </h3>
+                        <i class="bi bi-car-front-fill"></i>
 
-                <p class="text-muted">
+                    </div>
 
-                    Pide un conductor en tiempo real.
+                    <div>
 
-                </p>
+                        <h6 class="text-muted mb-1">
 
-                <a href="/Pedido/Create"
-                   class="btn btn-dark">
+                            Viajes realizados
 
-                    Solicitar
+                        </h6>
 
-                </a>
+                        <h2 class="fw-bold mb-0">
 
-            </div>
+                            12
 
-        </div>
+                        </h2>
 
+                    </div>
 
-        <div class="col-md-4 mb-4">
-
-            <div class="card shadow border-0 rounded-4 p-4 text-center h-100">
-
-                <h3>
-
-                    Historial
-
-                </h3>
-
-                <p class="text-muted">
-
-                    Consulta tus viajes realizados.
-
-                </p>
-
-                <a href="/Pedido"
-                   class="btn btn-primary">
-
-                    Ver Viajes
-
-                </a>
+                </div>
 
             </div>
 
         </div>
 
 
-        <div class="col-md-4 mb-4">
+        <!-- GASTOS -->
+        <div class="col-md-4">
 
-            <div class="card shadow border-0 rounded-4 p-4 text-center h-100">
+            <div class="card shadow-lg rounded-4 p-4 h-100">
 
-                <h3>
+                <div class="d-flex align-items-center">
 
-                    Facturas
+                    <div class="icon-box bg-success text-white me-3">
 
-                </h3>
+                        <i class="bi bi-cash-stack"></i>
 
-                <p class="text-muted">
+                    </div>
 
-                    Revisa tus pagos y recibos.
+                    <div>
 
-                </p>
+                        <h6 class="text-muted mb-1">
 
-                <a href="/Factura"
-                   class="btn btn-success">
+                            Total gastado
 
-                    Ver Facturas
+                        </h6>
 
-                </a>
+                        <h2 class="fw-bold mb-0">
+
+                            $320K
+
+                        </h2>
+
+                    </div>
+
+                </div>
 
             </div>
 
         </div>
 
-        <a href="/Conductor/Solicitar"
-           class="btn btn-warning btn-lg">
 
-            Quiero ser conductor
+        <!-- CALIFICACION -->
+        <div class="col-md-4">
 
-        </a>
+            <div class="card shadow-lg rounded-4 p-4 h-100">
+
+                <div class="d-flex align-items-center">
+
+                    <div class="icon-box bg-primary text-white me-3">
+
+                        <i class="bi bi-star-fill"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6 class="text-muted mb-1">
+
+                            Calificación
+
+                        </h6>
+
+                        <h2 class="fw-bold mb-0">
+
+                            4.9
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- OPCIONES -->
+    <div class="row g-4">
+
+        <!-- SOLICITAR -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+
+                <div class="card-body text-center p-5">
+
+                    <div class="mb-4">
+
+                        <div class="icon-box bg-dark text-white mx-auto">
+
+                            <i class="bi bi-geo-alt-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                    <h3 class="fw-bold">
+
+                        Solicitar Viaje
+
+                    </h3>
+
+                    <p class="text-muted mt-3">
+
+                        Encuentra conductores disponibles
+                        cerca de tu ubicación en segundos.
+
+                    </p>
+
+                    <a href="/Pedido/Create"
+                       class="btn btn-dark btn-lg w-100 mt-3">
+
+                        Solicitar Ahora
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HISTORIAL -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+
+                <div class="card-body text-center p-5">
+
+                    <div class="mb-4">
+
+                        <div class="icon-box bg-primary text-white mx-auto">
+
+                            <i class="bi bi-clock-history"></i>
+
+                        </div>
+
+                    </div>
+
+                    <h3 class="fw-bold">
+
+                        Historial
+
+                    </h3>
+
+                    <p class="text-muted mt-3">
+
+                        Consulta tus viajes recientes
+                        y revisa el estado de tus recorridos.
+
+                    </p>
+
+                    <a href="/Pedido"
+                       class="btn btn-primary btn-lg w-100 mt-3">
+
+                        Ver Historial
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FACTURAS -->
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+
+                <div class="card-body text-center p-5">
+
+                    <div class="mb-4">
+
+                        <div class="icon-box bg-success text-white mx-auto">
+
+                            <i class="bi bi-receipt-cutoff"></i>
+
+                        </div>
+
+                    </div>
+
+                    <h3 class="fw-bold">
+
+                        Facturas
+
+                    </h3>
+
+                    <p class="text-muted mt-3">
+
+                        Revisa pagos, recibos
+                        y detalles de facturación fácilmente.
+
+                    </p>
+
+                    <a href="/Factura"
+                       class="btn btn-success btn-lg w-100 mt-3">
+
+                        Ver Facturas
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVIDAD -->
+    <div class="card border-0 shadow-lg rounded-4 p-4 mt-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h3 class="fw-bold mb-1">
+
+                    Actividad Reciente
+
+                </h3>
+
+                <p class="text-muted mb-0">
+
+                    Últimos movimientos de tu cuenta
+
+                </p>
+
+            </div>
+
+            <i class="bi bi-clock-history fs-1 text-primary"></i>
+
+        </div>
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <div class="border rounded-4 p-4 h-100">
+
+                    <h6 class="text-muted">
+
+                        Último viaje
+
+                    </h6>
+
+                    <h5 class="fw-bold">
+
+                        Valledupar → Centro
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="border rounded-4 p-4 h-100">
+
+                    <h6 class="text-muted">
+
+                        Estado
+
+                    </h6>
+
+                    <h5 class="fw-bold text-success">
+
+                        Finalizado
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="border rounded-4 p-4 h-100">
+
+                    <h6 class="text-muted">
+
+                        Último pago
+
+                    </h6>
+
+                    <h5 class="fw-bold">
+
+                        $18.000 COP
+
+                    </h5>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
-```
