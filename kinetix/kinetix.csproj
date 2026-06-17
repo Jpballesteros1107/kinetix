@@ -225,6 +225,7 @@
     <Content Include="Views\Pedido\MisViajes.cshtml" />
     <Content Include="Views\Factura\MisGanancias.cshtml" />
     <Content Include="Views\Factura\MisFacturas.cshtml" />
+    <Content Include="Views\Pedido\MisPedidos.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

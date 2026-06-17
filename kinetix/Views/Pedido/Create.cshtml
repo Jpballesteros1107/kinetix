@@ -407,6 +407,52 @@
             padding: 24px;
         }
     }
+
+    /* ==========================
+   PAYMENT
+========================== */
+
+    .payment-grid {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 16px;
+    }
+
+    .payment-card {
+        background: #1a1a1a;
+        border: 2px solid rgba(255,255,255,.08);
+        border-radius: 18px;
+        padding: 22px;
+        cursor: pointer;
+        transition: .25s;
+        text-align: center;
+        color: white;
+    }
+
+        .payment-card:hover {
+            border-color: #00c853;
+            transform: translateY(-2px);
+        }
+
+        .payment-card i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 10px;
+            color: #00c853;
+        }
+
+        .payment-card span {
+            font-weight: 700;
+        }
+
+    .payment-radio {
+        display: none;
+    }
+
+    .payment-card:has(input:checked) {
+        border-color: #00c853;
+        background: rgba(0,200,83,.12);
+    }
 </style>
 
 
@@ -525,13 +571,77 @@
                     <div class="form-group-custom full-width">
 
                         <label class="label-custom">
+                            Método de Pago
+                        </label>
+
+                        <div class="payment-grid">
+
+                            <label class="payment-card">
+
+                                @Html.RadioButtonFor(
+                                    x => x.MetodoPago,
+                                    "Efectivo",
+                                    new { @class = "payment-radio" })
+
+                                <i class="bi bi-cash-coin"></i>
+
+                                <span>Efectivo</span>
+
+                            </label>
+
+                            <label class="payment-card">
+
+                                @Html.RadioButtonFor(
+                                    x => x.MetodoPago,
+                                    "Tarjeta",
+                                    new { @class = "payment-radio" })
+
+                                <i class="bi bi-credit-card-fill"></i>
+
+                                <span>Tarjeta</span>
+
+                            </label>
+
+                            <label class="payment-card">
+
+                                @Html.RadioButtonFor(
+                                    x => x.MetodoPago,
+                                    "Nequi",
+                                    new { @class = "payment-radio" })
+
+                                <i class="bi bi-phone-fill"></i>
+
+                                <span>Nequi</span>
+
+                            </label>
+
+                            <label class="payment-card">
+
+                                @Html.RadioButtonFor(
+                                    x => x.MetodoPago,
+                                    "Daviplata",
+                                    new { @class = "payment-radio" })
+
+                                <i class="bi bi-wallet2"></i>
+
+                                <span>Daviplata</span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group-custom full-width">
+
+                        <label class="label-custom">
                             Mapa del recorrido
                         </label>
 
                         <div class="map-container">
 
                             <iframe src="https://maps.google.com/maps?q=Valledupar&t=&z=13&ie=UTF8&iwloc=&output=embed"
-                                    width="100"
+                                    width="100%"
                                     height="350"
                                     style="border:0; border-radius:18px;"
                                     allowfullscreen>

@@ -16,6 +16,7 @@ namespace kinetix.Models
         public string Destino { get; set; }
         public string Estado { get; set; }
         public decimal Valor { get; set; }
+        public string MetodoPago { get; set; }
         public DateTime Fecha { get; set; }
     }
 }

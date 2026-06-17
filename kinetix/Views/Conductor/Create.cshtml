@@ -106,6 +106,45 @@
             box-shadow: 0 0 0 4px rgba(0,200,83,0.12);
         }
 
+    /* =========================
+       PASSWORD TOGGLE
+    ========================== */
+
+    .input-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        color: rgba(255,255,255,0.45);
+        font-size: 16px;
+        cursor: pointer;
+        padding: 6px;
+    }
+
+    .password-strength {
+        margin-top: 8px;
+        font-size: 13px;
+        color: rgba(255,255,255,0.6);
+    }
+
+    .strength-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+
+    .strength-fill {
+        height: 100%;
+        width: 0%;
+        background: #ff3b30;
+        transition: width 0.25s ease, background 0.25s ease;
+    }
+
         .form-select-custom option {
             background: #1c1c1c;
             color: #fff;
@@ -372,6 +411,88 @@
 
 
                 <!-- BUTTONS -->
+
+                <!-- CONTRASEÑA -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Contraseña
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-lock-fill input-icon"></i>
+
+                        <input id="Password" name="Password" class="form-input" placeholder="Escribe una contraseña segura" type="password" />
+
+                        <button type="button" class="input-toggle" id="TogglePassword" aria-label="Mostrar contraseña">
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                        <div class="password-strength" id="PasswordStrengthText">&nbsp;</div>
+
+                        <div class="strength-bar" aria-hidden="true">
+                            <div class="strength-fill" id="StrengthFill"></div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+<script>
+    (function(){
+        var pwd = document.getElementById('Password');
+        var toggle = document.getElementById('TogglePassword');
+        var strengthText = document.getElementById('PasswordStrengthText');
+        var strengthFill = document.getElementById('StrengthFill');
+
+        function scorePassword(s) {
+            var score = 0;
+            if (!s) return 0;
+            // length
+            if (s.length >= 8) score += 2; else if (s.length >= 5) score += 1;
+            // variety
+            if (/[a-z]/.test(s)) score += 1;
+            if (/[A-Z]/.test(s)) score += 1;
+            if (/[0-9]/.test(s)) score += 1;
+            if (/[^A-Za-z0-9]/.test(s)) score += 1;
+            return score; // 0-6
+        }
+
+        function updateStrength() {
+            var s = pwd.value;
+            var score = scorePassword(s);
+            var pct = Math.round((score / 6) * 100);
+            strengthFill.style.width = pct + '%';
+            var color = '#ff3b30';
+            var label = 'Muy débil';
+            if (score >= 5) { color = '#00c853'; label = 'Muy fuerte'; }
+            else if (score >= 4) { color = '#66bb6a'; label = 'Fuerte'; }
+            else if (score >= 3) { color = '#ffd54f'; label = 'Media'; }
+            else if (score >= 2) { color = '#ffb74d'; label = 'Débil'; }
+
+            strengthFill.style.background = color;
+            strengthText.textContent = s ? label : '\u00A0';
+        }
+
+        toggle && toggle.addEventListener('click', function(){
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                toggle.innerHTML = '<i class="bi bi-eye-slash"></i>';
+                toggle.setAttribute('aria-label', 'Ocultar contraseña');
+            } else {
+                pwd.type = 'password';
+                toggle.innerHTML = '<i class="bi bi-eye"></i>';
+                toggle.setAttribute('aria-label', 'Mostrar contraseña');
+            }
+        });
+
+        pwd && pwd.addEventListener('input', updateStrength);
+
+        // init
+        updateStrength();
+    })();
+</script>
                 <div class="actions">
 
                     <button type="submit"

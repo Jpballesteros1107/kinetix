@@ -216,9 +216,7 @@ namespace kinetix.Controllers
             return RedirectToAction("Index");
         }
 
-        // =========================
         // ELIMINAR
-        // =========================
         public ActionResult Delete(int id)
         {
             using (SqlConnection cn =
@@ -228,8 +226,9 @@ namespace kinetix.Controllers
 
                 SqlCommand cmd =
                     new SqlCommand(
-                        @"DELETE FROM Conductores
-                          WHERE IdConductor=@id",
+                        @"UPDATE Conductores
+                            SET Estado='Inactivo'
+                            WHERE IdConductor=@id",
                         cn);
 
                 cmd.Parameters.AddWithValue(
@@ -313,8 +312,8 @@ namespace kinetix.Controllers
                 SqlCommand obtener =
                     new SqlCommand(
                         @"SELECT *
-                  FROM SolicitudesConductores
-                  WHERE IdSolicitud=@id",
+                          FROM SolicitudesConductores
+                          WHERE IdSolicitud=@id",
                         cn);
 
                 obtener.Parameters.AddWithValue(
@@ -337,6 +336,9 @@ namespace kinetix.Controllers
 
                     s.Telefono =
                         dr["Telefono"].ToString();
+                    
+                    s.Password =
+                        dr["Password"].ToString();
 
                     s.Licencia =
                         dr["Licencia"].ToString();
@@ -347,41 +349,88 @@ namespace kinetix.Controllers
 
                 dr.Close();
 
-                // =========================
-                // INSERTAR EN CONDUCTORES
-                // =========================
+                // Insertar en usuarios
 
-                SqlCommand insertar =
-                    new SqlCommand(
-                        @"INSERT INTO Conductores
+                SqlCommand crearUsuario =
+                new SqlCommand(
+                @"INSERT INTO Usuarios
                 (
                     Nombre,
-                    Licencia,
-                    Telefono,
+                    Correo,
+                    Password,
+                    Rol,
                     Estado
                 )
                 VALUES
                 (
                     @nom,
-                    @lic,
-                    @tel,
-                    'Disponible'
-                )",
-                        cn);
+                    @cor,
+                    @pass,
+                    'Conductor',
+                    'Activo'
+                );
 
-                insertar.Parameters.AddWithValue(
+                SELECT SCOPE_IDENTITY();
+                ",
+                cn);    
+
+                crearUsuario.Parameters.AddWithValue(
                     "@nom",
                     s.Nombre);
 
-                insertar.Parameters.AddWithValue(
-                    "@lic",
-                    s.Licencia);
+                crearUsuario.Parameters.AddWithValue(
+                    "@cor",
+                    s.Correo);
 
-                insertar.Parameters.AddWithValue(
-                    "@tel",
-                    s.Telefono);
+                crearUsuario.Parameters.AddWithValue(
+                    "@pass",
+                    s.Password);
 
-                insertar.ExecuteNonQuery();
+                int idUsuario =
+                    Convert.ToInt32(
+                        crearUsuario.ExecuteScalar());
+
+                // INSERTAR EN CONDUCTORES
+
+                SqlCommand insertar =
+                    new SqlCommand(
+                        @"INSERT INTO Conductores
+                        (
+                            IdUsuario,
+                            Nombre,
+                            Licencia,
+                            Telefono,
+                            Estado,
+                            FechaRegistro
+                        )
+                        VALUES
+                        (
+                            @idu,
+                            @nom,
+                            @lic,
+                            @tel,
+                            'Disponible',
+                            GETDATE()
+                        )",
+                        cn);
+
+                    insertar.Parameters.AddWithValue(
+                        "@idu",
+                        idUsuario);
+
+                    insertar.Parameters.AddWithValue(
+                        "@nom",
+                        s.Nombre);
+
+                    insertar.Parameters.AddWithValue(
+                        "@lic",
+                        s.Licencia);
+
+                    insertar.Parameters.AddWithValue(
+                        "@tel",
+                        s.Telefono);
+
+                    insertar.ExecuteNonQuery();
 
                 // =========================
                 // ACTUALIZAR SOLICITUD
@@ -390,8 +439,8 @@ namespace kinetix.Controllers
                 SqlCommand actualizar =
                     new SqlCommand(
                         @"UPDATE SolicitudesConductores
-                  SET Estado='Aprobado'
-                  WHERE IdSolicitud=@id",
+                          SET Estado='Aprobado'
+                          WHERE IdSolicitud=@id",
                         cn);
 
                 actualizar.Parameters.AddWithValue(
@@ -416,8 +465,8 @@ namespace kinetix.Controllers
                 SqlCommand cmd =
                     new SqlCommand(
                         @"UPDATE SolicitudesConductores
-                  SET Estado='Rechazado'
-                  WHERE IdSolicitud=@id",
+                          SET Estado='Rechazado'
+                          WHERE IdSolicitud=@id",
                         cn);
 
                 cmd.Parameters.AddWithValue(

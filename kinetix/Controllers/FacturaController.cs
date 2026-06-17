@@ -82,18 +82,14 @@ namespace kinetix.Controllers
         }
 
 
-        // =========================
         // VISTA CREAR
-        // =========================
         public ActionResult Create()
         {
             return View();
         }
 
 
-        // =========================
         // GUARDAR
-        // =========================
         [HttpPost]
         public ActionResult Create(Factura f)
         {
@@ -149,9 +145,7 @@ namespace kinetix.Controllers
         }
 
 
-        // =========================
         // VISTA EDITAR
-        // =========================
         public ActionResult Edit(int id)
         {
             Factura f =
@@ -205,10 +199,7 @@ namespace kinetix.Controllers
             return View(f);
         }
 
-
-        // =========================
         // ACTUALIZAR
-        // =========================
         [HttpPost]
         public ActionResult Edit(Factura f)
         {
@@ -249,10 +240,7 @@ namespace kinetix.Controllers
             return RedirectToAction("Index");
         }
 
-
-        // =========================
         // ELIMINAR
-        // =========================
         public ActionResult Delete(int id)
         {
             using (SqlConnection cn =
@@ -355,6 +343,94 @@ namespace kinetix.Controllers
             }
 
             ViewBag.TotalPagado =
+                lista.Sum(x => x.Total);
+
+            return View(lista);
+        }
+
+        public ActionResult MisGanancias()
+        {
+            if (Session["Rol"] == null ||
+                Session["Rol"].ToString() != "Conductor")
+            {
+                return RedirectToAction(
+                    "Index",
+                    "Login");
+            }
+
+            List<Factura> lista =
+                new List<Factura>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+            SELECT
+                f.*,
+                u.Nombre AS Cliente
+            FROM Facturas f
+
+            INNER JOIN Pedidos p
+                ON f.IdPedido = p.IdPedido
+
+            INNER JOIN Usuarios u
+                ON p.IdUsuario = u.IdUsuario
+
+            WHERE p.IdConductor =
+                (
+                    SELECT IdConductor
+                    FROM Conductores
+                    WHERE IdUsuario = @idu
+                )
+
+            ORDER BY f.Fecha DESC
+            ",
+                    cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@idu",
+                    Session["IdUsuario"]);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    lista.Add(new Factura
+                    {
+                        IdFactura =
+                            Convert.ToInt32(
+                                dr["IdFactura"]),
+
+                        IdPedido =
+                            Convert.ToInt32(
+                                dr["IdPedido"]),
+
+                        Fecha =
+                            Convert.ToDateTime(
+                                dr["Fecha"]),
+
+                        Total =
+                            Convert.ToDecimal(
+                                dr["Total"]),
+
+                        MetodoPago =
+                            dr["MetodoPago"].ToString(),
+
+                        Estado =
+                            dr["Estado"].ToString(),
+
+                        Cliente =
+                            dr["Cliente"].ToString()
+                    });
+                }
+            }
+
+            ViewBag.TotalGanado =
                 lista.Sum(x => x.Total);
 
             return View(lista);

@@ -228,7 +228,8 @@
         font-size: 14px;
     }
 
-    @@media(max-width:991px) {
+    @@media(max-width:991px) 
+    {
 
         .driver-left {
             display: none;
@@ -242,6 +243,63 @@
             font-size: 30px;
         }
     }
+
+    .driver-container{
+        animation: fadeUp .7s ease;
+        backdrop-filter: blur(16px);
+    }
+
+    .driver-right{
+        background: linear-gradient(
+            180deg,
+            #141414,
+            #101010
+        );
+    }
+
+    .input-custom{
+        height:60px;
+        border-radius:18px;
+        transition:.25s;
+    }
+
+    .input-custom:hover{
+        border-color:rgba(0,200,83,.4);
+    }
+
+    .input-custom:focus{
+        background:#222;
+        border-color:#00e676;
+        box-shadow:0 0 0 5px rgba(0,230,118,.12);
+    }
+
+    .btn-driver{
+        background:linear-gradient(
+            135deg,
+            #00c853,
+            #00e676
+        );
+        font-weight:800;
+        letter-spacing:.4px;
+    }
+
+    .btn-driver:hover{
+        box-shadow:0 15px 35px rgba(0,230,118,.25);
+    }
+
+        @@keyframes fadeUp{
+
+                        from{
+                            opacity:0;
+                            transform:translateY(25px);
+                        }
+
+                        to{
+                            opacity:1;
+                            transform:translateY(0);
+                        }
+        }
+
 </style>
 
 
@@ -343,133 +401,180 @@
                     {
                         <div class="alert-custom">
 
+
                             <i class="bi bi-check-circle me-2"></i>
 
                             @ViewBag.Mensaje
 
                         </div>
+
                     }
 
                     @using (Html.BeginForm())
                     {
+                        <div class="row">
 
-                        <!-- NOMBRE -->
-                        <label class="form-label-custom">
+                            <!-- NOMBRE -->
+                            <div class="col-12">
 
-                            Nombre completo
+                                <label class="form-label-custom">
+                                    Nombre completo
+                                </label>
 
-                        </label>
+                                <div class="input-wrap">
 
-                        <div class="input-wrap">
+                                    <i class="bi bi-person input-icon"></i>
 
-                            <i class="bi bi-person input-icon"></i>
+                                    @Html.TextBoxFor(
+                                        m => m.Nombre,
+                                        new
+                                        {
+                                            @class = "input-custom",
+                                            placeholder = "Juan Pablo"
+                                        })
 
-                            @Html.TextBoxFor(
-                                m => m.Nombre,
-                                new
-                                {
-                                    @class = "input-custom",
-                                    placeholder = "Juan Pablo"
-                                })
+                                </div>
+
+                            </div>
+
+                            <!-- CORREO -->
+                            <div class="col-12">
+
+                                <label class="form-label-custom">
+                                    Correo electrónico
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <i class="bi bi-envelope input-icon"></i>
+
+                                    @Html.TextBoxFor(
+                                        m => m.Correo,
+                                        new
+                                        {
+                                            @class = "input-custom",
+                                            placeholder = "correo@ejemplo.com"
+                                        }
+                                        )
+
+                                </div>
+
+                            </div>
+
+                            <!-- TELEFONO -->
+                            <div class="col-md-6">
+
+                                <label class="form-label-custom">
+                                    Teléfono
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <i class="bi bi-telephone input-icon"></i>
+
+                                    @Html.TextBoxFor(
+                                        m => m.Telefono,
+                                        new
+                                        {
+                                            @class = "input-custom",
+                                            placeholder = "3001234567"
+                                        }
+                                        )
+
+                                </div>
+
+                            </div>
+
+                            <!-- PASSWORD -->
+                            <div class="col-md-6">
+
+                                <label class="form-label-custom">
+                                    Contraseña
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <i class="bi bi-lock input-icon"></i>
+
+                                    @Html.PasswordFor(
+                                        m => m.Password,
+                                        new
+                                        {
+                                            @class = "input-custom",
+                                            placeholder = "Contraseña segura"
+                                        })
+
+                                </div>
+
+                            </div>
+
+                            <!-- LICENCIA -->
+                            <div class="col-md-6">
+
+                                <label class="form-label-custom">
+                                    Número de licencia
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <i class="bi bi-card-text input-icon"></i>
+
+                                    @Html.TextBoxFor(
+                                        m => m.Licencia,
+                                        new
+                                        {
+                                            @class = "input-custom",
+                                            placeholder = "LIC-123456"
+                                        })
+
+                                </div>
+
+                            </div>
+
+                            <!-- VEHICULO -->
+                            <div class="col-md-6">
+
+                                <label class="form-label-custom">
+                                    Vehículo
+                                </label>
+
+                                <div class="input-wrap">
+
+                                    <i class="bi bi-car-front input-icon"></i>
+
+                                    @Html.TextBoxFor(
+                                        m => m.Vehiculo,
+                                        new
+                                        {
+                                            @class = "input-custom",
+                                            placeholder = "Mazda 3 - Blanco"
+                                        })
+
+                                </div>
+
+                            </div>
 
                         </div>
 
+                        <button type="submit" class="btn-driver">
 
-                        <!-- CORREO -->
-                        <label class="form-label-custom">
-
-                            Correo electrónico
-
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <i class="bi bi-envelope input-icon"></i>
-
-                            @Html.TextBoxFor(
-                                m => m.Correo,
-                                new
-                                {
-                                    @class = "input-custom",
-                                    placeholder = "correo@ejemplo.com"
-                                })
-
-                        </div>
-
-
-                        <!-- TELEFONO -->
-                        <label class="form-label-custom">
-
-                            Teléfono
-
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <i class="bi bi-telephone input-icon"></i>
-
-                            @Html.TextBoxFor(
-                                m => m.Telefono,
-                                new
-                                {
-                                    @class = "input-custom",
-                                    placeholder = "3001234567"
-                                })
-
-                        </div>
-
-
-                        <!-- LICENCIA -->
-                        <label class="form-label-custom">
-
-                            Número de licencia
-
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <i class="bi bi-card-text input-icon"></i>
-
-                            @Html.TextBoxFor(
-                                m => m.Licencia,
-                                new
-                                {
-                                    @class = "input-custom",
-                                    placeholder = "LIC-123456"
-                                })
-
-                        </div>
-
-
-                        <!-- VEHICULO -->
-                        <label class="form-label-custom">
-
-                            Vehículo
-
-                        </label>
-
-                        <div class="input-wrap">
-
-                            <i class="bi bi-car-front input-icon"></i>
-
-                            @Html.TextBoxFor(
-                                m => m.Vehiculo,
-                                new
-                                {
-                                    @class = "input-custom",
-                                    placeholder = "Mazda 3 - Blanco"
-                                })
-
-                        </div>
-
-
-                        <button class="btn-driver">
+                            <i class="bi bi-send-fill me-2"></i>
 
                             Enviar Solicitud
 
                         </button>
 
-                    }
+                        <div class="text-center mt-4">
+
+                            <small style="color:rgba(255,255,255,.45)">
+                                Al enviar tu solicitud aceptas el proceso de validación de Kinetix.
+                            </small>
+
+                        </div>
+
+
+                        }
+
 
                 </div>
 

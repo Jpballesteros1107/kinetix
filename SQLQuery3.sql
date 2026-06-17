@@ -1,1 +1,2 @@
-﻿select * from Conductores
+﻿SELECT TOP 1 *
+FROM SolicitudesConductores

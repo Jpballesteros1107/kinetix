@@ -64,8 +64,8 @@ namespace kinetix.Controllers
                 SqlCommand cmdSolicitudes =
                     new SqlCommand(
                         @"SELECT *
-                  FROM SolicitudesConductores
-                  WHERE Estado='Pendiente'",
+                          FROM SolicitudesConductores
+                          WHERE Estado='Pendiente'",
                         cn);
 
                 SqlDataReader dr =

@@ -130,6 +130,7 @@ namespace kinetix.Controllers
                         Destino,
                         Estado,
                         Valor,
+                        MetodoPago,
                         Fecha
                     )
                     VALUES
@@ -139,6 +140,7 @@ namespace kinetix.Controllers
                         @des,
                         'Pendiente',
                         @val,
+                        @met,
                         @fec
                     )
                     ",
@@ -159,6 +161,10 @@ namespace kinetix.Controllers
                 cmd.Parameters.AddWithValue(
                     "@val",
                     valor);
+
+                cmd.Parameters.AddWithValue(
+                "@met",
+                p.MetodoPago);
 
                 cmd.Parameters.AddWithValue(
                     "@fec",
@@ -280,7 +286,6 @@ namespace kinetix.Controllers
                 // FACTURA AUTOMATICA
                 if (estado == "Finalizado")
                 {
-                    // VALIDAR SI YA EXISTE
                     SqlCommand existeCmd =
                         new SqlCommand(
                         @"
@@ -290,10 +295,9 @@ namespace kinetix.Controllers
                         ",
                         cn);
 
-                    existeCmd.Parameters
-                        .AddWithValue(
-                            "@id",
-                            id);
+                    existeCmd.Parameters.AddWithValue(
+                        "@id",
+                        id);
 
                     int existe =
                         Convert.ToInt32(
@@ -301,23 +305,36 @@ namespace kinetix.Controllers
 
                     if (existe == 0)
                     {
-                        SqlCommand totalCmd =
+                        SqlCommand pedidoCmd =
                             new SqlCommand(
                             @"
-                            SELECT Valor
+                            SELECT Valor, MetodoPago
                             FROM Pedidos
                             WHERE IdPedido=@id
                             ",
                             cn);
 
-                        totalCmd.Parameters
-                            .AddWithValue(
-                                "@id",
-                                id);
+                        pedidoCmd.Parameters.AddWithValue(
+                            "@id",
+                            id);
 
-                        decimal total =
-                            Convert.ToDecimal(
-                                totalCmd.ExecuteScalar());
+                        SqlDataReader dr =
+                            pedidoCmd.ExecuteReader();
+
+                        decimal total = 0;
+                        string metodoPago = "";
+
+                        if (dr.Read())
+                        {
+                            total =
+                                Convert.ToDecimal(
+                                    dr["Valor"]);
+
+                            metodoPago =
+                                dr["MetodoPago"].ToString();
+                        }
+
+                        dr.Close();
 
                         SqlCommand facturaCmd =
                             new SqlCommand(
@@ -335,26 +352,27 @@ namespace kinetix.Controllers
                                 @idp,
                                 @fec,
                                 @tot,
-                                'Tarjeta',
+                                @met,
                                 'Pagada'
                             )
                             ",
                             cn);
 
-                        facturaCmd.Parameters
-                            .AddWithValue(
-                                "@idp",
-                                id);
+                        facturaCmd.Parameters.AddWithValue(
+                            "@idp",
+                            id);
 
-                        facturaCmd.Parameters
-                            .AddWithValue(
-                                "@fec",
-                                DateTime.Now);
+                        facturaCmd.Parameters.AddWithValue(
+                            "@fec",
+                            DateTime.Now);
 
-                        facturaCmd.Parameters
-                            .AddWithValue(
-                                "@tot",
-                                total);
+                        facturaCmd.Parameters.AddWithValue(
+                            "@tot",
+                            total);
+
+                        facturaCmd.Parameters.AddWithValue(
+                            "@met",
+                            metodoPago);
 
                         facturaCmd.ExecuteNonQuery();
                     }
@@ -387,36 +405,36 @@ namespace kinetix.Controllers
                 SqlCommand cmd =
                     new SqlCommand(
                     @"
-            SELECT
-                p.*,
-                u.Nombre AS NombreUsuario,
-                ISNULL(c.Nombre,'Sin asignar')
-                    AS NombreConductor
-            FROM Pedidos p
-            INNER JOIN Usuarios u
-                ON p.IdUsuario = u.IdUsuario
-            LEFT JOIN Conductores c
-                ON p.IdConductor = c.IdConductor
-            WHERE
+                    SELECT
+                        p.*,
+                        u.Nombre AS NombreUsuario,
+                        ISNULL(c.Nombre,'Sin asignar')
+                            AS NombreConductor
+                    FROM Pedidos p
+                    INNER JOIN Usuarios u
+                        ON p.IdUsuario = u.IdUsuario
+                    LEFT JOIN Conductores c
+                        ON p.IdConductor = c.IdConductor
+                    WHERE
 
-                (
-                    p.Estado = 'Pendiente'
-                    AND p.IdConductor IS NULL
-                )
+                        (
+                            p.Estado = 'Pendiente'
+                            AND p.IdConductor IS NULL
+                        )
 
-                OR
+                        OR
 
-                (
-                    p.IdConductor =
-                    (
-                        SELECT IdConductor
-                        FROM Conductores
-                        WHERE IdUsuario = @idu
-                    )
-                )
+                        (
+                            p.IdConductor =
+                            (
+                                SELECT IdConductor
+                                FROM Conductores
+                                WHERE IdUsuario = @idu
+                            )
+                        )
 
-            ORDER BY p.IdPedido DESC
-            ",
+                    ORDER BY p.IdPedido DESC
+                    ",
                     cn);
 
                 cmd.Parameters.AddWithValue(
@@ -459,6 +477,9 @@ namespace kinetix.Controllers
 
                     p.Estado =
                         dr["Estado"].ToString();
+                    
+                    p.MetodoPago =
+                        dr["MetodoPago"].ToString();
 
                     p.Valor =
                         Convert.ToDecimal(
@@ -467,6 +488,72 @@ namespace kinetix.Controllers
                     p.Fecha =
                         Convert.ToDateTime(
                             dr["Fecha"]);
+
+                    lista.Add(p);
+                }
+            }
+
+            return View(lista);
+        }
+
+        public ActionResult MisPedidos()
+        {
+            if (Session["Rol"] == null ||
+                Session["Rol"].ToString() != "Cliente")
+            {
+                return RedirectToAction(
+                    "Index",
+                    "Login");
+            }
+
+            List<Pedido> lista =
+                new List<Pedido>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+                    SELECT *
+                    FROM Pedidos
+                    WHERE IdUsuario = @idu
+                    ORDER BY IdPedido DESC
+                    ", cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@idu",
+                    Session["IdUsuario"]);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    Pedido p = new Pedido();
+
+                    p.IdPedido =
+                        Convert.ToInt32(dr["IdPedido"]);
+
+                    p.Origen =
+                        dr["Origen"].ToString();
+
+                    p.Destino =
+                        dr["Destino"].ToString();
+
+                    p.Estado =
+                        dr["Estado"].ToString();
+
+                    p.MetodoPago =
+                        dr["MetodoPago"].ToString();
+
+                    p.Valor =
+                        Convert.ToDecimal(dr["Valor"]);
+
+                    p.Fecha =
+                        Convert.ToDateTime(dr["Fecha"]);
 
                     lista.Add(p);
                 }

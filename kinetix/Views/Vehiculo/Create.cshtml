@@ -1,41 +1,164 @@
 ﻿@model kinetix.Models.Vehiculo
 
-<h2>Nuevo Vehiculo</h2>
-
-@using (Html.BeginForm())
-{
-    <div>
-        Placa:
-        @Html.TextBoxFor(x => x.Placa)
-    </div>
-
-    <br />
-
-    <div>
-        Modelo:
-        @Html.TextBoxFor(x => x.Modelo)
-    </div>
-
-    <br />
-
-    <div>
-        Marca:
-        @Html.TextBoxFor(x => x.Marca)
-    </div>
-
-    <br />
-
-    <div>
-        ID Conductor:
-        @Html.DropDownListFor(
-            x => x.IdConductor,
-            (List<SelectListItem>)ViewBag.Conductores
-        )
-    </div>
-
-    <br />
-
-    <button type="submit">
-        Guardar
-    </button>
+@{
+    ViewBag.Title = "Nuevo Vehículo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+<style>
+
+    .form-page {
+        min-height: 100vh;
+        background: #0d0d0d;
+        padding: 40px 20px;
+    }
+
+    .form-card {
+        max-width: 700px;
+        margin: auto;
+        background: #141414;
+        border-radius: 28px;
+        padding: 35px;
+        border: 1px solid rgba(255,255,255,.07);
+    }
+
+    .form-title {
+        color: white;
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+        color: rgba(255,255,255,.5);
+        margin-bottom: 30px;
+    }
+
+    .form-group-custom {
+        margin-bottom: 22px;
+    }
+
+    .label-custom {
+        display: block;
+        color: white;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select-custom {
+        width: 100%;
+        background: #1d1d1d;
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 14px;
+        padding: 14px;
+        color: white;
+    }
+
+        .form-input:focus,
+        .form-select-custom:focus {
+            outline: none;
+            border-color: #00c853;
+        }
+
+    .btn-save {
+        background: #00c853;
+        border: none;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 14px;
+        font-weight: 700;
+    }
+
+    .btn-back {
+        margin-left: 10px;
+        text-decoration: none;
+        color: #aaa;
+    }
+</style>
+
+<div class="form-page">
+
+    <div class="form-card">
+
+        <h2 class="form-title">
+            Registrar Vehículo
+        </h2>
+
+        <p class="form-subtitle">
+            Asigna un vehículo a un conductor.
+        </p>
+
+        @using (Html.BeginForm())
+        {
+            <div class="form-group-custom">
+
+                <label class="label-custom">
+                    Placa
+                </label>
+
+                @Html.TextBoxFor(
+                    x => x.Placa,
+                    new { @class = "form-input" })
+
+            </div>
+
+            <div class="form-group-custom">
+
+                <label class="label-custom">
+                    Modelo
+                </label>
+
+                @Html.TextBoxFor(
+                    x => x.Modelo,
+                    new { @class = "form-input" })
+
+            </div>
+
+            <div class="form-group-custom">
+
+                <label class="label-custom">
+                    Marca
+                </label>
+
+                @Html.TextBoxFor(
+                    x => x.Marca,
+                    new { @class = "form-input" })
+
+            </div>
+
+            <div class="form-group-custom">
+
+                <label class="label-custom">
+                    Conductor
+                </label>
+
+                @Html.DropDownListFor(
+                    x => x.IdConductor,
+                    (List<SelectListItem>)ViewBag.Conductores,
+                    "-- Seleccione un conductor --",
+                    new
+                    {
+                        @class = "form-select-custom"
+                    })
+
+            </div>
+
+            <button type="submit"
+                    class="btn-save">
+
+                Guardar Vehículo
+
+            </button>
+
+            <a href="/Vehiculo"
+               class="btn-back">
+
+                Cancelar
+
+            </a>
+        }
+
+    </div>
+
+</div>

@@ -6,18 +6,14 @@ namespace kinetix.Controllers
 {
     public class ConductorRegistroController : Controller
     {
-        // =========================
+
         // VISTA
-        // =========================
         public ActionResult Index()
         {
             return View();
         }
 
-
-        // =========================
         // REGISTRO CONDUCTOR
-        // =========================
         [HttpPost]
         public ActionResult Index(SolicitudConductor s)
         {
@@ -33,6 +29,7 @@ namespace kinetix.Controllers
                         Nombre,
                         Correo,
                         Telefono,
+                        Password,
                         Licencia,
                         Vehiculo,
                         Estado
@@ -42,6 +39,7 @@ namespace kinetix.Controllers
                         @nom,
                         @cor,
                         @tel,
+                        @pass,
                         @lic,
                         @veh,
                         'Pendiente'
@@ -51,15 +49,17 @@ namespace kinetix.Controllers
                 cmd.Parameters.AddWithValue("@nom", s.Nombre);
                 cmd.Parameters.AddWithValue("@cor", s.Correo);
                 cmd.Parameters.AddWithValue("@tel", s.Telefono);
+                cmd.Parameters.AddWithValue("@pass",s.Password);
                 cmd.Parameters.AddWithValue("@lic", s.Licencia);
                 cmd.Parameters.AddWithValue("@veh", s.Vehiculo);
 
                 cmd.ExecuteNonQuery();
 
-                ViewBag.Mensaje =
-                "Solicitud enviada correctamente";
+                ViewBag.Mensaje ="Solicitud enviada correctamente";
 
-                return View();
+                ModelState.Clear();
+
+                return View(new SolicitudConductor());
             }
         }
     }
