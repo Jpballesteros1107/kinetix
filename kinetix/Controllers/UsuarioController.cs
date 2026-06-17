@@ -8,14 +8,14 @@ namespace kinetix.Controllers
 {
     public class UsuarioController : Controller
     {
-        // =========================
+
         // LISTAR
-        // =========================
         public ActionResult Index()
         {
             List<Usuario> lista =
                 ObtenerUsuarios(
-                    "SELECT * FROM Usuarios");
+                    @"SELECT * FROM Usuarios
+                    WHERE Estado = 'Activo'");
 
             return View(lista);
         }
@@ -164,10 +164,7 @@ namespace kinetix.Controllers
             return View(u);
         }
 
-
-        // =========================
         // ACTUALIZAR
-        // =========================
         [HttpPost]
         public ActionResult Edit(Usuario u)
         {
@@ -202,10 +199,7 @@ namespace kinetix.Controllers
             return RedirectToAction("Index");
         }
 
-
-        // =========================
         // ELIMINAR
-        // =========================
         public ActionResult Delete(int id)
         {
             using (SqlConnection cn =
@@ -215,8 +209,9 @@ namespace kinetix.Controllers
 
                 SqlCommand cmd =
                     new SqlCommand(
-                        @"DELETE FROM Usuarios
-                        WHERE IdUsuario=@id",
+                        @"UPDATE Usuarios
+                          SET Estado = 'Inactivo'
+                          WHERE IdUsuario = @id",
                         cn);
 
                 cmd.Parameters.AddWithValue(
@@ -229,10 +224,7 @@ namespace kinetix.Controllers
             return RedirectToAction("Index");
         }
 
-
-        // =========================
-        // METODO LISTAR
-        // =========================
+       // METODO LISTAR
         private List<Usuario> ObtenerUsuarios(
             string consulta)
         {
@@ -262,10 +254,7 @@ namespace kinetix.Controllers
             return lista;
         }
 
-
-        // =========================
         // MAPEAR USUARIO
-        // =========================
         private Usuario MapearUsuario(
             SqlDataReader dr)
         {
@@ -290,6 +279,41 @@ namespace kinetix.Controllers
                 Estado =
                     dr["Estado"].ToString()
             };
+        }
+
+        public ActionResult Inactivos()
+        {
+            List<Usuario> lista =
+                ObtenerUsuarios(
+                    @"SELECT *
+                      FROM Usuarios
+                      WHERE Estado = 'Inactivo'");
+
+            return View(lista);
+        }
+
+        public ActionResult Restaurar(int id)
+        {
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                        @"UPDATE Usuarios
+                          SET Estado='Activo'
+                          WHERE IdUsuario=@id",
+                        cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@id",
+                    id);
+
+                cmd.ExecuteNonQuery();
+            }
+
+            return RedirectToAction("Inactivos");
         }
     }
 }

@@ -195,31 +195,9 @@
             @using (Html.BeginForm())
             {
                 @Html.HiddenFor(x => x.IdConductor)
+                @Html.HiddenFor(x => x.IdUsuario)
 
-                <!-- ID USUARIO -->
-                <div class="form-group-custom">
-
-                    <label class="label-custom">
-                        ID Usuario
-                    </label>
-
-                    <div class="input-wrapper">
-
-                        <i class="bi bi-person-badge-fill input-icon"></i>
-
-                        @Html.TextBoxFor(
-                            x => x.IdUsuario,
-                            new
-                            {
-                                @class = "form-input",
-                                placeholder = "ID del usuario asociado"
-                            })
-
-                    </div>
-
-                </div>
-
-
+               
                 <!-- NOMBRE -->
                 <div class="form-group-custom">
 
@@ -309,8 +287,8 @@
                             {
                                 new SelectListItem
                                 {
-                                    Text = "Activo",
-                                    Value = "Activo"
+                                    Text = "Disponible",
+                                    Value = "Disponible"
                                 },
 
                                 new SelectListItem
@@ -325,7 +303,6 @@
                                     Value = "Inactivo"
                                 }
                             },
-                            "Seleccionar estado",
                             new
                             {
                                 @class = "form-input"

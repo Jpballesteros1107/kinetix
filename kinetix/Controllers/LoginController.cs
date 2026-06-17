@@ -21,10 +21,7 @@ namespace kinetix.Controllers
             return View();
         }
 
-
-        // =========================
         // LOGIN
-        // =========================
         [HttpPost]
         public ActionResult Index(
             string correo,
@@ -53,7 +50,8 @@ namespace kinetix.Controllers
                             Estado
                         FROM Usuarios
                         WHERE Correo=@c
-                        AND Password=@p",
+                        AND Password=@p
+                        AND ESTADO='Activo'",
                         cn);
 
                 cmd.Parameters.AddWithValue(
@@ -145,5 +143,6 @@ namespace kinetix.Controllers
                         "Home");
             }
         }
+
     }
 }

@@ -43,8 +43,10 @@ namespace kinetix.Controllers
                     lista.Add(new Conductor
                     {
                         IdConductor =
-                            Convert.ToInt32(
-                                dr["IdConductor"]),
+                            Convert.ToInt32(dr["IdConductor"]),
+
+                        IdUsuario =
+                            Convert.ToInt32(dr["IdUsuario"]),
 
                         Nombre =
                             dr["Nombre"].ToString(),
@@ -56,7 +58,10 @@ namespace kinetix.Controllers
                             dr["Telefono"].ToString(),
 
                         Estado =
-                            dr["Estado"].ToString()
+                            dr["Estado"].ToString(),
+
+                        FechaRegistro =
+                            Convert.ToDateTime(dr["FechaRegistro"])
                     });
                 }
             }
@@ -64,17 +69,13 @@ namespace kinetix.Controllers
             return View(lista);
         }
 
-        // =========================
         // VISTA CREAR
-        // =========================
         public ActionResult Create()
         {
             return View();
         }
 
-        // =========================
         // GUARDAR
-        // =========================
         [HttpPost]
         public ActionResult Create(Conductor c)
         {
@@ -119,9 +120,7 @@ namespace kinetix.Controllers
             return RedirectToAction("Index");
         }
 
-        // =========================
-        // VISTA EDITAR
-        // =========================
+        // EDITAR
         public ActionResult Edit(int id)
         {
             Conductor c =
@@ -151,6 +150,10 @@ namespace kinetix.Controllers
                     c.IdConductor =
                         Convert.ToInt32(
                             dr["IdConductor"]);
+                    
+                    c.IdUsuario =
+                        Convert.ToInt32(
+                            dr["IdUsuario"]);
 
                     c.Nombre =
                         dr["Nombre"].ToString();
@@ -163,15 +166,17 @@ namespace kinetix.Controllers
 
                     c.Estado =
                         dr["Estado"].ToString();
+
+                    c.FechaRegistro =
+                        Convert.ToDateTime(
+                            dr["FechaRegistro"]);
                 }
             }
 
             return View(c);
         }
 
-        // =========================
         // ACTUALIZAR
-        // =========================
         [HttpPost]
         public ActionResult Edit(Conductor c)
         {
