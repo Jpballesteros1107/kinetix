@@ -9,7 +9,7 @@ namespace kinetix.Models
     {
         public int IdPedido { get; set; }
         public int IdUsuario { get; set; }
-        public int IdConductor { get; set; }
+        public int? IdConductor { get; set; }
         public string NombreUsuario { get; set; }
         public string NombreConductor { get; set; }
         public string Origen { get; set; }

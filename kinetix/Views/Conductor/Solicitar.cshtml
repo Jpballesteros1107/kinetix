@@ -1,48 +1,345 @@
 ﻿@model kinetix.Models.Conductor
 
-<h2>Solicitud para Conductor</h2>
-
-<hr />
-
-@using (Html.BeginForm())
-{
-    <div class="mb-3">
-
-        <label>
-            Nombre
-        </label>
-
-        @Html.TextBoxFor(
-            x => x.Nombre,
-            new { @class = "form-control" })
-
-    </div>
-
-    <div class="mb-3">
-
-        <label>
-            Licencia
-        </label>
-
-        @Html.TextBoxFor(
-            x => x.Licencia,
-            new { @class = "form-control" })
-
-    </div>
-
-    <div class="mb-3">
-
-        <label>
-            Teléfono
-        </label>
-
-        @Html.TextBoxFor(
-            x => x.Telefono,
-            new { @class = "form-control" })
-
-    </div>
-
-    <button class="btn btn-dark">
-        Enviar Solicitud
-    </button>
+@{
+    ViewBag.Title = "Solicitud para Conductor";
 }
+
+<style>
+
+    .solicitud-wrapper {
+        min-height: 100vh;
+        background: #0a0a0a;
+        padding: 60px 20px;
+        font-family: 'Inter', sans-serif;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .solicitud-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(0,200,83,0.08), transparent 40%);
+            pointer-events: none;
+        }
+
+    .solicitud-container {
+        max-width: 700px;
+        margin: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .solicitud-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+        .solicitud-header h1 {
+            color: #fff;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .solicitud-header p {
+            color: rgba(255,255,255,0.45);
+            font-size: 15px;
+            max-width: 520px;
+            margin: auto;
+            line-height: 1.7;
+        }
+
+    /* =========================
+       CARD
+    ========================== */
+
+    .solicitud-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 28px;
+        padding: 42px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    /* =========================
+       FORM
+    ========================== */
+
+    .form-group-custom {
+        margin-bottom: 24px;
+    }
+
+    .label-custom {
+        display: block;
+        color: rgba(255,255,255,0.75);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 0.4px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255,255,255,0.25);
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    .form-input {
+        width: 100%;
+        background: #1d1d1d;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 15px 16px 15px 46px;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+        .form-input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .form-input:focus {
+            border-color: #00c853;
+            box-shadow: 0 0 0 4px rgba(0,200,83,0.12);
+        }
+
+    /* =========================
+       INFO BOX
+    ========================== */
+
+    .info-box {
+        background: rgba(0,200,83,0.08);
+        border: 1px solid rgba(0,200,83,0.15);
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 28px;
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+    }
+
+        .info-box i {
+            color: #00c853;
+            font-size: 22px;
+        }
+
+        .info-box h5 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .info-box p {
+            color: rgba(255,255,255,0.55);
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+    /* =========================
+       BUTTON
+    ========================== */
+
+    .btn-submit {
+        width: 100%;
+        background: #00c853;
+        border: none;
+        color: white;
+        border-radius: 18px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        transition: 0.2s;
+        margin-top: 10px;
+    }
+
+        .btn-submit:hover {
+            background: #00b248;
+            transform: translateY(-2px);
+        }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    .form-footer {
+        text-align: center;
+        margin-top: 24px;
+        color: rgba(255,255,255,0.35);
+        font-size: 13px;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @@media (max-width: 576px) {
+
+        .solicitud-card {
+            padding: 28px 22px;
+        }
+
+        .solicitud-header h1 {
+            font-size: 32px;
+        }
+    }
+</style>
+
+
+<div class="solicitud-wrapper">
+
+    <div class="solicitud-container">
+
+        <!-- HEADER -->
+        <div class="solicitud-header">
+
+            <h1>
+                Conduce con Kinetix
+            </h1>
+
+            <p>
+                Únete a nuestra plataforma y comienza a generar ingresos
+                realizando viajes de forma segura y rápida.
+            </p>
+
+        </div>
+
+
+        <!-- CARD -->
+        <div class="solicitud-card">
+
+            <!-- INFO -->
+            <div class="info-box">
+
+                <i class="bi bi-shield-check"></i>
+
+                <div>
+
+                    <h5>
+                        Solicitud segura
+                    </h5>
+
+                    <p>
+                        Nuestro equipo validará tu información antes
+                        de aprobar tu acceso como conductor.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @using (Html.BeginForm())
+            {
+
+                <!-- NOMBRE -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Nombre Completo
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-person-fill input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Nombre,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "Ingresa tu nombre completo"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- LICENCIA -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Número de Licencia
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-card-text input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Licencia,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "Ej: C12345678"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- TELEFONO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Número Telefónico
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-telephone-fill input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Telefono,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "3001234567"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTON -->
+                <button type="submit"
+                        class="btn-submit">
+
+                    <i class="bi bi-send-fill me-2"></i>
+
+                    Enviar Solicitud
+
+                </button>
+
+            }
+
+            <div class="form-footer">
+
+                Kinetix revisará tu solicitud en las próximas horas.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

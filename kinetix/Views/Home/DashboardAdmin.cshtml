@@ -2,194 +2,588 @@
 
 @{
     ViewBag.Title = "Dashboard Admin";
-
-    Layout =
-    "~/Views/Shared/_LayoutAdmin.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container-fluid py-4">
+<style>
 
-    <!-- HERO -->
-    <div class="hero-gradient text-white rounded-4 shadow-lg p-5 mb-5">
+    .dash-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 32px 24px;
+        font-family: 'Inter', sans-serif;
+        animation: fadeDashboard 0.5s ease;
+    }
 
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
+    @@keyframes fadeDashboard {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
 
-            <div>
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-                <h1 class="display-5 fw-bold mb-2">
+    /* ==============================
+       HEADER
+    ============================== */
 
-                    Dashboard Administrativo
+    .dash-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 36px;
+    }
 
-                </h1>
+    .dash-header-left h1 {
+        font-size: 28px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 4px;
+    }
 
-                <p class="fs-5 mb-0">
+    .dash-header-left p {
+        font-size: 14px;
+        color: rgba(255,255,255,0.4);
+        margin: 0;
+    }
 
-                    Bienvenido,
-                    @Session["Usuario"]
+        .dash-header-left p span {
+            color: #00c853;
+            font-weight: 600;
+        }
 
-                </p>
+    .dash-date {
+        margin-top: 8px;
+        font-size: 13px;
+        color: rgba(255,255,255,0.35);
+    }
 
+    .dash-admin-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 10px 18px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #fff;
+        backdrop-filter: blur(10px);
+    }
+
+        .dash-admin-badge i {
+            color: #00c853;
+        }
+
+    /* ==============================
+       STAT CARDS
+    ============================== */
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .stat-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 18px;
+        padding: 24px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -40%;
+            width: 140px;
+            height: 140px;
+            background: rgba(0,200,83,0.04);
+            border-radius: 50%;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(0,200,83,0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.4);
+        }
+
+    .stat-card-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(255,255,255,0.4);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+    }
+
+    .stat-card-value {
+        font-size: 36px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+    }
+
+    .stat-card-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+    .icon-blue {
+        background: rgba(30,136,229,0.15);
+        color: #42a5f5;
+    }
+
+    .icon-green {
+        background: rgba(0,200,83,0.15);
+        color: #00c853;
+    }
+
+    .icon-yellow {
+        background: rgba(245,158,11,0.15);
+        color: #fbbf24;
+    }
+
+    .icon-white {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+    }
+
+    /* ==============================
+       RESUMEN
+    ============================== */
+
+    .resumen-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .resumen-card {
+        border-radius: 18px;
+        padding: 26px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .resumen-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.06;
+            background: #fff;
+        }
+
+        .resumen-card.green {
+            background: #003d1a;
+            border: 1px solid rgba(0,200,83,0.25);
+        }
+
+        .resumen-card.blue {
+            background: #001f4d;
+            border: 1px solid rgba(30,136,229,0.25);
+        }
+
+        .resumen-card.red {
+            background: #3d0000;
+            border: 1px solid rgba(239,68,68,0.25);
+        }
+
+    .resumen-card-label {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .resumen-card.green .resumen-card-label {
+        color: rgba(0,200,83,0.8);
+    }
+
+    .resumen-card.blue .resumen-card-label {
+        color: rgba(100,180,255,0.8);
+    }
+
+    .resumen-card.red .resumen-card-label {
+        color: rgba(255,100,100,0.8);
+    }
+
+    .resumen-card-value {
+        font-size: 32px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1;
+    }
+
+    .resumen-card-icon {
+        font-size: 42px;
+        opacity: 0.25;
+    }
+
+    /* ==============================
+       TABLA
+    ============================== */
+
+    .table-card {
+        border-radius: 20px;
+        padding: 28px;
+        margin-bottom: 28px;
+        border: 1px solid rgba(255,255,255,0.07);
+        background: linear-gradient( 180deg, rgba(20,20,20,0.95), rgba(15,15,15,0.95) );
+        backdrop-filter: blur(10px);
+    }
+
+    .table-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .table-card-title {
+        font-size: 17px;
+        font-weight: 800;
+        color: #fff;
+        margin: 0;
+    }
+
+    .pending-badge {
+        background: rgba(245,158,11,0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245,158,11,0.25);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 5px 14px;
+        border-radius: 50px;
+        backdrop-filter: blur(10px);
+    }
+
+    .dash-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .dash-table thead th {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            padding: 0 16px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .dash-table tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: background 0.15s;
+        }
+
+            .dash-table tbody tr:hover {
+                background: rgba(255,255,255,0.03);
+            }
+
+        .dash-table tbody td {
+            font-size: 13px;
+            color: rgba(255,255,255,0.75);
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
+
+    .td-name {
+        font-weight: 600;
+        color: #fff !important;
+    }
+
+    .td-mono {
+        font-family: monospace;
+        color: rgba(255,255,255,0.45) !important;
+    }
+
+    .btn-aprobar,
+    .btn-rechazar {
+        font-size: 12px;
+        font-weight: 700;
+        padding: 6px 16px;
+        border-radius: 50px;
+        text-decoration: none;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+
+    .btn-aprobar {
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        border: 1px solid rgba(0,200,83,0.25);
+    }
+
+        .btn-aprobar:hover {
+            background: rgba(0,200,83,0.22);
+            color: #00c853;
+        }
+
+    .btn-rechazar {
+        background: rgba(239,68,68,0.1);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.2);
+    }
+
+        .btn-rechazar:hover {
+            background: rgba(239,68,68,0.18);
+            color: #f87171;
+        }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: rgba(255,255,255,0.25);
+    }
+
+        .empty-state i {
+            font-size: 36px;
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255,255,255,0.1);
+        }
+
+    /* ==============================
+       QUICK ACCESS
+    ============================== */
+
+    .quick-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+
+    .quick-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 16px;
+        padding: 22px 18px;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        overflow: hidden;
+        transition: 0.25s;
+    }
+
+        .quick-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient( 135deg, rgba(255,255,255,0.04), transparent );
+            opacity: 0;
+            transition: 0.25s;
+        }
+
+        .quick-card:hover::before {
+            opacity: 1;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .quick-card-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .quick-card span {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .qc-usuarios .quick-card-icon {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+    }
+
+    .qc-conductores .quick-card-icon {
+        background: rgba(0,200,83,0.15);
+        color: #00c853;
+    }
+
+    .qc-vehiculos .quick-card-icon {
+        background: rgba(30,136,229,0.15);
+        color: #42a5f5;
+    }
+
+    .qc-pedidos .quick-card-icon {
+        background: rgba(245,158,11,0.15);
+        color: #fbbf24;
+    }
+
+    /* ==============================
+       SCROLLBAR
+    ============================== */
+
+    ::-webkit-scrollbar {
+        height: 8px;
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #2a2a2a;
+        border-radius: 20px;
+    }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3a3a3a;
+        }
+
+    /* ==============================
+       RESPONSIVE
+    ============================== */
+
+    @@media (max-width: 992px) {
+
+        .stat-grid,
+        .resumen-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .quick-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 576px) {
+
+        .stat-grid,
+        .resumen-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .dash-wrapper {
+            padding: 20px 14px;
+        }
+    }
+</style>
+
+
+<div class="dash-wrapper">
+
+    <!-- HEADER -->
+    <div class="dash-header">
+
+        <div class="dash-header-left">
+
+            <h1>
+                Dashboard Administrativo
+            </h1>
+
+            <p>
+                Bienvenido,
+                <span>@Session["Usuario"]</span>
+            </p>
+
+            <div class="dash-date">
+                <i class="bi bi-calendar3 me-2"></i>
+                @DateTime.Now.ToString("dddd, dd MMMM yyyy")
             </div>
 
-            <div class="mt-3 mt-md-0">
+        </div>
 
-                <span class="badge bg-light text-dark fs-6 px-4 py-3">
-
-                    <i class="bi bi-shield-check me-2"></i>
-
-                    Administrador
-
-                </span>
-
-            </div>
-
+        <div class="dash-admin-badge">
+            <i class="bi bi-shield-check"></i>
+            Administrador
         </div>
 
     </div>
 
 
-    <!-- ESTADISTICAS -->
-    <div class="row g-4 mb-5">
+    <!-- STATS -->
+    <div class="stat-grid">
 
-        <!-- USUARIOS -->
-        <div class="col-md-3">
+        <div class="stat-card">
 
-            <div class="card shadow-lg rounded-4 p-4 h-100">
+            <div>
+                <div class="stat-card-label">Usuarios</div>
+                <div class="stat-card-value">@Model.TotalUsuarios</div>
+            </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h6 class="text-muted">
-
-                            Usuarios
-
-                        </h6>
-
-                        <h1 class="fw-bold dashboard-title">
-
-                            @Model.TotalUsuarios
-
-                        </h1>
-
-                    </div>
-
-                    <div class="icon-box bg-primary text-white">
-
-                        <i class="bi bi-people-fill"></i>
-
-                    </div>
-
-                </div>
-
+            <div class="stat-card-icon icon-blue">
+                <i class="bi bi-people-fill"></i>
             </div>
 
         </div>
 
+        <div class="stat-card">
 
-        <!-- CONDUCTORES -->
-        <div class="col-md-3">
+            <div>
+                <div class="stat-card-label">Conductores</div>
+                <div class="stat-card-value">@Model.TotalConductores</div>
+            </div>
 
-            <div class="card shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h6 class="text-muted">
-
-                            Conductores
-
-                        </h6>
-
-                        <h1 class="fw-bold dashboard-title">
-
-                            @Model.TotalConductores
-
-                        </h1>
-
-                    </div>
-
-                    <div class="icon-box bg-success text-white">
-
-                        <i class="bi bi-person-badge-fill"></i>
-
-                    </div>
-
-                </div>
-
+            <div class="stat-card-icon icon-green">
+                <i class="bi bi-person-badge-fill"></i>
             </div>
 
         </div>
 
+        <div class="stat-card">
 
-        <!-- VEHICULOS -->
-        <div class="col-md-3">
+            <div>
+                <div class="stat-card-label">Vehículos</div>
+                <div class="stat-card-value">@Model.TotalVehiculos</div>
+            </div>
 
-            <div class="card shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h6 class="text-muted">
-
-                            Vehículos
-
-                        </h6>
-
-                        <h1 class="fw-bold dashboard-title">
-
-                            @Model.TotalVehiculos
-
-                        </h1>
-
-                    </div>
-
-                    <div class="icon-box bg-warning text-white">
-
-                        <i class="bi bi-car-front-fill"></i>
-
-                    </div>
-
-                </div>
-
+            <div class="stat-card-icon icon-yellow">
+                <i class="bi bi-car-front-fill"></i>
             </div>
 
         </div>
 
+        <div class="stat-card">
 
-        <!-- VIAJES -->
-        <div class="col-md-3">
+            <div>
+                <div class="stat-card-label">Viajes</div>
+                <div class="stat-card-value">@Model.TotalPedidos</div>
+            </div>
 
-            <div class="card shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h6 class="text-muted">
-
-                            Viajes
-
-                        </h6>
-
-                        <h1 class="fw-bold dashboard-title">
-
-                            @Model.TotalPedidos
-
-                        </h1>
-
-                    </div>
-
-                    <div class="icon-box bg-dark text-white">
-
-                        <i class="bi bi-geo-alt-fill"></i>
-
-                    </div>
-
-                </div>
-
+            <div class="stat-card-icon icon-white">
+                <i class="bi bi-geo-alt-fill"></i>
             </div>
 
         </div>
@@ -198,144 +592,84 @@
 
 
     <!-- RESUMEN -->
-    <div class="row g-4 mb-5">
+    <div class="resumen-grid">
 
-        <div class="col-md-4">
+        <div class="resumen-card green">
 
-            <div class="card bg-success text-white shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h5>
-
-                            Ganancias Totales
-
-                        </h5>
-
-                        <h1 class="fw-bold">
-
-                            $@Model.Ganancias
-
-                        </h1>
-
-                    </div>
-
-                    <i class="bi bi-cash-stack"
-                       style="font-size:50px;">
-                    </i>
-
+            <div>
+                <div class="resumen-card-label">Ganancias Totales</div>
+                <div class="resumen-card-value">
+                    @String.Format("{0:C0}", Model.Ganancias)
                 </div>
-
             </div>
+
+            <i class="bi bi-cash-stack resumen-card-icon"></i>
 
         </div>
 
-        <div class="col-md-4">
+        <div class="resumen-card blue">
 
-            <div class="card bg-primary text-white shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h5>
-
-                            Viajes Finalizados
-
-                        </h5>
-
-                        <h1 class="fw-bold">
-
-                            @Model.ViajesFinalizados
-
-                        </h1>
-
-                    </div>
-
-                    <i class="bi bi-check-circle-fill"
-                       style="font-size:50px;">
-                    </i>
-
+            <div>
+                <div class="resumen-card-label">Viajes Finalizados</div>
+                <div class="resumen-card-value">
+                    @Model.ViajesFinalizados
                 </div>
-
             </div>
+
+            <i class="bi bi-check-circle-fill resumen-card-icon"></i>
 
         </div>
 
-        <div class="col-md-4">
+        <div class="resumen-card red">
 
-            <div class="card bg-danger text-white shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex justify-content-between align-items-center">
-
-                    <div>
-
-                        <h5>
-
-                            Viajes Cancelados
-
-                        </h5>
-
-                        <h1 class="fw-bold">
-
-                            @Model.ViajesCancelados
-
-                        </h1>
-
-                    </div>
-
-                    <i class="bi bi-x-circle-fill"
-                       style="font-size:50px;">
-                    </i>
-
+            <div>
+                <div class="resumen-card-label">Viajes Cancelados</div>
+                <div class="resumen-card-value">
+                    @Model.ViajesCancelados
                 </div>
-
             </div>
+
+            <i class="bi bi-x-circle-fill resumen-card-icon"></i>
 
         </div>
 
     </div>
 
 
-    <!-- SOLICITUDES -->
-    <div class="card shadow-lg rounded-4 p-4 mb-5">
+    <!-- TABLA -->
+    <div class="table-card">
 
-        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+        <div class="table-card-header">
 
-            <h3 class="fw-bold mb-3 mb-md-0">
+            <h3 class="table-card-title">
+                <i class="bi bi-person-lines-fill me-2"
+                   style="color:#00c853;"></i>
 
                 Solicitudes de Conductores
-
             </h3>
 
-            <span class="badge bg-dark fs-6">
-
-                @Model.Solicitudes.Count Pendientes
-
+            <span class="pending-badge">
+                @(Model.Solicitudes.Count) Solicitudes
             </span>
 
         </div>
 
-        @if (Model.Solicitudes != null &&
-             Model.Solicitudes.Count > 0)
+        @if (Model.Solicitudes != null
+            && Model.Solicitudes.Count > 0)
         {
-            <div class="table-responsive">
+            <div style="overflow-x:auto;">
 
-                <table class="table align-middle">
+                <table class="dash-table">
 
                     <thead>
 
                         <tr>
-
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Teléfono</th>
                             <th>Licencia</th>
                             <th>Vehículo</th>
                             <th>Acción</th>
-
                         </tr>
 
                     </thead>
@@ -346,30 +680,42 @@
                         {
                             <tr>
 
-                                <td>@item.Nombre</td>
+                                <td class="td-name">
+                                    @item.Nombre
+                                </td>
 
-                                <td>@item.Correo</td>
+                                <td>
+                                    @item.Correo
+                                </td>
 
-                                <td>@item.Telefono</td>
+                                <td class="td-mono">
+                                    @item.Telefono
+                                </td>
 
-                                <td>@item.Licencia</td>
+                                <td class="td-mono">
+                                    @item.Licencia
+                                </td>
 
-                                <td>@item.Vehiculo</td>
+                                <td>
+                                    @item.Vehiculo
+                                </td>
 
                                 <td>
 
-                                    <div class="d-flex gap-2">
+                                    <div style="display:flex; gap:8px;">
 
                                         <a href="/Conductor/Aprobar/@item.IdSolicitud"
-                                           class="btn btn-success btn-sm rounded-pill px-3">
+                                           class="btn-aprobar">
 
+                                            <i class="bi bi-check me-1"></i>
                                             Aprobar
 
                                         </a>
 
                                         <a href="/Conductor/Rechazar/@item.IdSolicitud"
-                                           class="btn btn-danger btn-sm rounded-pill px-3">
+                                           class="btn-rechazar">
 
+                                            <i class="bi bi-x me-1"></i>
                                             Rechazar
 
                                         </a>
@@ -389,9 +735,14 @@
         }
         else
         {
-            <div class="alert alert-light border rounded-4 text-center">
+            <div class="empty-state">
 
-                No hay solicitudes pendientes.
+                <i class="bi bi-inbox"></i>
+
+                <p>
+                    Todo está al día.
+                    No hay solicitudes pendientes.
+                </p>
 
             </div>
         }
@@ -399,60 +750,52 @@
     </div>
 
 
-    <!-- ACCESOS RAPIDOS -->
-    <div class="row g-4">
+    <!-- QUICK ACCESS -->
+    <div class="quick-grid">
 
-        <div class="col-md-3">
+        <a href="/Usuario"
+           class="quick-card qc-usuarios">
 
-            <a href="/Usuario"
-               class="btn btn-dark w-100 py-4 rounded-4">
+            <div class="quick-card-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
 
-                <i class="bi bi-people-fill me-2"></i>
+            <span>Usuarios</span>
 
-                Usuarios
+        </a>
 
-            </a>
+        <a href="/Conductor"
+           class="quick-card qc-conductores">
 
-        </div>
+            <div class="quick-card-icon">
+                <i class="bi bi-person-badge-fill"></i>
+            </div>
 
-        <div class="col-md-3">
+            <span>Conductores</span>
 
-            <a href="/Conductor"
-               class="btn btn-success w-100 py-4 rounded-4">
+        </a>
 
-                <i class="bi bi-person-badge-fill me-2"></i>
+        <a href="/Vehiculo"
+           class="quick-card qc-vehiculos">
 
-                Conductores
+            <div class="quick-card-icon">
+                <i class="bi bi-car-front-fill"></i>
+            </div>
 
-            </a>
+            <span>Vehículos</span>
 
-        </div>
+        </a>
 
-        <div class="col-md-3">
+        <a href="/Pedido"
+           class="quick-card qc-pedidos">
 
-            <a href="/Vehiculo"
-               class="btn btn-primary w-100 py-4 rounded-4">
+            <div class="quick-card-icon">
+                <i class="bi bi-geo-alt-fill"></i>
+            </div>
 
-                <i class="bi bi-car-front-fill me-2"></i>
+            <span>Pedidos</span>
 
-                Vehículos
-
-            </a>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <a href="/Pedido"
-               class="btn btn-warning w-100 py-4 rounded-4 text-dark fw-bold">
-
-                <i class="bi bi-geo-alt-fill me-2"></i>
-
-                Pedidos
-
-            </a>
-
-        </div>
+        </a>
 
     </div>
 

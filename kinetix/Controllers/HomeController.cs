@@ -107,10 +107,7 @@ namespace kinetix.Controllers
             return View(d);
         }
 
-
-
         // DASHBOARD CLIENTE
-
         public ActionResult DashboardCliente()
         {
             if (!ValidarRol("Cliente"))
@@ -123,10 +120,7 @@ namespace kinetix.Controllers
             return View();
         }
 
-
-        // =========================
         // DASHBOARD CONDUCTOR
-        // =========================
         public ActionResult DashboardConductor()
         {
             if (!ValidarRol("Conductor"))
@@ -147,21 +141,17 @@ namespace kinetix.Controllers
                 SqlCommand cmd =
                     new SqlCommand(
                     @"
-                    SELECT *
-                    FROM Pedidos
-                    WHERE IdConductor =
-                    (
-                        SELECT IdConductor
-                        FROM Conductores
-                        WHERE Nombre=@nom
-                    )
-                    ORDER BY IdPedido DESC
-                    ",
-                    cn);
+                    SELECT p.*
+                    FROM Pedidos p
+                    INNER JOIN Conductores c
+                    ON p.IdConductor = c.IdConductor
+                    WHERE c.IdUsuario = @idu
+                    ORDER BY p.IdPedido DESC
+                    ", cn);
 
                 cmd.Parameters.AddWithValue(
-                    "@nom",
-                    Session["Usuario"]);
+                    "@idu",
+                    Session["IdUsuario"]);
 
                 SqlDataReader dr =
                     cmd.ExecuteReader();
@@ -197,9 +187,7 @@ namespace kinetix.Controllers
             return View(pedidos);
         }
 
-        // =========================
         // OBTENER ESTADISTICAS
-        // =========================
         private Dashboard ObtenerDashboard()
         {
             Dashboard d =

@@ -1,63 +1,554 @@
 ﻿@model List<kinetix.Models.Usuario>
 
-<h2>Usuarios</h2>
-
-<a href="/Usuario/Create">
-    Nuevo Usuario
-</a>
-
-<br />
-<br />
-
-@using (Html.BeginForm("Buscar", "Usuario"))
-{
-    <input type="text"
-           name="texto"
-           placeholder="Buscar usuario" />
-
-    <button type="submit">
-        Buscar
-    </button>
+@{
+    ViewBag.Title = "Usuarios";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<table border="1">
+<style>
 
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Correo</th>
-        <th>Telefono</th>
-        <th>Rol</th>
-        <th>Estado</th>
-        <th>Acciones</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-
-            <td>@item.IdUsuario</td>
-            <td>@item.Nombre</td>
-            <td>@item.Correo</td>
-            <td>@item.Telefono</td>
-            <td>@item.Rol</td>
-            <td>@item.Estado</td>
-
-            <td>
-
-                <a href="/Usuario/Edit/@item.IdUsuario">
-                    Editar
-                </a>
-
-                |
-
-                <a href="/Usuario/Delete/@item.IdUsuario">
-                    Eliminar
-                </a>
-
-            </td>
-
-        </tr>
+    .users-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 32px 24px;
+        font-family: 'Inter', sans-serif;
     }
 
-</table>
+    /* =========================
+       HEADER
+    ========================== */
+
+    .users-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .users-title h1 {
+        color: #fff;
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .users-title p {
+        color: rgba(255,255,255,0.45);
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .btn-new-user {
+        background: #00c853;
+        color: white;
+        border: none;
+        padding: 12px 22px;
+        border-radius: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-new-user:hover {
+            background: #00b248;
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+    /* =========================
+       SEARCH
+    ========================== */
+
+    .search-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 220px;
+        background: #1c1c1c;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 14px;
+        padding: 13px 16px;
+        color: #fff;
+        outline: none;
+        transition: 0.2s;
+    }
+
+        .search-input::placeholder {
+            color: rgba(255,255,255,0.25);
+        }
+
+        .search-input:focus {
+            border-color: #00c853;
+            box-shadow: 0 0 0 4px rgba(0,200,83,0.12);
+        }
+
+    .btn-search {
+        background: #fff;
+        color: #111;
+        border: none;
+        border-radius: 14px;
+        padding: 13px 24px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+        .btn-search:hover {
+            background: #ececec;
+        }
+
+    /* =========================
+       TABLE
+    ========================== */
+
+    .table-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 22px;
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 22px 24px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+        .table-header h3 {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+    .users-count {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.7);
+        padding: 8px 14px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .custom-table thead th {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.35);
+            font-weight: 700;
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            white-space: nowrap;
+        }
+
+        .custom-table tbody tr {
+            transition: 0.2s;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+        }
+
+            .custom-table tbody tr:hover {
+                background: rgba(255,255,255,0.03);
+            }
+
+        .custom-table tbody td {
+            padding: 18px 20px;
+            color: rgba(255,255,255,0.75);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+    .user-name {
+        color: #fff !important;
+        font-weight: 700;
+    }
+
+    .user-email {
+        color: rgba(255,255,255,0.55);
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .role-admin {
+        background: rgba(239,68,68,0.12);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.2);
+    }
+
+    .role-cliente {
+        background: rgba(30,136,229,0.12);
+        color: #42a5f5;
+        border: 1px solid rgba(30,136,229,0.2);
+    }
+
+    .role-conductor {
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        border: 1px solid rgba(0,200,83,0.2);
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .status-active {
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        border: 1px solid rgba(0,200,83,0.2);
+    }
+
+    .status-inactive {
+        background: rgba(239,68,68,0.12);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.2);
+    }
+
+    /* =========================
+       ACTIONS
+    ========================== */
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-edit {
+        background: rgba(30,136,229,0.12);
+        color: #42a5f5;
+        border: 1px solid rgba(30,136,229,0.2);
+        padding: 8px 16px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+        .btn-edit:hover {
+            background: rgba(30,136,229,0.22);
+            color: #42a5f5;
+            text-decoration: none;
+        }
+
+    .btn-delete {
+        background: rgba(239,68,68,0.12);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.2);
+        padding: 8px 16px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+        .btn-delete:hover {
+            background: rgba(239,68,68,0.22);
+            color: #f87171;
+            text-decoration: none;
+        }
+
+    /* =========================
+       EMPTY
+    ========================== */
+
+    .empty-users {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+        .empty-users i {
+            font-size: 55px;
+            color: rgba(255,255,255,0.12);
+            margin-bottom: 14px;
+        }
+
+        .empty-users h4 {
+            color: rgba(255,255,255,0.8);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .empty-users p {
+            color: rgba(255,255,255,0.35);
+            margin: 0;
+        }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @@media (max-width: 768px) {
+
+        .users-wrapper {
+            padding: 20px 14px;
+        }
+
+        .custom-table {
+            min-width: 900px;
+        }
+
+        .users-header {
+            align-items: stretch;
+        }
+
+        .btn-new-user {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+
+<div class="users-wrapper">
+
+    <!-- HEADER -->
+    <div class="users-header">
+
+        <div class="users-title">
+
+            <h1>
+                Gestión de Usuarios
+            </h1>
+
+            <p>
+                Administra los usuarios registrados en Kinetix
+            </p>
+
+        </div>
+
+        <a href="/Usuario/Create"
+           class="btn-new-user">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Nuevo Usuario
+
+        </a>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="search-card">
+
+        @using (Html.BeginForm("Buscar", "Usuario"))
+        {
+            <div class="search-form">
+
+                <input type="text"
+                       name="texto"
+                       class="search-input"
+                       placeholder="Buscar por nombre, correo o teléfono..." />
+
+                <button type="submit"
+                        class="btn-search">
+
+                    <i class="bi bi-search me-2"></i>
+
+                    Buscar
+
+                </button>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <h3>
+                <i class="bi bi-people-fill me-2"
+                   style="color:#00c853;"></i>
+
+                Lista de Usuarios
+            </h3>
+
+            <div class="users-count">
+
+                @Model.Count Usuarios
+
+            </div>
+
+        </div>
+
+        @if (Model.Count > 0)
+        {
+            <div style="overflow-x:auto;">
+
+                <table class="custom-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Teléfono</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    #@item.IdUsuario
+                                </td>
+
+                                <td class="user-name">
+                                    @item.Nombre
+                                </td>
+
+                                <td class="user-email">
+                                    @item.Correo
+                                </td>
+
+                                <td>
+                                    @item.Telefono
+                                </td>
+
+                                <td>
+
+                                    @if (item.Rol == "Admin")
+                                    {
+                                        <span class="role-badge role-admin">
+                                            Admin
+                                        </span>
+                                    }
+                                    else if (item.Rol == "Conductor")
+                                    {
+                                        <span class="role-badge role-conductor">
+                                            Conductor
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="role-badge role-cliente">
+                                            Cliente
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @if (item.Estado == "Activo")
+                                    {
+                                        <span class="status-badge status-active">
+                                            Activo
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status-badge status-inactive">
+                                            Inactivo
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <div class="actions">
+
+                                        <a href="/Usuario/Edit/@item.IdUsuario"
+                                           class="btn-edit">
+
+                                            <i class="bi bi-pencil-square me-1"></i>
+
+                                            Editar
+
+                                        </a>
+
+                                        <a href="/Usuario/Delete/@item.IdUsuario"
+                                           class="btn-delete">
+
+                                            <i class="bi bi-trash3 me-1"></i>
+
+                                            Eliminar
+
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-users">
+
+                <i class="bi bi-people"></i>
+
+                <h4>
+                    No hay usuarios registrados
+                </h4>
+
+                <p>
+                    Aún no existen usuarios en el sistema.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -3,141 +3,240 @@
 <head>
 
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>
-        @ViewBag.Title - Kinetix
-    </title>
+    <title>@ViewBag.Title - Kinetix</title>
 
     @Styles.Render("~/Content/css")
-
     @Scripts.Render("~/bundles/modernizr")
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    <link rel="preconnect"
-          href="https://fonts.googleapis.com">
-
-    <link rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             background: #f8f9fa;
             font-family: 'Inter', sans-serif;
             color: #1f1f1f;
+            margin: 0;
+            padding: 0;
         }
 
-        /* =========================
+        /* ==============================
            NAVBAR
-        ==========================*/
+        ============================== */
 
         .navbar {
             background: #000 !important;
             padding-top: 14px;
             padding-bottom: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .navbar-brand {
-            font-size: 28px;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 800;
             letter-spacing: 1px;
             color: white !important;
+            text-decoration: none;
+        }
+
+        .navbar-brand-k {
+            background: #00c853;
+            color: #fff;
+            font-weight: 900;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
         }
 
         .nav-link {
-            color: rgba(255,255,255,0.85) !important;
+            color: rgba(255,255,255,0.75) !important;
             font-weight: 500;
-            margin-right: 10px;
-            transition: 0.3s;
+            font-size: 14px;
+            margin-right: 4px;
+            padding: 8px 12px !important;
+            border-radius: 8px;
+            transition: color 0.2s, background 0.2s;
         }
 
             .nav-link:hover {
+                color: #fff !important;
+                background: rgba(255,255,255,0.08);
+            }
+
+            .nav-link.active {
                 color: #00c853 !important;
             }
 
-        /* =========================
-           BOTONES
-        ==========================*/
+        /* ==============================
+           BOTONES NAVBAR
+        ============================== */
 
-        .btn-kinetix {
+        .btn-nav-login {
+            color: rgba(255,255,255,0.8) !important;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 16px !important;
+            border-radius: 50px;
+            transition: color 0.2s;
+            text-decoration: none;
+        }
+
+            .btn-nav-login:hover {
+                color: #fff !important;
+                text-decoration: none;
+            }
+
+        .btn-nav-register {
+            background: transparent;
+            color: #fff !important;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1.5px solid rgba(255,255,255,0.3);
+            text-decoration: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+            .btn-nav-register:hover {
+                border-color: #fff;
+                background: rgba(255,255,255,0.06);
+                color: #fff !important;
+                text-decoration: none;
+            }
+
+        .btn-nav-driver {
             background: #00c853;
+            color: #fff !important;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
             border: none;
-            color: white;
-            padding: 10px 22px;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s, transform 0.2s;
         }
 
-            .btn-kinetix:hover {
+            .btn-nav-driver:hover {
                 background: #00b248;
-                color: white;
-                transform: translateY(-2px);
+                color: #fff !important;
+                transform: translateY(-1px);
+                text-decoration: none;
             }
 
-        .btn-dark-custom {
-            background: #111;
-            color: white;
-            border-radius: 12px;
-            padding: 10px 22px;
-            font-weight: 600;
+        .btn-nav-logout {
+            background: transparent;
+            color: rgba(255,255,255,0.7) !important;
+            font-weight: 500;
+            font-size: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            text-decoration: none;
+            transition: border-color 0.2s, color 0.2s;
         }
 
-            .btn-dark-custom:hover {
-                background: #222;
-                color: white;
+            .btn-nav-logout:hover {
+                border-color: rgba(255,255,255,0.5);
+                color: #fff !important;
+                text-decoration: none;
             }
 
-        /* =========================
+        /* ==============================
+           USER BADGE
+        ============================== */
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 7px 14px;
+            border-radius: 50px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .user-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #00c853;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* ==============================
+           ROL BADGE (en navbar)
+        ============================== */
+
+        .rol-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .rol-badge.admin {
+                background: #fff3e0;
+                color: #e65100;
+            }
+
+            .rol-badge.cliente {
+                background: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .rol-badge.conductor {
+                background: #e3f2fd;
+                color: #1565c0;
+            }
+
+        /* ==============================
            CONTENIDO
-        ==========================*/
+        ============================== */
 
         .body-content {
             min-height: 80vh;
-            padding-top: 40px;
-            padding-bottom: 40px;
         }
 
-        /* =========================
-           FOOTER
-        ==========================*/
+        /* ==============================
+           NAVBAR TOGGLER
+        ============================== */
 
-        footer {
-            background: #000;
-            color: rgba(255,255,255,0.7);
-            padding: 30px 0;
-            margin-top: 60px;
-            text-align: center;
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.2);
         }
 
-            footer h5 {
-                color: white;
-                margin-bottom: 10px;
-            }
-
-        /* =========================
-           BADGES
-        ==========================*/
-
-        .user-badge {
-            background: rgba(255,255,255,0.12);
-            padding: 8px 14px;
-            border-radius: 20px;
-            color: white;
-            font-size: 14px;
+        .navbar-toggler-icon {
+            filter: invert(1);
         }
     </style>
 
@@ -147,204 +246,109 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark">
-
         <div class="container">
 
-            <a class="navbar-brand"
-               href="/">
-
+            <!-- BRAND -->
+            <a class="navbar-brand" href="/">
+                <span class="navbar-brand-k">K</span>
                 KINETIX
-
             </a>
 
-            <button class="navbar-toggler"
-                    type="button"
+            <!-- TOGGLER MOBILE -->
+            <button class="navbar-toggler" type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#menu">
-
                 <span class="navbar-toggler-icon"></span>
-
             </button>
 
-            <div class="collapse navbar-collapse"
-                 id="menu">
+            <div class="collapse navbar-collapse" id="menu">
 
-                <!-- MENU IZQUIERDA -->
+                <!-- MENÚ IZQUIERDA -->
                 <ul class="navbar-nav me-auto">
 
                     <li class="nav-item">
-
-                        <a class="nav-link"
-                           href="/Home">
-
-                            Inicio
-
-                        </a>
-
+                        <a class="nav-link" href="/Home">Inicio</a>
                     </li>
 
-                    @if (Session["Rol"] != null
-                      && Session["Rol"].ToString() == "Admin")
+                    @if (Session["Rol"] != null && Session["Rol"].ToString() == "Admin")
                     {
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Usuario">
-
-                                Usuarios
-
-                            </a>
-
+                            <a class="nav-link" href="/Usuario">Usuarios</a>
                         </li>
-
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Conductor">
-
-                                Conductores
-
-                            </a>
-
+                            <a class="nav-link" href="/Conductor">Conductores</a>
                         </li>
-
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Vehiculo">
-
-                                Vehículos
-
-                            </a>
-
+                            <a class="nav-link" href="/Vehiculo">Vehículos</a>
                         </li>
-
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Pedido">
-
-                                Viajes
-
-                            </a>
-
+                            <a class="nav-link" href="/Pedido">Viajes</a>
                         </li>
-
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Factura">
-
-                                Facturas
-
-                            </a>
-
+                            <a class="nav-link" href="/Factura">Facturas</a>
                         </li>
                     }
 
-                    @if (Session["Rol"] != null
-                      && Session["Rol"].ToString() == "Cliente")
+                    @if (Session["Rol"] != null && Session["Rol"].ToString() == "Cliente")
                     {
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Pedido/Create">
-
-                                Solicitar Viaje
-
-                            </a>
-
+                            <a class="nav-link" href="/Pedido/Create">Solicitar Viaje</a>
                         </li>
-
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Factura">
-
-                                Mis Facturas
-
-                            </a>
-
+                            <a class="nav-link" href="/Factura">Mis Facturas</a>
                         </li>
                     }
 
-                    @if (Session["Rol"] != null
-                      && Session["Rol"].ToString() == "Conductor")
+                    @if (Session["Rol"] != null && Session["Rol"].ToString() == "Conductor")
                     {
                         <li class="nav-item">
-
-                            <a class="nav-link"
-                               href="/Pedido">
-
-                                Viajes Disponibles
-
-                            </a>
-
+                            <a class="nav-link" href="/Pedido">Viajes Disponibles</a>
                         </li>
                     }
 
                 </ul>
 
-
-                <!-- MENU DERECHA -->
-                <ul class="navbar-nav align-items-center">
+                <!-- MENÚ DERECHA -->
+                <ul class="navbar-nav align-items-center gap-2">
 
                     @if (Session["Usuario"] == null)
                     {
-                        <li class="nav-item me-2">
-
-                            <a class="nav-link"
-                               href="/Login">
-
-                                Iniciar Sesión
-
-                            </a>
-
-                        </li>
-
-                        <li class="nav-item me-2">
-
-                            <a class="btn btn-light rounded-pill px-4"
-                               href="/Registro">
-
-                                Registro
-
-                            </a>
-
-                        </li>
-
                         <li class="nav-item">
-
-                            <a class="btn btn-kinetix"
-                               href="/ConductorRegistro">
-
-                                Conducir con Kinetix
-
+                            <a class="btn-nav-login" href="/Login">
+                                Iniciar Sesión
                             </a>
-
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-nav-register" href="/Registro">
+                                Registro
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-nav-driver" href="/ConductorRegistro">
+                                <i class="bi bi-car-front"></i>
+                                Conducir con Kinetix
+                            </a>
                         </li>
                     }
                     else
                     {
-                        <li class="nav-item me-3">
-
-                            <span class="user-badge">
-
-                                Hola @Session["Usuario"]
-
-                            </span>
-
-                        </li>
-
                         <li class="nav-item">
-
-                            <a class="btn btn-outline-light rounded-pill px-4"
-                               href="/Login/Logout">
-
+                            <div class="user-badge">
+                                <span class="user-badge-dot"></span>
+                                Hola, @Session["Usuario"]
+                                @if (Session["Rol"] != null)
+                                {
+                                    <span class="rol-badge @Session["Rol"].ToString().ToLower()">
+                                        @Session["Rol"]
+                                    </span>
+                                }
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn-nav-logout" href="/Login/Logout">
+                                <i class="bi bi-box-arrow-right"></i>
                                 Cerrar Sesión
-
                             </a>
-
                         </li>
                     }
 
@@ -353,51 +357,20 @@
             </div>
 
         </div>
-
     </nav>
 
 
-    <!-- CONTENIDO -->
-    <main class="container body-content">
-
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="body-content">
         @RenderBody()
-
     </main>
 
 
-    <!-- FOOTER -->
-    <footer>
-
-        <div class="container">
-
-            <h5>
-                KINETIX
-            </h5>
-
-            <p>
-
-                Plataforma inteligente de movilidad urbana.
-
-            </p>
-
-            <small>
-
-                © @DateTime.Now.Year Kinetix.
-                Todos los derechos reservados.
-
-            </small>
-
-        </div>
-
-    </footer>
-
-
     @Scripts.Render("~/bundles/jquery")
-
     @Scripts.Render("~/bundles/bootstrap")
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     @RenderSection("scripts", required: false)
 
 </body>
-
 </html>

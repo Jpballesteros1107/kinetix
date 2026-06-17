@@ -1,33 +1,392 @@
 ﻿@model kinetix.Models.Conductor
+@using System.Web.Mvc
 
-<h2>Editar Conductor</h2>
-
-@using (Html.BeginForm())
-{
-    @Html.HiddenFor(x => x.IdConductor)
-
-    <div>
-        Nombre:
-        @Html.TextBoxFor(x => x.Nombre)
-    </div>
-
-    <br />
-
-    <div>
-        Licencia:
-        @Html.TextBoxFor(x => x.Licencia)
-    </div>
-
-    <br />
-
-    <div>
-        Telefono:
-        @Html.TextBoxFor(x => x.Telefono)
-    </div>
-
-    <br />
-
-    <button type="submit">
-        Actualizar
-    </button>
+@{
+    ViewBag.Title = "Editar Conductor";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+<style>
+
+    .edit-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 40px 20px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .edit-container {
+        max-width: 720px;
+        margin: auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .edit-header {
+        margin-bottom: 28px;
+    }
+
+        .edit-header h1 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .edit-header p {
+            color: rgba(255,255,255,0.45);
+            margin: 0;
+            font-size: 14px;
+        }
+
+    /* =========================
+       CARD
+    ========================== */
+
+    .edit-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 24px;
+        padding: 36px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    /* =========================
+       FORM
+    ========================== */
+
+    .form-group-custom {
+        margin-bottom: 22px;
+    }
+
+    .label-custom {
+        display: block;
+        color: rgba(255,255,255,0.75);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 0.3px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255,255,255,0.25);
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    .form-input {
+        width: 100%;
+        background: #1c1c1c;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 14px 16px 14px 46px;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+        .form-input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .form-input:focus {
+            border-color: #00c853;
+            box-shadow: 0 0 0 4px rgba(0,200,83,0.12);
+        }
+
+    /* =========================
+       BUTTONS
+    ========================== */
+
+    .actions {
+        display: flex;
+        gap: 14px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+    }
+
+    .btn-save {
+        flex: 1;
+        background: #00c853;
+        border: none;
+        color: white;
+        border-radius: 16px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+        .btn-save:hover {
+            background: #00b248;
+            transform: translateY(-2px);
+        }
+
+    .btn-cancel {
+        flex: 1;
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.8);
+        border-radius: 16px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            text-decoration: none;
+        }
+
+    @@media (max-width: 576px) {
+
+        .edit-card {
+            padding: 26px 20px;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="edit-wrapper">
+
+    <div class="edit-container">
+
+        <!-- HEADER -->
+        <div class="edit-header">
+
+            <h1>
+                Editar Conductor
+            </h1>
+
+            <p>
+                Actualiza la información del conductor seleccionado
+            </p>
+
+        </div>
+
+
+        <!-- CARD -->
+        <div class="edit-card">
+
+            @using (Html.BeginForm())
+            {
+                @Html.HiddenFor(x => x.IdConductor)
+
+                <!-- ID USUARIO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        ID Usuario
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-person-badge-fill input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.IdUsuario,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "ID del usuario asociado"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOMBRE -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Nombre Completo
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-person-fill input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Nombre,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "Nombre del conductor"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- LICENCIA -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Número de Licencia
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-card-checklist input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Licencia,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "Licencia de conducción"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- TELEFONO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Número Telefónico
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-telephone-fill input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Telefono,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "3001234567"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- ESTADO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Estado del Conductor
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-shield-check input-icon"></i>
+
+                        @Html.DropDownListFor(
+                            x => x.Estado,
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem
+                                {
+                                    Text = "Activo",
+                                    Value = "Activo"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Pendiente",
+                                    Value = "Pendiente"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Inactivo",
+                                    Value = "Inactivo"
+                                }
+                            },
+                            "Seleccionar estado",
+                            new
+                            {
+                                @class = "form-input"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- FECHA REGISTRO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Fecha de Registro
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-calendar-event-fill input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.FechaRegistro,
+                            "{0:yyyy-MM-dd}",
+                            new
+                            {
+                                @class = "form-input",
+                                type = "date"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="actions">
+
+                    <button type="submit"
+                            class="btn-save">
+
+                        <i class="bi bi-check-circle-fill me-2"></i>
+
+                        Actualizar Conductor
+
+                    </button>
+
+                    <a href="/Conductor"
+                       class="btn-cancel">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+
+                        Volver
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

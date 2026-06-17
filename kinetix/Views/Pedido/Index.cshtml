@@ -1,30 +1,410 @@
 ﻿@model List<kinetix.Models.Pedido>
 
 @{
-    ViewBag.Title = "Pedidos";
+    ViewBag.Title = "Gestión de Pedidos";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<div class="container mt-4">
+<style>
+
+    .pedido-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 36px 22px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .pedido-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+        .pedido-header h1 {
+            color: #fff;
+            font-size: 34px;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        .pedido-header p {
+            color: rgba(255,255,255,0.45);
+            margin: 0;
+            font-size: 14px;
+        }
+
+    .btn-new {
+        background: #00c853;
+        border: none;
+        color: #fff;
+        padding: 14px 24px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .btn-new:hover {
+            background: #00b248;
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    /* =========================
+       STATS
+    ========================== */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .stat-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 22px;
+        padding: 26px 24px;
+        transition: 0.2s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(0,200,83,0.2);
+        }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .icon-green {
+        background: rgba(0,200,83,0.15);
+        color: #00c853;
+    }
+
+    .icon-blue {
+        background: rgba(59,130,246,0.15);
+        color: #60a5fa;
+    }
+
+    .icon-yellow {
+        background: rgba(245,158,11,0.15);
+        color: #fbbf24;
+    }
+
+    .icon-red {
+        background: rgba(239,68,68,0.15);
+        color: #f87171;
+    }
+
+    .stat-label {
+        color: rgba(255,255,255,0.45);
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        color: #fff;
+        font-size: 34px;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    /* =========================
+       TABLE CARD
+    ========================== */
+
+    .table-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 28px;
+        overflow: hidden;
+    }
+
+    .table-header {
+        padding: 28px;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+        .table-header h3 {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .table-header p {
+            color: rgba(255,255,255,0.4);
+            margin: 4px 0 0;
+            font-size: 13px;
+        }
+
+    .table-badge {
+        background: rgba(0,200,83,0.12);
+        border: 1px solid rgba(0,200,83,0.2);
+        color: #00c853;
+        padding: 10px 18px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* =========================
+       TABLE
+    ========================== */
+
+    .custom-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .custom-table thead th {
+            background: #181818;
+            color: rgba(255,255,255,0.35);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 18px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            white-space: nowrap;
+        }
+
+        .custom-table tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            transition: 0.2s;
+        }
+
+            .custom-table tbody tr:hover {
+                background: rgba(255,255,255,0.02);
+            }
+
+        .custom-table tbody td {
+            padding: 18px 16px;
+            color: rgba(255,255,255,0.75);
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+    .pedido-id {
+        color: #fff;
+        font-weight: 800;
+    }
+
+    .pedido-user {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .pedido-value {
+        color: #00c853;
+        font-weight: 800;
+    }
+
+    .pedido-date {
+        color: rgba(255,255,255,0.45);
+        font-size: 12px;
+    }
+
+    /* =========================
+       STATUS
+    ========================== */
+
+    .status-badge {
+        padding: 8px 14px;
+        border-radius: 50px;
+        font-size: 11px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .status-pendiente {
+        background: rgba(245,158,11,0.12);
+        color: #fbbf24;
+        border: 1px solid rgba(245,158,11,0.2);
+    }
+
+    .status-aceptado {
+        background: rgba(59,130,246,0.12);
+        color: #60a5fa;
+        border: 1px solid rgba(59,130,246,0.2);
+    }
+
+    .status-camino {
+        background: rgba(139,92,246,0.12);
+        color: #a78bfa;
+        border: 1px solid rgba(139,92,246,0.2);
+    }
+
+    .status-finalizado {
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        border: 1px solid rgba(0,200,83,0.2);
+    }
+
+    .status-cancelado {
+        background: rgba(239,68,68,0.12);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.2);
+    }
+
+    /* =========================
+       ACTIONS
+    ========================== */
+
+    .action-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .btn-action {
+        border: none;
+        border-radius: 12px;
+        padding: 9px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        transition: 0.2s;
+        color: #fff;
+    }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+    .btn-aceptar {
+        background: #2563eb;
+    }
+
+    .btn-camino {
+        background: #7c3aed;
+    }
+
+    .btn-finalizar {
+        background: #00c853;
+    }
+
+    .btn-cancelar {
+        background: #dc2626;
+    }
+
+    .no-actions {
+        color: rgba(255,255,255,0.3);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* =========================
+       EMPTY
+    ========================== */
+
+    .empty-state {
+        padding: 70px 20px;
+        text-align: center;
+    }
+
+        .empty-state i {
+            font-size: 60px;
+            color: rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state h4 {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            color: rgba(255,255,255,0.35);
+            margin: 0;
+        }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @@media (max-width: 1200px) {
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 768px) {
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .pedido-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .pedido-wrapper {
+            padding: 24px 14px;
+        }
+    }
+</style>
+
+
+<div class="pedido-wrapper">
 
     <!-- HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="pedido-header">
 
         <div>
 
-            <h2 class="fw-bold">
+            <h1>
                 Gestión de Viajes
-            </h2>
+            </h1>
 
-            <p class="text-muted">
-
-                Administra pedidos y estados en tiempo real.
-
+            <p>
+                Administra pedidos, estados y recorridos en tiempo real.
             </p>
 
         </div>
 
         <a href="/Pedido/Create"
-           class="btn btn-dark">
+           class="btn-new">
+
+            <i class="bi bi-plus-circle-fill"></i>
 
             Nuevo Pedido
 
@@ -33,35 +413,149 @@
     </div>
 
 
-    <!-- TABLA -->
-    <div class="card shadow border-0">
+    <!-- STATS -->
+    <div class="stats-grid">
 
-        <div class="card-body">
+        <div class="stat-card">
 
+            <div class="stat-top">
+
+                <div class="stat-icon icon-yellow">
+
+                    <i class="bi bi-clock-history"></i>
+
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Pedidos Pendientes
+            </div>
+
+            <div class="stat-value">
+                @Model.Count(x => x.Estado == "Pendiente")
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon icon-blue">
+
+                    <i class="bi bi-car-front-fill"></i>
+
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                En Camino
+            </div>
+
+            <div class="stat-value">
+                @Model.Count(x => x.Estado == "En Camino")
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon icon-green">
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Finalizados
+            </div>
+
+            <div class="stat-value">
+                @Model.Count(x => x.Estado == "Finalizado")
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-top">
+
+                <div class="stat-icon icon-red">
+
+                    <i class="bi bi-x-circle-fill"></i>
+
+                </div>
+
+            </div>
+
+            <div class="stat-label">
+                Cancelados
+            </div>
+
+            <div class="stat-value">
+                @Model.Count(x => x.Estado == "Cancelado")
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="table-card">
+
+        <div class="table-header">
+
+            <div>
+
+                <h3>
+                    Lista de Pedidos
+                </h3>
+
+                <p>
+                    Visualiza y actualiza el estado de cada viaje.
+                </p>
+
+            </div>
+
+            <div class="table-badge">
+
+                <i class="bi bi-lightning-charge-fill me-1"></i>
+
+                @Model.Count Pedidos registrados
+
+            </div>
+
+        </div>
+
+
+        @if (Model != null && Model.Count > 0)
+        {
             <div class="table-responsive">
 
-                <table class="table table-hover align-middle">
+                <table class="custom-table">
 
-                    <thead class="table-dark">
+                    <thead>
 
                         <tr>
 
-                            <th>#</th>
-
+                            <th>ID</th>
                             <th>Cliente</th>
-
                             <th>Conductor</th>
-
                             <th>Origen</th>
-
                             <th>Destino</th>
-
                             <th>Estado</th>
-
                             <th>Valor</th>
-
                             <th>Fecha</th>
-
                             <th>Acciones</th>
 
                         </tr>
@@ -74,15 +568,11 @@
                         {
                             <tr id="fila-@item.IdPedido">
 
-                                <td>
-
-                                    <strong>
-                                        #@item.IdPedido
-                                    </strong>
-
+                                <td class="pedido-id">
+                                    #@item.IdPedido
                                 </td>
 
-                                <td>
+                                <td class="pedido-user">
                                     @item.NombreUsuario
                                 </td>
 
@@ -102,52 +592,53 @@
 
                                     @if (item.Estado == "Pendiente")
                                     {
-                                        <span class="badge bg-warning text-dark">
+                                        <span class="status-badge status-pendiente">
+                                            <i class="bi bi-clock"></i>
                                             Pendiente
                                         </span>
                                     }
 
                                     else if (item.Estado == "Aceptado")
                                     {
-                                        <span class="badge bg-info text-dark">
+                                        <span class="status-badge status-aceptado">
+                                            <i class="bi bi-check-circle"></i>
                                             Aceptado
                                         </span>
                                     }
 
                                     else if (item.Estado == "En Camino")
                                     {
-                                        <span class="badge bg-primary">
+                                        <span class="status-badge status-camino">
+                                            <i class="bi bi-car-front"></i>
                                             En Camino
                                         </span>
                                     }
 
                                     else if (item.Estado == "Finalizado")
                                     {
-                                        <span class="badge bg-success">
+                                        <span class="status-badge status-finalizado">
+                                            <i class="bi bi-check2-all"></i>
                                             Finalizado
                                         </span>
                                     }
 
                                     else if (item.Estado == "Cancelado")
                                     {
-                                        <span class="badge bg-danger">
+                                        <span class="status-badge status-cancelado">
+                                            <i class="bi bi-x-circle"></i>
                                             Cancelado
                                         </span>
                                     }
 
                                 </td>
 
-                                <td>
+                                <td class="pedido-value">
 
-                                    <strong>
-
-                                        $@String.Format("{0:N0}", item.Valor)
-
-                                    </strong>
+                                    $@String.Format("{0:N0}", item.Valor)
 
                                 </td>
 
-                                <td>
+                                <td class="pedido-date">
 
                                     @item.Fecha.ToString("dd/MM/yyyy HH:mm")
 
@@ -158,9 +649,9 @@
                                     @if (item.Estado != "Finalizado"
                                      && item.Estado != "Cancelado")
                                     {
-                                        <div class="d-flex flex-wrap gap-1">
+                                        <div class="action-group">
 
-                                            <button class="btn btn-sm btn-info estado"
+                                            <button class="btn-action btn-aceptar estado"
                                                     data-id="@item.IdPedido"
                                                     data-estado="Aceptado">
 
@@ -168,7 +659,7 @@
 
                                             </button>
 
-                                            <button class="btn btn-sm btn-primary estado"
+                                            <button class="btn-action btn-camino estado"
                                                     data-id="@item.IdPedido"
                                                     data-estado="En Camino">
 
@@ -176,7 +667,7 @@
 
                                             </button>
 
-                                            <button class="btn btn-sm btn-success estado"
+                                            <button class="btn-action btn-finalizar estado"
                                                     data-id="@item.IdPedido"
                                                     data-estado="Finalizado">
 
@@ -184,7 +675,7 @@
 
                                             </button>
 
-                                            <button class="btn btn-sm btn-danger estado"
+                                            <button class="btn-action btn-cancelar estado"
                                                     data-id="@item.IdPedido"
                                                     data-estado="Cancelado">
 
@@ -196,9 +687,9 @@
                                     }
                                     else
                                     {
-                                        <span class="text-muted">
+                                        <span class="no-actions">
 
-                                            Sin acciones
+                                            Sin acciones disponibles
 
                                         </span>
                                     }
@@ -213,8 +704,23 @@
                 </table>
 
             </div>
+        }
+        else
+        {
+            <div class="empty-state">
 
-        </div>
+                <i class="bi bi-inbox"></i>
+
+                <h4>
+                    No hay pedidos registrados
+                </h4>
+
+                <p>
+                    Los nuevos viajes aparecerán aquí automáticamente.
+                </p>
+
+            </div>
+        }
 
     </div>
 
@@ -223,46 +729,50 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
+@section scripts {
 
-    $(".estado").click(function () {
+    <script>
 
-        var boton = $(this);
+        $(".estado").click(function () {
 
-        var id = boton.data("id");
+            var boton = $(this);
 
-        var estado = boton.data("estado");
+            var id = boton.data("id");
 
-        boton.prop("disabled", true);
+            var estado = boton.data("estado");
 
-        $.ajax({
+            boton.prop("disabled", true);
 
-            url: "/Pedido/CambiarEstado",
+            $.ajax({
 
-            type: "POST",
+                url: "/Pedido/CambiarEstado",
 
-            data:
-            {
-                id: id,
-                estado: estado
-            },
+                type: "POST",
 
-            success: function () {
+                data:
+                {
+                    id: id,
+                    estado: estado
+                },
 
-                location.reload();
+                success: function () {
 
-            },
+                    location.reload();
 
-            error: function () {
+                },
 
-                alert("Error al actualizar estado");
+                error: function () {
 
-                boton.prop("disabled", false);
+                    alert("Error al actualizar estado");
 
-            }
+                    boton.prop("disabled", false);
+
+                }
+
+            });
 
         });
 
-    });
+    </script>
 
-</script>
+}

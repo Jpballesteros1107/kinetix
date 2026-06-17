@@ -1,107 +1,551 @@
 ﻿@{
     ViewBag.Title = "Dashboard Cliente";
-
-    Layout =
-    "~/Views/Shared/_LayoutCliente.cshtml";
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
 }
 
-<div class="container py-4">
+<style>
+
+    .client-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 34px 24px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* =========================
+       HERO
+    ========================== */
+
+    .hero-card {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #00c853 0%, #003d1a 100%);
+        border-radius: 32px;
+        padding: 60px;
+        margin-bottom: 28px;
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+            top: -220px;
+            right: -120px;
+        }
+
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -140px;
+            left: -80px;
+        }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.14);
+        border: 1px solid rgba(255,255,255,0.18);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 28px;
+        backdrop-filter: blur(8px);
+    }
+
+    .hero-title {
+        font-size: 52px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.05;
+        margin-bottom: 18px;
+    }
+
+        .hero-title span {
+            color: #d4ffe3;
+        }
+
+    .hero-text {
+        color: rgba(255,255,255,0.82);
+        font-size: 17px;
+        max-width: 600px;
+        line-height: 1.7;
+        margin-bottom: 34px;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .btn-main {
+        background: #fff;
+        color: #000;
+        border-radius: 18px;
+        padding: 15px 28px;
+        font-size: 15px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: 0.2s;
+        border: none;
+    }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            background: #f1f1f1;
+            color: #000;
+            text-decoration: none;
+        }
+
+    .btn-outline-custom {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 18px;
+        padding: 15px 28px;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+        backdrop-filter: blur(8px);
+    }
+
+        .btn-outline-custom:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            text-decoration: none;
+            transform: translateY(-3px);
+        }
+
+    .hero-icon-box {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .hero-icon {
+        font-size: 170px;
+        color: rgba(255,255,255,0.92);
+        animation: floatCar 4s ease-in-out infinite;
+    }
+
+    @@keyframes floatCar {
+
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-12px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    /* =========================
+       STATS
+    ========================== */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .stat-card {
+        background: #141414;
+        border-radius: 24px;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 28px 24px;
+        transition: 0.2s;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(0,200,83,0.25);
+        }
+
+    .stat-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
+    .stat-icon {
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+    }
+
+    .icon-dark {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+    }
+
+    .icon-green {
+        background: rgba(0,200,83,0.15);
+        color: #00c853;
+    }
+
+    .icon-blue {
+        background: rgba(59,130,246,0.15);
+        color: #60a5fa;
+    }
+
+    .icon-yellow {
+        background: rgba(245,158,11,0.15);
+        color: #fbbf24;
+    }
+
+    .stat-label {
+        font-size: 13px;
+        color: rgba(255,255,255,0.4);
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .stat-value {
+        color: #fff;
+        font-size: 34px;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .stat-extra {
+        margin-top: 14px;
+        color: rgba(255,255,255,0.35);
+        font-size: 12px;
+    }
+
+    /* =========================
+       QUICK ACTIONS
+    ========================== */
+
+    .section-title {
+        color: #fff;
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+        color: rgba(255,255,255,0.4);
+        font-size: 14px;
+        margin-bottom: 28px;
+    }
+
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .action-card {
+        background: #141414;
+        border-radius: 26px;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 34px 28px;
+        transition: 0.2s;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.05;
+            background: #fff;
+        }
+
+    .action-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        margin-bottom: 26px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .bg-green {
+        background: rgba(0,200,83,0.15);
+        color: #00c853;
+    }
+
+    .bg-blue {
+        background: rgba(59,130,246,0.15);
+        color: #60a5fa;
+    }
+
+    .bg-yellow {
+        background: rgba(245,158,11,0.15);
+        color: #fbbf24;
+    }
+
+    .action-title {
+        color: #fff;
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 12px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .action-text {
+        color: rgba(255,255,255,0.5);
+        line-height: 1.7;
+        margin-bottom: 28px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 22px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 800;
+        text-decoration: none;
+        transition: 0.2s;
+        position: relative;
+        z-index: 2;
+    }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+    .btn-green {
+        background: #00c853;
+        color: #fff;
+    }
+
+        .btn-green:hover {
+            background: #00b248;
+            color: #fff;
+        }
+
+    .btn-blue {
+        background: #2563eb;
+        color: #fff;
+    }
+
+        .btn-blue:hover {
+            background: #1d4ed8;
+            color: #fff;
+        }
+
+    .btn-yellow {
+        background: #f59e0b;
+        color: #fff;
+    }
+
+        .btn-yellow:hover {
+            background: #d97706;
+            color: #fff;
+        }
+
+    /* =========================
+       ACTIVITY
+    ========================== */
+
+    .activity-card {
+        background: #141414;
+        border-radius: 28px;
+        border: 1px solid rgba(255,255,255,0.08);
+        padding: 34px;
+    }
+
+    .activity-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+        .activity-header h3 {
+            color: #fff;
+            font-size: 24px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .activity-header p {
+            color: rgba(255,255,255,0.4);
+            margin: 6px 0 0;
+            font-size: 14px;
+        }
+
+    .activity-icon {
+        width: 62px;
+        height: 62px;
+        border-radius: 18px;
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+    }
+
+    .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .activity-item {
+        background: #1b1b1b;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 22px;
+        padding: 24px;
+    }
+
+    .activity-item-label {
+        color: rgba(255,255,255,0.4);
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .activity-item-value {
+        color: #fff;
+        font-size: 22px;
+        font-weight: 800;
+    }
+
+    .text-success-custom {
+        color: #00c853;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @@media (max-width: 1200px) {
+
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 768px) {
+
+        .hero-card {
+            padding: 40px 28px;
+        }
+
+        .hero-title {
+            font-size: 38px;
+        }
+
+        .activity-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+<div class="client-wrapper">
 
     <!-- HERO -->
-    <div class="hero-gradient text-white rounded-4 shadow-lg p-5 mb-5 overflow-hidden">
+    <div class="hero-card">
 
         <div class="row align-items-center">
 
             <div class="col-lg-7">
 
-                <span class="badge bg-light text-dark px-3 py-2 mb-4">
+                <div class="hero-content">
 
-                    <i class="bi bi-lightning-charge-fill me-2"></i>
+                    <div class="hero-badge">
 
-                    Transporte rápido y seguro
+                        <i class="bi bi-lightning-charge-fill"></i>
 
-                </span>
-
-                <h1 class="display-4 fw-bold mb-3">
-
-                    Hola,
-                    @Session["Usuario"] 👋
-
-                </h1>
-
-                <p class="lead mb-4">
-
-                    Solicita viajes cómodos y seguros
-                    desde cualquier lugar de la ciudad.
-
-                </p>
-
-                <div class="d-flex flex-wrap gap-3">
-
-                    <a href="/Pedido/Create"
-                       class="btn btn-light btn-lg px-4">
-
-                        <i class="bi bi-geo-alt-fill me-2"></i>
-
-                        Solicitar Viaje
-
-                    </a>
-
-                    <a href="/Pedido"
-                       class="btn btn-outline-light btn-lg px-4">
-
-                        <i class="bi bi-clock-history me-2"></i>
-
-                        Ver Historial
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <div class="col-lg-5 text-center mt-5 mt-lg-0">
-
-                <i class="bi bi-car-front-fill"
-                   style="font-size:140px; opacity:.9;">
-                </i>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ESTADISTICAS -->
-    <div class="row g-4 mb-5">
-
-        <!-- VIAJES -->
-        <div class="col-md-4">
-
-            <div class="card shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex align-items-center">
-
-                    <div class="icon-box bg-dark text-white me-3">
-
-                        <i class="bi bi-car-front-fill"></i>
+                        Plataforma inteligente de transporte
 
                     </div>
 
-                    <div>
+                    <h1 class="hero-title">
 
-                        <h6 class="text-muted mb-1">
+                        Hola,
+                        <span>@Session["Usuario"]</span> 👋
 
-                            Viajes realizados
+                    </h1>
 
-                        </h6>
+                    <p class="hero-text">
 
-                        <h2 class="fw-bold mb-0">
+                        Solicita viajes seguros, rápidos y cómodos
+                        desde cualquier lugar de Valledupar con Kinetix.
 
-                            12
+                    </p>
 
-                        </h2>
+                    <div class="hero-actions">
+
+                        <a href="/Pedido/Create"
+                           class="btn-main">
+
+                            <i class="bi bi-geo-alt-fill me-2"></i>
+
+                            Solicitar Viaje
+
+                        </a>
+
+                        <a href="/Pedido"
+                           class="btn-outline-custom">
+
+                            <i class="bi bi-clock-history me-2"></i>
+
+                            Ver Historial
+
+                        </a>
 
                     </div>
 
@@ -109,73 +553,11 @@
 
             </div>
 
-        </div>
+            <div class="col-lg-5">
 
+                <div class="hero-icon-box">
 
-        <!-- GASTOS -->
-        <div class="col-md-4">
-
-            <div class="card shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex align-items-center">
-
-                    <div class="icon-box bg-success text-white me-3">
-
-                        <i class="bi bi-cash-stack"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h6 class="text-muted mb-1">
-
-                            Total gastado
-
-                        </h6>
-
-                        <h2 class="fw-bold mb-0">
-
-                            $320K
-
-                        </h2>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- CALIFICACION -->
-        <div class="col-md-4">
-
-            <div class="card shadow-lg rounded-4 p-4 h-100">
-
-                <div class="d-flex align-items-center">
-
-                    <div class="icon-box bg-primary text-white me-3">
-
-                        <i class="bi bi-star-fill"></i>
-
-                    </div>
-
-                    <div>
-
-                        <h6 class="text-muted mb-1">
-
-                            Calificación
-
-                        </h6>
-
-                        <h2 class="fw-bold mb-0">
-
-                            4.9
-
-                        </h2>
-
-                    </div>
+                    <i class="bi bi-car-front-fill hero-icon"></i>
 
                 </div>
 
@@ -186,135 +568,213 @@
     </div>
 
 
-    <!-- OPCIONES -->
-    <div class="row g-4">
+    <!-- STATS -->
+    <div class="stats-grid">
 
-        <!-- SOLICITAR -->
-        <div class="col-lg-4">
+        <div class="stat-card">
 
-            <div class="card border-0 shadow-lg rounded-4 h-100">
+            <div class="stat-top">
 
-                <div class="card-body text-center p-5">
-
-                    <div class="mb-4">
-
-                        <div class="icon-box bg-dark text-white mx-auto">
-
-                            <i class="bi bi-geo-alt-fill"></i>
-
-                        </div>
-
-                    </div>
-
-                    <h3 class="fw-bold">
-
-                        Solicitar Viaje
-
-                    </h3>
-
-                    <p class="text-muted mt-3">
-
-                        Encuentra conductores disponibles
-                        cerca de tu ubicación en segundos.
-
-                    </p>
-
-                    <a href="/Pedido/Create"
-                       class="btn btn-dark btn-lg w-100 mt-3">
-
-                        Solicitar Ahora
-
-                    </a>
-
+                <div class="stat-icon icon-dark">
+                    <i class="bi bi-car-front-fill"></i>
                 </div>
 
+            </div>
+
+            <div class="stat-label">
+                Viajes Realizados
+            </div>
+
+            <div class="stat-value">
+                12
+            </div>
+
+            <div class="stat-extra">
+                +3 esta semana
             </div>
 
         </div>
 
 
-        <!-- HISTORIAL -->
-        <div class="col-lg-4">
+        <div class="stat-card">
 
-            <div class="card border-0 shadow-lg rounded-4 h-100">
+            <div class="stat-top">
 
-                <div class="card-body text-center p-5">
-
-                    <div class="mb-4">
-
-                        <div class="icon-box bg-primary text-white mx-auto">
-
-                            <i class="bi bi-clock-history"></i>
-
-                        </div>
-
-                    </div>
-
-                    <h3 class="fw-bold">
-
-                        Historial
-
-                    </h3>
-
-                    <p class="text-muted mt-3">
-
-                        Consulta tus viajes recientes
-                        y revisa el estado de tus recorridos.
-
-                    </p>
-
-                    <a href="/Pedido"
-                       class="btn btn-primary btn-lg w-100 mt-3">
-
-                        Ver Historial
-
-                    </a>
-
+                <div class="stat-icon icon-green">
+                    <i class="bi bi-cash-stack"></i>
                 </div>
 
+            </div>
+
+            <div class="stat-label">
+                Total Gastado
+            </div>
+
+            <div class="stat-value">
+                $320K
+            </div>
+
+            <div class="stat-extra">
+                Pagos completados correctamente
             </div>
 
         </div>
 
 
-        <!-- FACTURAS -->
-        <div class="col-lg-4">
+        <div class="stat-card">
 
-            <div class="card border-0 shadow-lg rounded-4 h-100">
+            <div class="stat-top">
 
-                <div class="card-body text-center p-5">
+                <div class="stat-icon icon-blue">
+                    <i class="bi bi-star-fill"></i>
+                </div>
 
-                    <div class="mb-4">
+            </div>
 
-                        <div class="icon-box bg-success text-white mx-auto">
+            <div class="stat-label">
+                Calificación
+            </div>
 
-                            <i class="bi bi-receipt-cutoff"></i>
+            <div class="stat-value">
+                4.9
+            </div>
 
-                        </div>
+            <div class="stat-extra">
+                Excelente experiencia
+            </div>
 
-                    </div>
+        </div>
 
-                    <h3 class="fw-bold">
 
-                        Facturas
+        <div class="stat-card">
 
-                    </h3>
+            <div class="stat-top">
 
-                    <p class="text-muted mt-3">
+                <div class="stat-icon icon-yellow">
+                    <i class="bi bi-clock-history"></i>
+                </div>
 
-                        Revisa pagos, recibos
-                        y detalles de facturación fácilmente.
+            </div>
 
-                    </p>
+            <div class="stat-label">
+                Tiempo Promedio
+            </div>
 
-                    <a href="/Factura"
-                       class="btn btn-success btn-lg w-100 mt-3">
+            <div class="stat-value">
+                8 min
+            </div>
 
-                        Ver Facturas
+            <div class="stat-extra">
+                Tiempo de espera estimado
+            </div>
 
-                    </a>
+        </div>
+
+    </div>
+
+
+    <!-- QUICK ACTIONS -->
+    <div>
+
+        <h2 class="section-title">
+            Accesos rápidos
+        </h2>
+
+        <p class="section-subtitle">
+            Gestiona tus viajes y movimientos rápidamente
+        </p>
+
+        <div class="actions-grid">
+
+            <!-- SOLICITAR -->
+            <div class="action-card">
+
+                <div class="action-icon bg-green">
+
+                    <i class="bi bi-geo-alt-fill"></i>
 
                 </div>
+
+                <div class="action-title">
+                    Solicitar Viaje
+                </div>
+
+                <div class="action-text">
+
+                    Encuentra conductores disponibles
+                    cerca de tu ubicación en segundos.
+
+                </div>
+
+                <a href="/Pedido/Create"
+                   class="action-btn btn-green">
+
+                    Solicitar Ahora
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- HISTORIAL -->
+            <div class="action-card">
+
+                <div class="action-icon bg-blue">
+
+                    <i class="bi bi-clock-history"></i>
+
+                </div>
+
+                <div class="action-title">
+                    Historial
+                </div>
+
+                <div class="action-text">
+
+                    Consulta tus viajes recientes
+                    y revisa el estado de cada recorrido.
+
+                </div>
+
+                <a href="/Pedido"
+                   class="action-btn btn-blue">
+
+                    Ver Historial
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+
+            <!-- FACTURAS -->
+            <div class="action-card">
+
+                <div class="action-icon bg-yellow">
+
+                    <i class="bi bi-receipt-cutoff"></i>
+
+                </div>
+
+                <div class="action-title">
+                    Facturas
+                </div>
+
+                <div class="action-text">
+
+                    Revisa pagos, recibos
+                    y detalles de facturación fácilmente.
+
+                </div>
+
+                <a href="/Factura"
+                   class="action-btn btn-yellow">
+
+                    Ver Facturas
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
 
             </div>
 
@@ -324,88 +784,67 @@
 
 
     <!-- ACTIVIDAD -->
-    <div class="card border-0 shadow-lg rounded-4 p-4 mt-5">
+    <div class="activity-card">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="activity-header">
 
             <div>
 
-                <h3 class="fw-bold mb-1">
-
-                    Actividad Reciente
-
+                <h3>
+                    Actividad reciente
                 </h3>
 
-                <p class="text-muted mb-0">
-
-                    Últimos movimientos de tu cuenta
-
+                <p>
+                    Últimos movimientos registrados en tu cuenta
                 </p>
 
             </div>
 
-            <i class="bi bi-clock-history fs-1 text-primary"></i>
+            <div class="activity-icon">
+
+                <i class="bi bi-activity"></i>
+
+            </div>
 
         </div>
 
-        <div class="row g-3">
 
-            <div class="col-md-4">
+        <div class="activity-grid">
 
-                <div class="border rounded-4 p-4 h-100">
+            <div class="activity-item">
 
-                    <h6 class="text-muted">
+                <div class="activity-item-label">
+                    Último viaje
+                </div>
 
-                        Último viaje
-
-                    </h6>
-
-                    <h5 class="fw-bold">
-
-                        Valledupar → Centro
-
-                    </h5>
-
+                <div class="activity-item-value">
+                    Valledupar → Centro
                 </div>
 
             </div>
 
-            <div class="col-md-4">
 
-                <div class="border rounded-4 p-4 h-100">
+            <div class="activity-item">
 
-                    <h6 class="text-muted">
+                <div class="activity-item-label">
+                    Estado
+                </div>
 
-                        Estado
-
-                    </h6>
-
-                    <h5 class="fw-bold text-success">
-
-                        Finalizado
-
-                    </h5>
-
+                <div class="activity-item-value text-success-custom">
+                    Finalizado
                 </div>
 
             </div>
 
-            <div class="col-md-4">
 
-                <div class="border rounded-4 p-4 h-100">
+            <div class="activity-item">
 
-                    <h6 class="text-muted">
+                <div class="activity-item-label">
+                    Último pago
+                </div>
 
-                        Último pago
-
-                    </h6>
-
-                    <h5 class="fw-bold">
-
-                        $18.000 COP
-
-                    </h5>
-
+                <div class="activity-item-value">
+                    $18.000 COP
                 </div>
 
             </div>

@@ -1,314 +1,1163 @@
 ﻿@{
-    ViewBag.Title = "Kinetix";
+    ViewBag.Title = "Kinetix - Movilidad Urbana";
 }
 
-<main class="bg-white text-dark">
+<style>
 
-    <!-- HERO -->
-    <section class="bg-black text-white">
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-        <div class="container py-5">
+    html {
+        scroll-behavior: smooth;
+    }
 
-            <div class="row align-items-center min-vh-100">
+    .hero-section {
+        background: #0a0a0a;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        padding: 80px 0 60px;
+    }
 
-                <div class="col-md-6">
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 70% 50%, rgba(0,200,83,0.08) 0%, transparent 65%);
+            pointer-events: none;
+        }
 
-                    <h1 class="display-2 fw-bold mb-4">
+    .hero-eyebrow {
+        display: inline-block;
+        color: #00c853;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
 
-                        Muévete
-                        por la ciudad
-                        con Kinetix.
+    .hero-title {
+        font-size: clamp(2.8rem, 5vw, 4.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
 
-                    </h1>
+        .hero-title .accent {
+            color: #00c853;
+        }
 
-                    <p class="lead text-light mb-4">
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: rgba(255,255,255,0.65);
+        max-width: 460px;
+        line-height: 1.7;
+        margin-bottom: 32px;
+    }
 
-                        Solicita viajes rápidos, seguros y confiables
-                        desde cualquier lugar de la ciudad.
+    .hero-social-proof {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 36px;
+    }
 
-                    </p>
+    .hero-avatars {
+        display: flex;
+    }
 
-                    <p class="mb-5 text-secondary">
+        .hero-avatars img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid #0a0a0a;
+            margin-left: -10px;
+            object-fit: cover;
+        }
 
-                        Una plataforma moderna inspirada en las
-                        mejores aplicaciones de movilidad urbana.
+            .hero-avatars img:first-child {
+                margin-left: 0;
+            }
 
-                    </p>
+    .hero-badge {
+        background: #00c853;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 9px;
+        border-radius: 20px;
+        margin-left: 4px;
+    }
 
-                    <a href="/Registro"
-                       class="btn btn-success btn-lg px-5 me-3 rounded-pill">
+    .hero-social-text {
+        font-size: 13px;
+        color: rgba(255,255,255,0.6);
+        line-height: 1.4;
+    }
 
+        .hero-social-text strong {
+            color: #fff;
+            display: block;
+        }
+
+    .hero-cta-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .btn-hero-primary {
+        background: #00c853;
+        color: #fff;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 30px;
+        border-radius: 50px;
+        border: none;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.25s, transform 0.2s;
+    }
+
+        .btn-hero-primary:hover {
+            background: #00b248;
+            color: #fff;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+    .btn-hero-secondary {
+        background: transparent;
+        color: #fff;
+        font-weight: 600;
+        font-size: 15px;
+        padding: 14px 30px;
+        border-radius: 50px;
+        border: 1.5px solid rgba(255,255,255,0.3);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: border-color 0.25s, background 0.25s;
+    }
+
+        .btn-hero-secondary:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+            text-decoration: none;
+        }
+
+    .hero-visual {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .hero-car-img {
+        width: 100%;
+        max-width: 580px;
+        border-radius: 20px;
+        object-fit: cover;
+        max-height: 520px;
+        filter: brightness(0.75);
+    }
+
+    .phone-mockup {
+        position: absolute;
+        right: -20px;
+        bottom: -20px;
+        width: 200px;
+        background: #fff;
+        border-radius: 28px;
+        padding: 14px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+        .phone-mockup .pm-label {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 6px;
+        }
+
+        .phone-mockup .pm-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 10px;
+        }
+
+    .pm-map {
+        width: 100%;
+        height: 90px;
+        background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+        border-radius: 12px;
+        margin-bottom: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .pm-map::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            right: 30px;
+            height: 3px;
+            background: #00c853;
+            border-radius: 2px;
+        }
+
+    .pm-driver {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .pm-driver-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .pm-driver-name {
+        font-size: 11px;
+        font-weight: 700;
+        color: #111;
+    }
+
+    .pm-driver-sub {
+        font-size: 10px;
+        color: #888;
+    }
+
+    .pm-stars {
+        margin-left: auto;
+        font-size: 11px;
+        color: #f59e0b;
+        font-weight: 700;
+    }
+
+    .pm-eta {
+        margin-top: 8px;
+        font-size: 10px;
+        color: #00c853;
+        font-weight: 600;
+    }
+
+    .stats-bar {
+        background: #fff;
+        border-radius: 20px;
+        padding: 28px 36px;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+        margin-top: -30px;
+        position: relative;
+        z-index: 10;
+    }
+
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+    }
+
+        .stat-icon.green {
+            background: #e8f5e9;
+        }
+
+        .stat-icon.blue {
+            background: #e3f2fd;
+        }
+
+        .stat-icon.purple {
+            background: #f3e5f5;
+        }
+
+        .stat-icon.yellow {
+            background: #fffde7;
+        }
+
+    .stat-value {
+        font-size: 22px;
+        font-weight: 800;
+        color: #111;
+        line-height: 1;
+    }
+
+        .stat-value.green {
+            color: #00c853;
+        }
+
+        .stat-value.blue {
+            color: #1e88e5;
+        }
+
+        .stat-value.purple {
+            color: #8e24aa;
+        }
+
+        .stat-value.yellow {
+            color: #f59e0b;
+        }
+
+    .stat-label {
+        font-size: 12px;
+        color: #888;
+        margin-top: 3px;
+    }
+
+    .stat-divider {
+        width: 1px;
+        height: 50px;
+        background: #f0f0f0;
+    }
+
+    .how-section {
+        padding: 90px 0 70px;
+        background: #fff;
+    }
+
+    .section-eyebrow {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #00c853;
+        margin-bottom: 12px;
+    }
+
+    .section-title {
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        font-weight: 800;
+        color: #111;
+        line-height: 1.2;
+        margin-bottom: 0;
+    }
+
+    .how-left p {
+        color: #888;
+        font-size: 15px;
+        margin: 20px 0 28px;
+    }
+
+    .btn-more-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111;
+        text-decoration: none;
+        border: 1.5px solid #ddd;
+        padding: 10px 20px;
+        border-radius: 50px;
+        transition: border-color 0.2s;
+    }
+
+        .btn-more-info:hover {
+            border-color: #00c853;
+            color: #00c853;
+            text-decoration: none;
+        }
+
+    .how-step-card {
+        background: #f8f9fa;
+        border-radius: 20px;
+        padding: 28px 24px;
+        height: 100%;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid transparent;
+    }
+
+        .how-step-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0,200,83,0.1);
+            border-color: rgba(0,200,83,0.2);
+        }
+
+    .step-number {
+        width: 36px;
+        height: 36px;
+        background: #00c853;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 800;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .step-icon-wrap {
+        width: 52px;
+        height: 52px;
+        background: #e8f5e9;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 14px;
+    }
+
+    .step-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 8px;
+    }
+
+    .step-desc {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.6;
+    }
+
+    .benefits-section {
+        padding: 0 0 90px;
+        background: #fff;
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .benefit-check {
+        width: 24px;
+        height: 24px;
+        background: #e8f5e9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+        .benefit-check i {
+            color: #00c853;
+            font-size: 13px;
+        }
+
+    .benefit-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 4px;
+    }
+
+    .benefit-desc {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.6;
+    }
+
+    .benefits-img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 24px;
+        box-shadow: 0 16px 50px rgba(0,0,0,0.12);
+    }
+
+    .driver-section {
+        background: #0a0a0a;
+        padding: 70px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .driver-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(0,200,83,0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+    .driver-img-col {
+        position: relative;
+    }
+
+    .driver-person-img {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        object-position: top;
+        border-radius: 16px;
+    }
+
+    .driver-earnings-badge {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(0,0,0,0.85);
+        border: 1px solid rgba(0,200,83,0.3);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        padding: 14px 18px;
+        color: #fff;
+    }
+
+    .driver-earnings-label {
+        font-size: 11px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 4px;
+    }
+
+    .driver-earnings-value {
+        font-size: 22px;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .driver-earnings-growth {
+        font-size: 12px;
+        color: #00c853;
+        font-weight: 600;
+        margin-left: 6px;
+    }
+
+    .driver-section h2 {
+        font-size: clamp(1.8rem, 3vw, 2.6rem);
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.2;
+        margin-bottom: 14px;
+    }
+
+    .driver-section p {
+        color: rgba(255,255,255,0.6);
+        font-size: 15px;
+        margin-bottom: 30px;
+        max-width: 400px;
+    }
+
+    .cta-section {
+        padding: 80px 0;
+        background: #f8f9fa;
+    }
+
+    .cta-box {
+        background: #00c853;
+        border-radius: 28px;
+        padding: 60px 50px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0,200,83,0.25);
+    }
+
+        .cta-box h2 {
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .cta-box p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 32px;
+        }
+
+    .btn-cta-white {
+        background: #fff;
+        color: #00c853;
+        font-weight: 700;
+        font-size: 16px;
+        padding: 14px 36px;
+        border-radius: 50px;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+        .btn-cta-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            color: #00b248;
+            text-decoration: none;
+        }
+
+    .footer-full {
+        background: #0a0a0a;
+        color: rgba(255,255,255,0.6);
+        padding: 60px 0 0;
+    }
+
+    .footer-brand-name {
+        font-size: 22px;
+        font-weight: 800;
+        color: #fff;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .footer-brand-k {
+        background: #00c853;
+        color: #fff;
+        font-weight: 900;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+    }
+
+    .footer-tagline {
+        font-size: 13px;
+        color: rgba(255,255,255,0.4);
+        margin-bottom: 20px;
+    }
+
+    .footer-social a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.15);
+        color: rgba(255,255,255,0.5);
+        margin-right: 8px;
+        font-size: 14px;
+        text-decoration: none;
+        transition: border-color 0.2s, color 0.2s;
+    }
+
+        .footer-social a:hover {
+            border-color: #00c853;
+            color: #00c853;
+        }
+
+    .footer-col-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 16px;
+        letter-spacing: 0.5px;
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+    }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: rgba(255,255,255,0.45);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+            .footer-links a:hover {
+                color: #00c853;
+            }
+
+    .footer-contact-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: rgba(255,255,255,0.45);
+        margin-bottom: 10px;
+    }
+
+        .footer-contact-item i {
+            color: #00c853;
+            font-size: 14px;
+            width: 16px;
+        }
+
+    .footer-app-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #1a1a1a;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 10px;
+        padding: 8px 14px;
+        color: #fff;
+        text-decoration: none;
+        margin-bottom: 8px;
+        transition: border-color 0.2s;
+    }
+
+        .footer-app-btn:hover {
+            border-color: #00c853;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-app-btn .app-store-text {
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            line-height: 1;
+        }
+
+        .footer-app-btn .app-store-name {
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+    .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.08);
+        padding: 20px 0;
+        margin-top: 50px;
+    }
+
+    .footer-bottom-links a {
+        font-size: 12px;
+        color: rgba(255,255,255,0.3);
+        text-decoration: none;
+        margin-left: 20px;
+        transition: color 0.2s;
+    }
+
+        .footer-bottom-links a:hover {
+            color: #00c853;
+        }
+
+    @@media (max-width: 768px) {
+        .phone-mockup {
+            display: none;
+        }
+
+        .stat-divider {
+            display: none;
+        }
+
+        .cta-box {
+            padding: 40px 24px;
+        }
+
+        .hero-visual {
+            margin-top: 40px;
+        }
+    }
+</style>
+
+
+<!-- HERO -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6">
+                <span class="hero-eyebrow">Movilidad inteligente</span>
+                <h1 class="hero-title">
+                    Muévete por<br>
+                    la ciudad con<br>
+                    <span class="accent">Kinetix.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Solicita viajes rápidos, seguros y confiables
+                    desde cualquier lugar de la ciudad.
+                </p>
+                <div class="hero-social-proof">
+                    <div class="hero-avatars">
+                        <img src="https://i.pravatar.cc/36?img=1" alt="Usuario">
+                        <img src="https://i.pravatar.cc/36?img=2" alt="Usuario">
+                        <img src="https://i.pravatar.cc/36?img=3" alt="Usuario">
+                        <span class="hero-badge">10K+</span>
+                    </div>
+                    <div class="hero-social-text">
+                        <strong>Miles de personas</strong>
+                        confían en Kinetix
+                    </div>
+                </div>
+                <div class="hero-cta-group">
+                    <a href="/Registro" class="btn-hero-primary">
                         Empezar Ahora
-
+                        <i class="bi bi-arrow-right"></i>
                     </a>
-
-                    <a href="/ConductorRegistro"
-                       class="btn btn-outline-light btn-lg px-5 rounded-pill">
-
+                    <a href="/ConductorRegistro" class="btn-hero-secondary">
                         Conducir con Kinetix
-
+                        <i class="bi bi-car-front"></i>
                     </a>
-
                 </div>
+            </div>
 
-                <div class="col-md-6 text-center">
-
-                    <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?q=80&w=1200"
-                         class="img-fluid rounded-4 shadow-lg"
-                         style="max-height:600px; object-fit:cover;" />
-
+            <div class="col-lg-6">
+                <div class="hero-visual">
+                    <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?q=80&w=1200"
+                         class="hero-car-img" alt="Kinetix movilidad urbana">
+                    <div class="phone-mockup">
+                        <div class="pm-label">Tu viaje</div>
+                        <div class="pm-map"></div>
+                        <div class="pm-driver">
+                            <img src="https://i.pravatar.cc/32?img=12" class="pm-driver-avatar" alt="Conductor">
+                            <div>
+                                <div class="pm-driver-name">Juan Carlos</div>
+                                <div class="pm-driver-sub">Toyota Corolla · ABC123</div>
+                            </div>
+                            <span class="pm-stars">4.9 ★</span>
+                        </div>
+                        <div class="pm-eta">
+                            <i class="bi bi-clock"></i> Llegada estimada: 4 min
+                        </div>
+                    </div>
                 </div>
-
             </div>
 
         </div>
+    </div>
+</section>
 
-    </section>
+
+<!-- STATS BAR -->
+<section class="py-4 bg-light">
+    <div class="container">
+        <div class="stats-bar d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+            <div class="stat-item">
+                <div class="stat-icon green">🚗</div>
+                <div>
+                    <div class="stat-value green">+10K</div>
+                    <div class="stat-label">Viajes realizados<br>cada mes</div>
+                </div>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+                <div class="stat-icon blue">👥</div>
+                <div>
+                    <div class="stat-value blue">+2K</div>
+                    <div class="stat-label">Conductores<br>activos</div>
+                </div>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+                <div class="stat-icon purple">🕐</div>
+                <div>
+                    <div class="stat-value purple">24/7</div>
+                    <div class="stat-label">Disponibilidad<br>total</div>
+                </div>
+            </div>
+
+            <div class="stat-divider"></div>
+
+            <div class="stat-item">
+                <div class="stat-icon yellow">⭐</div>
+                <div>
+                    <div class="stat-value yellow">4.9 ★</div>
+                    <div class="stat-label">Calificación<br>promedio</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 
-    <!-- COMO FUNCIONA -->
-    <section class="py-5 bg-light">
+<!-- CÓMO FUNCIONA -->
+<section class="how-section">
+    <div class="container">
+        <div class="row g-5 align-items-start">
 
-        <div class="container">
+            <div class="col-lg-4 how-left">
+                <div class="section-eyebrow">¿Cómo funciona?</div>
+                <h2 class="section-title">
+                    Viajar nunca<br>fue tan fácil.
+                </h2>
+                <p>
+                    En tres simples pasos, conéctate con
+                    un conductor y llega a tu destino.
+                </p>
+                <a href="#beneficios" class="btn-more-info">
+                    Más información
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
 
-            <div class="text-center mb-5">
+            <div class="col-lg-8">
+                <div class="row g-4">
 
-                <h2 class="fw-bold display-5">
+                    <div class="col-md-4">
+                        <div class="how-step-card">
+                            <div class="step-number">01</div>
+                            <div class="step-icon-wrap">📍</div>
+                            <div class="step-title">Elige tu destino</div>
+                            <p class="step-desc">
+                                Ingresa el punto de recogida
+                                y hacia dónde deseas ir.
+                            </p>
+                        </div>
+                    </div>
 
-                    ¿Cómo funciona?
+                    <div class="col-md-4">
+                        <div class="how-step-card">
+                            <div class="step-number">02</div>
+                            <div class="step-icon-wrap">🚘</div>
+                            <div class="step-title">Encuentra un conductor</div>
+                            <p class="step-desc">
+                                Kinetix conecta automáticamente
+                                con conductores disponibles cerca tuyo.
+                            </p>
+                        </div>
+                    </div>
 
+                    <div class="col-md-4">
+                        <div class="how-step-card">
+                            <div class="step-number">03</div>
+                            <div class="step-icon-wrap">⭐</div>
+                            <div class="step-title">Disfruta el viaje</div>
+                            <p class="step-desc">
+                                Viajes cómodos, rápidos
+                                y completamente seguros.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- BENEFICIOS -->
+<section class="benefits-section" id="beneficios">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+
+            <div class="col-lg-5">
+                <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1200"
+                     class="benefits-img" alt="Seguridad Kinetix">
+            </div>
+
+            <div class="col-lg-7">
+                <div class="section-eyebrow">Nuestros beneficios</div>
+                <h2 class="section-title mb-4">
+                    Seguridad y confianza<br>en cada trayecto.
                 </h2>
 
-                <p class="text-muted">
-
-                    Solicitar un viaje nunca fue tan fácil.
-
-                </p>
-
-            </div>
-
-            <div class="row text-center">
-
-                <div class="col-md-4 mb-4">
-
-                    <div class="p-4">
-
-                        <div class="display-4 mb-3">
-                            📍
-                        </div>
-
-                        <h3 class="fw-bold">
-
-                            Elige tu destino
-
-                        </h3>
-
-                        <p class="text-muted">
-
-                            Ingresa el punto de recogida
-                            y hacia dónde deseas ir.
-
+                <div class="benefit-item">
+                    <div class="benefit-check"><i class="bi bi-check"></i></div>
+                    <div>
+                        <div class="benefit-title">Conductores verificados</div>
+                        <p class="benefit-desc">
+                            Todos los conductores pasan por validaciones
+                            y aprobación antes de operar.
                         </p>
-
                     </div>
-
                 </div>
 
-                <div class="col-md-4 mb-4">
-
-                    <div class="p-4">
-
-                        <div class="display-4 mb-3">
-                            🚘
-                        </div>
-
-                        <h3 class="fw-bold">
-
-                            Encuentra un conductor
-
-                        </h3>
-
-                        <p class="text-muted">
-
-                            Kinetix conecta automáticamente
-                            con conductores disponibles.
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4 mb-4">
-
-                    <div class="p-4">
-
-                        <div class="display-4 mb-3">
-                            ⭐
-                        </div>
-
-                        <h3 class="fw-bold">
-
-                            Disfruta el viaje
-
-                        </h3>
-
-                        <p class="text-muted">
-
-                            Viajes cómodos,
-                            rápidos y seguros.
-
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- BENEFICIOS -->
-    <section class="py-5">
-
-        <div class="container">
-
-            <div class="row align-items-center">
-
-                <div class="col-md-6">
-
-                    <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=1200"
-                         class="img-fluid rounded-4 shadow" />
-
-                </div>
-
-                <div class="col-md-6">
-
-                    <h2 class="display-5 fw-bold mb-4">
-
-                        Seguridad y confianza
-                        en cada trayecto.
-
-                    </h2>
-
-                    <div class="mb-4">
-
-                        <h5 class="fw-bold">
-                            ✔ Conductores verificados
-                        </h5>
-
-                        <p class="text-muted">
-
-                            Todos los conductores pasan
-                            por validaciones y aprobación.
-
-                        </p>
-
-                    </div>
-
-                    <div class="mb-4">
-
-                        <h5 class="fw-bold">
-                            ✔ Viajes en tiempo real
-                        </h5>
-
-                        <p class="text-muted">
-
+                <div class="benefit-item">
+                    <div class="benefit-check"><i class="bi bi-check"></i></div>
+                    <div>
+                        <div class="benefit-title">Viajes en tiempo real</div>
+                        <p class="benefit-desc">
                             Consulta el estado de tu viaje
-                            en cualquier momento.
-
+                            en cualquier momento desde la app.
                         </p>
-
                     </div>
+                </div>
 
-                    <div class="mb-4">
-
-                        <h5 class="fw-bold">
-                            ✔ Plataforma moderna
-                        </h5>
-
-                        <p class="text-muted">
-
+                <div class="benefit-item">
+                    <div class="benefit-check"><i class="bi bi-check"></i></div>
+                    <div>
+                        <div class="benefit-title">Plataforma moderna</div>
+                        <p class="benefit-desc">
                             Desarrollada con tecnologías
                             modernas y escalables.
-
                         </p>
-
                     </div>
-
                 </div>
 
             </div>
 
         </div>
+    </div>
+</section>
 
-    </section>
 
+<!-- CONDUCTORES -->
+<section class="driver-section">
+    <div class="container">
+        <div class="row align-items-center g-5">
 
-    <!-- CONDUCTORES -->
-    <section class="bg-dark text-white py-5">
+            <div class="col-lg-5 driver-img-col">
+                <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1200"
+                     class="driver-person-img" alt="Conductor Kinetix">
+                <div class="driver-earnings-badge">
+                    <div class="driver-earnings-label">Ganancias de hoy</div>
+                    <div>
+                        <span class="driver-earnings-value">$125.000</span>
+                        <span class="driver-earnings-growth">+12%</span>
+                    </div>
+                    <svg viewBox="0 0 120 30" fill="none" style="height:30px; margin-top:8px; opacity:0.7;">
+                        <polyline points="0,25 20,20 40,22 60,12 80,15 100,8 120,5"
+                                  stroke="#00c853" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                    </svg>
+                </div>
+            </div>
 
-        <div class="container text-center">
-
-            <h2 class="display-5 fw-bold mb-4">
-
-                Genera ingresos
-                conduciendo con Kinetix
-
-            </h2>
-
-            <p class="lead text-light mb-5">
-
-                Únete a nuestra red de conductores
-                y comienza a generar ganancias.
-
-            </p>
-
-            <a href="/ConductorRegistro"
-               class="btn btn-success btn-lg px-5 rounded-pill">
-
-                Registrarme como conductor
-
-            </a>
+            <div class="col-lg-7">
+                <h2>
+                    Genera ingresos<br>
+                    conduciendo con Kinetix
+                </h2>
+                <p>
+                    Únete a nuestra red de conductores y comienza
+                    a generar ganancias en tus tiempos libres.
+                    Tú pones las horas, nosotros los viajes.
+                </p>
+                <a href="/ConductorRegistro" class="btn-hero-primary">
+                    Registrarme como conductor
+                    <i class="bi bi-arrow-right"></i>
+                </a>
+            </div>
 
         </div>
+    </div>
+</section>
 
-    </section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>¿Listo para comenzar?</h2>
+            <p>Regístrate y comienza a usar Kinetix hoy mismo.</p>
+            <a href="/Registro" class="btn-cta-white">Crear Cuenta</a>
+        </div>
+    </div>
+</section>
 
 
-    <!-- CTA FINAL -->
-    <section class="py-5">
+<!-- FOOTER COMPLETO -->
+<footer class="footer-full">
+    <div class="container">
+        <div class="row g-4">
 
-        <div class="container">
-
-            <div class="bg-success text-white rounded-4 p-5 text-center shadow-lg">
-
-                <h2 class="display-5 fw-bold mb-3">
-
-                    ¿Listo para comenzar?
-
-                </h2>
-
-                <p class="lead mb-4">
-
-                    Regístrate y comienza a usar Kinetix hoy mismo.
-
+            <div class="col-lg-3 col-md-6">
+                <div class="footer-brand-name">
+                    <span class="footer-brand-k">K</span>
+                    KINETIX
+                </div>
+                <p class="footer-tagline">
+                    Plataforma inteligente<br>de movilidad urbana.
                 </p>
+                <div class="footer-social">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#"><i class="bi bi-tiktok"></i></a>
+                </div>
+            </div>
 
-                <a href="/Registro"
-                   class="btn btn-light btn-lg px-5 rounded-pill">
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="footer-col-title">Empresa</div>
+                <ul class="footer-links">
+                    <li><a href="#">Quiénes somos</a></li>
+                    <li><a href="#">Trabaja con nosotros</a></li>
+                    <li><a href="#">Prensa</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
 
-                    Crear Cuenta
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="footer-col-title">Producto</div>
+                <ul class="footer-links">
+                    <li><a href="#">Cómo funciona</a></li>
+                    <li><a href="#">Seguridad</a></li>
+                    <li><a href="#">Kinetix para empresas</a></li>
+                    <li><a href="#">Planes</a></li>
+                </ul>
+            </div>
 
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="footer-col-title">Conductores</div>
+                <ul class="footer-links">
+                    <li><a href="/ConductorRegistro">Ser conductor</a></li>
+                    <li><a href="#">Requisitos</a></li>
+                    <li><a href="#">Preguntas frecuentes</a></li>
+                    <li><a href="#">Centro de ayuda</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-6">
+                <div class="footer-col-title">Contacto</div>
+                <div class="footer-contact-item">
+                    <i class="bi bi-envelope"></i> hola@kinetix.com
+                </div>
+                <div class="footer-contact-item">
+                    <i class="bi bi-telephone"></i> +57 300 123 4567
+                </div>
+                <div class="footer-contact-item">
+                    <i class="bi bi-geo-alt"></i> Bogotá, Colombia
+                </div>
+
+                <div class="footer-col-title mt-3">Descarga la app</div>
+                <a href="#" class="footer-app-btn">
+                    <span style="font-size:20px;">▶</span>
+                    <div>
+                        <div class="app-store-text">DISPONIBLE EN</div>
+                        <div class="app-store-name">Google Play</div>
+                    </div>
                 </a>
-
+                <a href="#" class="footer-app-btn">
+                    <span style="font-size:20px;"></span>
+                    <div>
+                        <div class="app-store-text">CONSÍGUELO EN</div>
+                        <div class="app-store-name">App Store</div>
+                    </div>
+                </a>
             </div>
 
         </div>
 
-    </section>
+        <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <small style="font-size:12px; color:rgba(255,255,255,0.3);">
+                © @DateTime.Now.Year Kinetix. Todos los derechos reservados.
+            </small>
+            <div class="footer-bottom-links">
+                <a href="#">Términos y condiciones</a>
+                <a href="#">Privacidad</a>
+                <a href="#">Política de cookies</a>
+            </div>
+        </div>
 
-</main>
+    </div>
+</footer>

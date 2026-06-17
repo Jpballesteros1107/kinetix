@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace kinetix.Controllers
@@ -274,5 +275,90 @@ namespace kinetix.Controllers
 
             return RedirectToAction("Index");
         }
+
+        /* Mis facturas */
+        public ActionResult MisFacturas()
+        {
+            if (Session["Rol"] == null ||
+                Session["Rol"].ToString() != "Cliente")
+            {
+                return RedirectToAction(
+                    "Index",
+                    "Login");
+            }
+
+            List<Factura> lista =
+                new List<Factura>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+                    SELECT
+                        f.*,
+                        u.Nombre AS Cliente
+                    FROM Facturas f
+
+                    INNER JOIN Pedidos p
+                        ON f.IdPedido = p.IdPedido
+
+                    INNER JOIN Usuarios u
+                        ON p.IdUsuario = u.IdUsuario
+
+                    WHERE p.IdUsuario = @idu
+
+                    ORDER BY f.Fecha DESC
+                    ",
+                    cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@idu",
+                    Session["IdUsuario"]);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    lista.Add(new Factura
+                    {
+                        IdFactura =
+                            Convert.ToInt32(
+                                dr["IdFactura"]),
+
+                        IdPedido =
+                            Convert.ToInt32(
+                                dr["IdPedido"]),
+
+                        Fecha =
+                            Convert.ToDateTime(
+                                dr["Fecha"]),
+
+                        Total =
+                            Convert.ToDecimal(
+                                dr["Total"]),
+
+                        MetodoPago =
+                            dr["MetodoPago"].ToString(),
+
+                        Estado =
+                            dr["Estado"].ToString(),
+
+                        Cliente =
+                            dr["Cliente"].ToString()
+                    });
+                }
+            }
+
+            ViewBag.TotalPagado =
+                lista.Sum(x => x.Total);
+
+            return View(lista);
+        }
+
     }
 }

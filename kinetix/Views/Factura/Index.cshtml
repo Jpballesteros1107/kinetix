@@ -1,60 +1,450 @@
 ﻿@model List<kinetix.Models.Factura>
 
-<h2>Facturas</h2>
+@{
+    ViewBag.Title = "Facturas";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
 
-<a href="/Factura/Create">
-    Nueva Factura
-</a>
+<style>
 
-<br />
-<br />
-
-<table border="1">
-
-    <tr>
-        <th>ID</th>
-        <th>Pedido</th>
-        <th>Fecha</th>
-        <th>Total</th>
-        <th>Metodo Pago</th>
-        <th>Estado</th>
-        <th>Cliente</th>
-        <th>Acciones</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-
-            <td>@item.IdFactura</td>
-
-            <td>@item.IdPedido</td>
-
-            <td>@item.Fecha</td>
-
-            <td>@item.Total</td>
-
-            <td>@item.MetodoPago</td>
-
-            <td>@item.Estado</td>
-
-            <td>@item.Cliente</td>
-
-            <td>
-
-                <a href="/Factura/Edit/@item.IdFactura">
-                    Editar
-                </a>
-
-                |
-
-                <a href="/Factura/Delete/@item.IdFactura">
-                    Eliminar
-                </a>
-
-            </td>
-
-        </tr>
+    .factura-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 35px 20px;
+        font-family: 'Inter', sans-serif;
     }
 
-</table>
+    .factura-container {
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .factura-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+        .factura-header h1 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .factura-header p {
+            color: rgba(255,255,255,0.45);
+            margin: 0;
+            font-size: 14px;
+        }
+
+    .btn-new-factura {
+        background: #00c853;
+        border: none;
+        color: #fff;
+        padding: 14px 22px;
+        border-radius: 16px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .btn-new-factura:hover {
+            background: #00b248;
+            color: #fff;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+    /* =========================
+       CARD
+    ========================== */
+
+    .factura-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    /* =========================
+       TABLE
+    ========================== */
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .factura-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1100px;
+    }
+
+        .factura-table thead {
+            background: rgba(255,255,255,0.03);
+        }
+
+            .factura-table thead th {
+                padding: 18px 20px;
+                color: rgba(255,255,255,0.45);
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                border-bottom: 1px solid rgba(255,255,255,0.06);
+                white-space: nowrap;
+            }
+
+        .factura-table tbody tr {
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: 0.2s;
+        }
+
+            .factura-table tbody tr:hover {
+                background: rgba(255,255,255,0.03);
+            }
+
+        .factura-table tbody td {
+            padding: 18px 20px;
+            color: rgba(255,255,255,0.75);
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+    .factura-id {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .factura-total {
+        color: #00c853;
+        font-weight: 800;
+    }
+
+    .factura-date {
+        color: rgba(255,255,255,0.5);
+        font-size: 13px;
+    }
+
+    /* =========================
+       BADGES
+    ========================== */
+
+    .badge-custom {
+        padding: 7px 14px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .badge-pagada {
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        border: 1px solid rgba(0,200,83,0.25);
+    }
+
+    .badge-pendiente {
+        background: rgba(245,158,11,0.12);
+        color: #fbbf24;
+        border: 1px solid rgba(245,158,11,0.25);
+    }
+
+    .badge-cancelada {
+        background: rgba(239,68,68,0.12);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.25);
+    }
+
+    /* =========================
+       ACTIONS
+    ========================== */
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .btn-edit {
+        background: rgba(59,130,246,0.12);
+        color: #60a5fa;
+        border: 1px solid rgba(59,130,246,0.25);
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-edit:hover {
+            background: rgba(59,130,246,0.2);
+            color: #93c5fd;
+            text-decoration: none;
+        }
+
+    .btn-delete {
+        background: rgba(239,68,68,0.12);
+        color: #f87171;
+        border: 1px solid rgba(239,68,68,0.25);
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-delete:hover {
+            background: rgba(239,68,68,0.2);
+            color: #fca5a5;
+            text-decoration: none;
+        }
+
+    /* =========================
+       EMPTY
+    ========================== */
+
+    .empty-state {
+        text-align: center;
+        padding: 70px 20px;
+    }
+
+        .empty-state i {
+            font-size: 60px;
+            color: rgba(255,255,255,0.08);
+            margin-bottom: 18px;
+        }
+
+        .empty-state h3 {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 0;
+        }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @@media(max-width:768px) {
+
+        .factura-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .btn-new-factura {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+
+<div class="factura-wrapper">
+
+    <div class="factura-container">
+
+        <!-- HEADER -->
+        <div class="factura-header">
+
+            <div>
+
+                <h1>
+                    Gestión de Facturas
+                </h1>
+
+                <p>
+                    Administra pagos, estados y facturación de los viajes.
+                </p>
+
+            </div>
+
+            <a href="/Factura/Create"
+               class="btn-new-factura">
+
+                <i class="bi bi-plus-circle-fill"></i>
+
+                Nueva Factura
+
+            </a>
+
+        </div>
+
+
+        <!-- CARD -->
+        <div class="factura-card">
+
+            @if (Model != null && Model.Count > 0)
+            {
+                <div class="table-responsive">
+
+                    <table class="factura-table">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>ID</th>
+
+                                <th>Pedido</th>
+
+                                <th>Fecha</th>
+
+                                <th>Total</th>
+
+                                <th>Método Pago</th>
+
+                                <th>Estado</th>
+
+                                <th>Cliente</th>
+
+                                <th>Acciones</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td class="factura-id">
+                                        #@item.IdFactura
+                                    </td>
+
+                                    <td>
+                                        Pedido #@item.IdPedido
+                                    </td>
+
+                                    <td class="factura-date">
+                                        @item.Fecha.ToString("dd/MM/yyyy")
+                                    </td>
+
+                                    <td class="factura-total">
+                                        $@String.Format("{0:N0}", item.Total)
+                                    </td>
+
+                                    <td>
+                                        @item.MetodoPago
+                                    </td>
+
+                                    <td>
+
+                                        @if (item.Estado == "Pagada")
+                                        {
+                                            <span class="badge-custom badge-pagada">
+
+                                                <i class="bi bi-check-circle-fill"></i>
+
+                                                Pagada
+
+                                            </span>
+                                        }
+                                        else if (item.Estado == "Pendiente")
+                                        {
+                                            <span class="badge-custom badge-pendiente">
+
+                                                <i class="bi bi-clock-fill"></i>
+
+                                                Pendiente
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge-custom badge-cancelada">
+
+                                                <i class="bi bi-x-circle-fill"></i>
+
+                                                Cancelada
+
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                    <td>
+                                        @item.Cliente
+                                    </td>
+
+                                    <td>
+
+                                        <div class="actions">
+
+                                            <a href="/Factura/Edit/@item.IdFactura"
+                                               class="btn-edit">
+
+                                                <i class="bi bi-pencil-fill me-1"></i>
+
+                                                Editar
+
+                                            </a>
+
+                                            <a href="/Factura/Delete/@item.IdFactura"
+                                               class="btn-delete">
+
+                                                <i class="bi bi-trash-fill me-1"></i>
+
+                                                Eliminar
+
+                                            </a>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+
+                    <i class="bi bi-receipt-cutoff"></i>
+
+                    <h3>
+                        No hay facturas registradas
+                    </h3>
+
+                    <p>
+                        Todavía no se han generado facturas en el sistema.
+                    </p>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

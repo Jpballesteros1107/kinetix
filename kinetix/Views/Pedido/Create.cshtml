@@ -1,51 +1,655 @@
 ﻿@model kinetix.Models.Pedido
 
-<h2>Nuevo Pedido</h2>
-
-@using (Html.BeginForm())
-{
-    <div>
-        ID Usuario:
-        @Html.DropDownListFor(
-            x => x.IdUsuario,
-            (List<SelectListItem>)ViewBag.Usuarios
-        )
-    </div>
-
-    <br />
-
-    <div>
-        ID Conductor:
-        @Html.DropDownListFor(
-            x => x.IdConductor,
-            (List<SelectListItem>)ViewBag.Conductores
-        )
-    </div>
-
-    <br />
-
-    <div>
-        Origen:
-        @Html.TextBoxFor(x => x.Origen)
-    </div>
-
-    <br />
-
-    <div>
-        Destino:
-        @Html.TextBoxFor(x => x.Destino)
-    </div>
-
-    <br />
-
-    <div>
-        Valor:
-        @Html.TextBoxFor(x => x.Valor)
-    </div>
-
-    <br />
-
-    <button type="submit">
-        Guardar Pedido
-    </button>
+@{
+    ViewBag.Title = "Solicitar Viaje";
+    Layout = "~/Views/Shared/_LayoutCliente.cshtml";
 }
+
+<style>
+
+    .pedido-page {
+        min-height: 100vh;
+        background: #0b0b0b;
+        padding: 40px 18px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .pedido-page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(0,200,83,0.10), transparent 35%), radial-gradient(circle at bottom left, rgba(33,150,243,0.08), transparent 30%);
+            pointer-events: none;
+        }
+
+    .pedido-container {
+        max-width: 1180px;
+        margin: auto;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* ========================================
+       HEADER
+    ======================================== */
+
+    .pedido-header {
+        margin-bottom: 34px;
+    }
+
+    .pedido-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(0,200,83,0.12);
+        border: 1px solid rgba(0,200,83,0.2);
+        color: #00c853;
+        padding: 10px 18px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .5px;
+        margin-bottom: 20px;
+    }
+
+    .pedido-title {
+        font-size: 42px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1.1;
+        margin-bottom: 12px;
+    }
+
+    .pedido-subtitle {
+        color: rgba(255,255,255,0.45);
+        font-size: 15px;
+        max-width: 700px;
+        margin: 0;
+    }
+
+    /* ========================================
+       GRID
+    ======================================== */
+
+    .pedido-grid {
+        display: grid;
+        grid-template-columns: 1.2fr .8fr;
+        gap: 26px;
+    }
+
+    /* ========================================
+       CARD
+    ======================================== */
+
+    .pedido-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 28px;
+        padding: 34px;
+        backdrop-filter: blur(10px);
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+
+    .card-title-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+
+    .card-title h3 {
+        color: #fff;
+        font-size: 22px;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .card-title p {
+        color: rgba(255,255,255,0.4);
+        font-size: 13px;
+        margin: 4px 0 0;
+    }
+
+    /* ========================================
+       FORM
+    ======================================== */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2,1fr);
+        gap: 18px;
+    }
+
+    .form-group-custom {
+        margin-bottom: 22px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    .label-custom {
+        display: block;
+        color: rgba(255,255,255,0.72);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255,255,255,0.25);
+        font-size: 15px;
+        z-index: 2;
+    }
+
+    .form-input,
+    .form-select-custom {
+        width: 100%;
+        background: #1c1c1c;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 15px 16px 15px 48px;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: .2s;
+    }
+
+        .form-input:focus,
+        .form-select-custom:focus {
+            border-color: #00c853;
+            box-shadow: 0 0 0 4px rgba(0,200,83,0.12);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .form-select-custom option {
+            background: #1c1c1c;
+        }
+
+    /* ========================================
+       RUTA
+    ======================================== */
+
+    .route-box {
+        background: #111;
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 22px;
+        padding: 22px;
+        margin-top: 6px;
+    }
+
+    .route-row {
+        display: flex;
+        gap: 16px;
+    }
+
+    .route-visual {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 10px;
+    }
+
+    .route-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .dot-origin {
+        background: #00c853;
+    }
+
+    .dot-dest {
+        background: #ff5252;
+    }
+
+    .route-line {
+        width: 2px;
+        height: 85px;
+        background: rgba(255,255,255,0.08);
+    }
+
+    .route-fields {
+        flex: 1;
+    }
+
+    /* Mapa */
+    .map-container {
+        overflow: hidden;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,.08);
+    }
+
+
+    /* ========================================
+       SIDEBAR
+    ======================================== */
+
+    .side-card {
+        background: linear-gradient(145deg,#161616,#101010);
+        border: 1px solid rgba(255,255,255,0.07);
+        border-radius: 28px;
+        padding: 30px;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+
+    .summary-top {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+    .summary-icon {
+        width: 82px;
+        height: 82px;
+        border-radius: 24px;
+        background: rgba(0,200,83,0.12);
+        color: #00c853;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 38px;
+        margin: auto auto 18px;
+    }
+
+    .summary-top h4 {
+        color: #fff;
+        font-size: 24px;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .summary-top p {
+        color: rgba(255,255,255,0.42);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .summary-list {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .summary-item-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: rgba(255,255,255,0.06);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .summary-item h6 {
+        color: #fff;
+        font-size: 14px;
+        margin: 0 0 2px;
+    }
+
+    .summary-item p {
+        color: rgba(255,255,255,0.4);
+        font-size: 12px;
+        margin: 0;
+    }
+
+    /* ========================================
+       BUTTONS
+    ======================================== */
+
+    .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btn-request {
+        width: 100%;
+        border: none;
+        background: #00c853;
+        color: white;
+        border-radius: 18px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 800;
+        transition: .2s;
+    }
+
+        .btn-request:hover {
+            background: #00b248;
+            transform: translateY(-2px);
+        }
+
+    .btn-back {
+        width: 100%;
+        border-radius: 18px;
+        padding: 15px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: transparent;
+        color: rgba(255,255,255,0.75);
+        text-decoration: none;
+        text-align: center;
+        font-weight: 700;
+        transition: .2s;
+    }
+
+        .btn-back:hover {
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            text-decoration: none;
+        }
+
+    /* ========================================
+       RESPONSIVE
+    ======================================== */
+
+    @@media(max-width: 992px) {
+
+        .pedido-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .side-card {
+            position: relative;
+            top: 0;
+        }
+    }
+
+    @@media(max-width: 768px) {
+
+        .pedido-title {
+            font-size: 32px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .full-width {
+            grid-column: span 1;
+        }
+
+        .pedido-card,
+        .side-card {
+            padding: 24px;
+        }
+    }
+</style>
+
+
+<div class="pedido-page">
+
+    <div class="pedido-container">
+
+        <!-- HEADER -->
+        <div class="pedido-header">
+
+            <div class="pedido-badge">
+                <i class="bi bi-lightning-charge-fill"></i>
+                Viajes rápidos y seguros
+            </div>
+
+            <h1 class="pedido-title">
+                Solicita tu próximo viaje
+            </h1>
+
+            <p class="pedido-subtitle">
+                Completa la información del recorrido y encuentra un conductor disponible en segundos.
+            </p>
+
+        </div>
+
+
+        <div class="pedido-grid">
+
+            <!-- FORMULARIO -->
+            <div class="pedido-card">
+
+                <div class="card-title">
+
+                    <div class="card-title-icon">
+                        <i class="bi bi-car-front-fill"></i>
+                    </div>
+
+                    <div>
+                        <h3>Información del viaje</h3>
+                        <p>Configura tu trayecto y tarifa</p>
+                    </div>
+
+                </div>
+
+
+                @using (Html.BeginForm())
+                {
+                    <div class="form-grid">
+
+                        <!-- RUTA -->
+                        <div class="form-group-custom full-width">
+
+                            <label class="label-custom">
+                                Ruta del viaje
+                            </label>
+
+                            <div class="route-box">
+
+                                <div class="route-row">
+
+                                    <div class="route-visual">
+                                        <div class="route-dot dot-origin"></div>
+                                        <div class="route-line"></div>
+                                        <div class="route-dot dot-dest"></div>
+                                    </div>
+
+                                    <div class="route-fields">
+
+                                        <div class="form-group-custom">
+
+                                            <div class="input-wrapper">
+
+                                                <i class="bi bi-geo-alt input-icon"></i>
+
+                                                @Html.TextBoxFor(
+                                                    x => x.Origen,
+                                                    new
+                                                    {
+                                                        @class = "form-input",
+                                                        placeholder = "Punto de recogida"
+                                                    })
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <div class="form-group-custom mb-0">
+
+                                            <div class="input-wrapper">
+
+                                                <i class="bi bi-flag-fill input-icon"></i>
+
+                                                @Html.TextBoxFor(
+                                                    x => x.Destino,
+                                                    new
+                                                    {
+                                                        @class = "form-input",
+                                                        placeholder = "Destino del viaje"
+                                                    })
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group-custom full-width">
+
+                        <label class="label-custom">
+                            Mapa del recorrido
+                        </label>
+
+                        <div class="map-container">
+
+                            <iframe src="https://maps.google.com/maps?q=Valledupar&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                                    width="100"
+                                    height="350"
+                                    style="border:0; border-radius:18px;"
+                                    allowfullscreen>
+                            </iframe>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="actions mt-4">
+
+                        <button type="submit"
+                                class="btn-request">
+
+                            <i class="bi bi-check-circle-fill me-2"></i>
+
+                            Confirmar Pedido
+
+                        </button>
+
+                        <a href="/Pedido"
+                           class="btn-back">
+
+                            <i class="bi bi-arrow-left me-2"></i>
+
+                            Volver
+
+                        </a>
+
+                    </div>
+                }
+
+            </div>
+
+
+            <!-- SIDEBAR -->
+            <div class="side-card">
+
+                <div class="summary-top">
+
+                    <div class="summary-icon">
+                        <i class="bi bi-map"></i>
+                    </div>
+
+                    <h4>Tu viaje Kinetix</h4>
+
+                    <p>
+                        Disfruta viajes seguros,
+                        rápidos y cómodos.
+                    </p>
+
+                </div>
+
+
+                <div class="summary-list">
+
+                    <div class="summary-item">
+
+                        <div class="summary-item-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+
+                        <div>
+                            <h6>Conductores verificados</h6>
+                            <p>Todos los perfiles son validados</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <div class="summary-item-icon">
+                            <i class="bi bi-lightning-charge"></i>
+                        </div>
+
+                        <div>
+                            <h6>Respuesta rápida</h6>
+                            <p>Asignación inmediata del viaje</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <div class="summary-item-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+
+                        <div>
+                            <h6>Pagos seguros</h6>
+                            <p>Tarifas claras y protegidas</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="summary-item">
+
+                        <div class="summary-item-icon">
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+
+                        <div>
+                            <h6>Experiencia premium</h6>
+                            <p>Viaja cómodo con Kinetix</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

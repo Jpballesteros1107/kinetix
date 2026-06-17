@@ -1,38 +1,384 @@
 ﻿@model kinetix.Models.Factura
 
-<h2>Nueva Factura</h2>
-
-@using (Html.BeginForm())
-{
-    <div>
-        ID Pedido:
-        @Html.TextBoxFor(x => x.IdPedido)
-    </div>
-
-    <br />
-
-    <div>
-        Total:
-        @Html.TextBoxFor(x => x.Total)
-    </div>
-
-    <br />
-
-    <div>
-        Metodo Pago:
-        @Html.TextBoxFor(x => x.MetodoPago)
-    </div>
-
-    <br />
-
-    <div>
-        Estado:
-        @Html.TextBoxFor(x => x.Estado)
-    </div>
-
-    <br />
-
-    <button type="submit">
-        Guardar
-    </button>
+@{
+    ViewBag.Title = "Nueva Factura";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+
+<style>
+
+    .create-wrapper {
+        background: #0d0d0d;
+        min-height: 100vh;
+        padding: 40px 20px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .create-container {
+        max-width: 720px;
+        margin: auto;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    .create-header {
+        margin-bottom: 28px;
+    }
+
+        .create-header h1 {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .create-header p {
+            color: rgba(255,255,255,0.45);
+            margin: 0;
+            font-size: 14px;
+        }
+
+    /* =========================
+       CARD
+    ========================== */
+
+    .create-card {
+        background: #141414;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 24px;
+        padding: 36px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    /* =========================
+       FORM
+    ========================== */
+
+    .form-group-custom {
+        margin-bottom: 22px;
+    }
+
+    .label-custom {
+        display: block;
+        color: rgba(255,255,255,0.75);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        letter-spacing: 0.3px;
+    }
+
+    .input-wrapper {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255,255,255,0.25);
+        font-size: 15px;
+        pointer-events: none;
+    }
+
+    .form-input,
+    .form-select-custom {
+        width: 100%;
+        background: #1c1c1c;
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 14px 16px 14px 46px;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+        .form-select-custom option {
+            background: #1c1c1c;
+            color: #fff;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .form-input:focus,
+        .form-select-custom:focus {
+            border-color: #00c853;
+            box-shadow: 0 0 0 4px rgba(0,200,83,0.12);
+        }
+
+    /* =========================
+       BUTTONS
+    ========================== */
+
+    .actions {
+        display: flex;
+        gap: 14px;
+        margin-top: 32px;
+        flex-wrap: wrap;
+    }
+
+    .btn-save {
+        flex: 1;
+        background: #00c853;
+        border: none;
+        color: white;
+        border-radius: 16px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+        .btn-save:hover {
+            background: #00b248;
+            transform: translateY(-2px);
+        }
+
+    .btn-cancel {
+        flex: 1;
+        background: transparent;
+        border: 1px solid rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.8);
+        border-radius: 16px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-cancel:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            text-decoration: none;
+        }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+
+    @@media (max-width: 576px) {
+
+        .create-card {
+            padding: 26px 20px;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="create-wrapper">
+
+    <div class="create-container">
+
+        <!-- HEADER -->
+        <div class="create-header">
+
+            <h1>
+                Nueva Factura
+            </h1>
+
+            <p>
+                Registra una nueva factura en el sistema Kinetix.
+            </p>
+
+        </div>
+
+
+        <!-- CARD -->
+        <div class="create-card">
+
+            @using (Html.BeginForm())
+            {
+
+                <!-- ID PEDIDO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        ID del Pedido
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-receipt input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.IdPedido,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "Ingresa el ID del pedido"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Total de la Factura
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-cash-stack input-icon"></i>
+
+                        @Html.TextBoxFor(
+                            x => x.Total,
+                            new
+                            {
+                                @class = "form-input",
+                                placeholder = "Valor total"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- METODO PAGO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Método de Pago
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-credit-card-fill input-icon"></i>
+
+                        @Html.DropDownListFor(
+                            x => x.MetodoPago,
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem
+                                {
+                                    Text = "Efectivo",
+                                    Value = "Efectivo"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Tarjeta",
+                                    Value = "Tarjeta"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Transferencia",
+                                    Value = "Transferencia"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Nequi",
+                                    Value = "Nequi"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Daviplata",
+                                    Value = "Daviplata"
+                                }
+                            },
+                            "Selecciona un método",
+                            new
+                            {
+                                @class = "form-select-custom"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- ESTADO -->
+                <div class="form-group-custom">
+
+                    <label class="label-custom">
+                        Estado de la Factura
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <i class="bi bi-check-circle-fill input-icon"></i>
+
+                        @Html.DropDownListFor(
+                            x => x.Estado,
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem
+                                {
+                                    Text = "Pagada",
+                                    Value = "Pagada"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Pendiente",
+                                    Value = "Pendiente"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Cancelada",
+                                    Value = "Cancelada"
+                                }
+                            },
+                            "Selecciona un estado",
+                            new
+                            {
+                                @class = "form-select-custom"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOTONES -->
+                <div class="actions">
+
+                    <button type="submit"
+                            class="btn-save">
+
+                        <i class="bi bi-check-circle-fill me-2"></i>
+
+                        Guardar Factura
+
+                    </button>
+
+                    <a href="/Factura"
+                       class="btn-cancel">
+
+                        <i class="bi bi-arrow-left me-2"></i>
+
+                        Volver
+
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

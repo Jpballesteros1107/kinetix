@@ -1,96 +1,316 @@
 ﻿@model kinetix.Models.Usuario
 
-<div class="container">
+@{
+    ViewBag.Title = "Registro";
+}
 
-    <div class="row justify-content-center">
+<style>
 
-        <div class="col-md-5">
+    body {
+        background: #f4f7fb;
+    }
 
-            <div class="card p-4 mt-5 shadow">
+    .register-wrapper {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+    }
 
-                <h2 class="text-center">
-                    Registro Kinetix
-                </h2>
+    .register-card {
+        border: none;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        background: white;
+    }
 
-                <hr />
+    .register-left {
+        background: linear-gradient( 135deg, #000000, #111111, #1f1f1f );
+        color: white;
+        padding: 60px;
+        height: 100%;
+    }
 
-                @if (ViewBag.Error != null)
-                {
-                    <div class="alert alert-danger">
+        .register-left h1 {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
 
-                        @ViewBag.Error
+        .register-left p {
+            color: rgba(255,255,255,0.75);
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+    .feature-item {
+        margin-top: 30px;
+    }
+
+        .feature-item i {
+            font-size: 22px;
+            color: #00c853;
+            margin-right: 10px;
+        }
+
+    .register-right {
+        padding: 60px;
+    }
+
+    .form-title {
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .form-subtitle {
+        color: #6c757d;
+        margin-bottom: 35px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .form-control {
+        border-radius: 14px;
+        height: 55px;
+        border: 1px solid #dee2e6;
+        padding-left: 18px;
+        font-size: 15px;
+    }
+
+        .form-control:focus {
+            border-color: #00c853;
+            box-shadow: 0 0 0 0.15rem rgba(0,200,83,.15);
+        }
+
+    .btn-register {
+        background: #00c853;
+        border: none;
+        color: white;
+        height: 55px;
+        border-radius: 14px;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+        .btn-register:hover {
+            background: #00b248;
+            transform: translateY(-2px);
+        }
+
+    .login-link {
+        text-decoration: none;
+        color: #00c853;
+        font-weight: 600;
+    }
+
+        .login-link:hover {
+            color: #00a844;
+        }
+
+    @@media(max-width:991px) {
+
+        .register-left {
+            display: none;
+        }
+
+        .register-right {
+            padding: 40px 30px;
+        }
+    }
+</style>
+
+<div class="container register-wrapper">
+
+    <div class="row justify-content-center w-100">
+
+        <div class="col-xl-10">
+
+            <div class="card register-card">
+
+                <div class="row g-0">
+
+                    <!-- LADO IZQUIERDO -->
+                    <div class="col-lg-6">
+
+                        <div class="register-left d-flex flex-column justify-content-center">
+
+                            <h1>
+                                Únete a
+                                Kinetix
+                            </h1>
+
+                            <p>
+
+                                La nueva experiencia de movilidad
+                                urbana rápida, moderna y segura.
+
+                            </p>
+
+                            <div class="feature-item">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Viajes seguros y monitoreados
+
+                            </div>
+
+                            <div class="feature-item">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Conductores verificados
+
+                            </div>
+
+                            <div class="feature-item">
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Facturación y seguimiento en tiempo real
+
+                            </div>
+
+                            <div class="mt-5">
+
+                                <i class="bi bi-car-front-fill"
+                                   style="font-size:90px; color:#00c853;">
+                                </i>
+
+                            </div>
+
+                        </div>
 
                     </div>
-                }
 
-                @using (Html.BeginForm())
-                {
-                    <div class="mb-3">
 
-                        <label>
-                            Nombre
-                        </label>
+                    <!-- LADO DERECHO -->
+                    <div class="col-lg-6">
 
-                        @Html.TextBoxFor(
-                            x => x.Nombre,
-                            new
+                        <div class="register-right">
+
+                            <h2 class="form-title">
+
+                                Crear Cuenta
+
+                            </h2>
+
+                            <p class="form-subtitle">
+
+                                Completa tus datos para comenzar.
+
+                            </p>
+
+                            @if (ViewBag.Error != null)
                             {
-                                @class = "form-control"
-                            })
+                                <div class="alert alert-danger rounded-4">
 
-                    </div>
+                                    @ViewBag.Error
 
-                    <div class="mb-3">
+                                </div>
+                            }
 
-                        <label>
-                            Correo
-                        </label>
-
-                        @Html.TextBoxFor(
-                            x => x.Correo,
-                            new
+                            @using (Html.BeginForm())
                             {
-                                @class = "form-control"
-                            })
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Nombre Completo
+
+                                    </label>
+
+                                    @Html.TextBoxFor(
+                                        x => x.Nombre,
+                                        new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "Ingresa tu nombre"
+                                        })
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Correo Electrónico
+
+                                    </label>
+
+                                    @Html.TextBoxFor(
+                                        x => x.Correo,
+                                        new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "correo@ejemplo.com"
+                                        })
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Teléfono
+
+                                    </label>
+
+                                    @Html.TextBoxFor(
+                                        x => x.Telefono,
+                                        new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "3001234567"
+                                        })
+
+                                </div>
+
+                                <div class="mb-4">
+
+                                    <label class="form-label">
+
+                                        Contraseña
+
+                                    </label>
+
+                                    @Html.PasswordFor(
+                                        x => x.Password,
+                                        new
+                                        {
+                                            @class = "form-control",
+                                            placeholder = "********"
+                                        })
+
+                                </div>
+
+                                <button class="btn btn-register w-100">
+
+                                    Crear Cuenta
+
+                                </button>
+
+                                <div class="text-center mt-4">
+
+                                    ¿Ya tienes cuenta?
+
+                                    <a href="/Login"
+                                       class="login-link">
+
+                                        Inicia sesión
+
+                                    </a>
+
+                                </div>
+                            }
+
+                        </div>
 
                     </div>
 
-                    <div class="mb-3">
-
-                        <label>
-                            Teléfono
-                        </label>
-
-                        @Html.TextBoxFor(
-                            x => x.Telefono,
-                            new
-                            {
-                                @class = "form-control"
-                            })
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label>
-                            Contraseña
-                        </label>
-
-                        @Html.PasswordFor(
-                            x => x.Password,
-                            new
-                            {
-                                @class = "form-control"
-                            })
-
-                    </div>
-
-                    <button class="btn btn-dark w-100">
-
-                        Registrarse
-
-                    </button>
-                }
+                </div>
 
             </div>
 

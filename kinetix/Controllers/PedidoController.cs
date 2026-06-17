@@ -30,7 +30,7 @@ namespace kinetix.Controllers
                     FROM Pedidos p
                     INNER JOIN Usuarios u
                         ON p.IdUsuario = u.IdUsuario
-                    INNER JOIN Conductores c
+                    LEFT JOIN Conductores c
                         ON p.IdConductor = c.IdConductor
                     ",
                     cn);
@@ -46,9 +46,9 @@ namespace kinetix.Controllers
                         Convert.ToInt32(
                             dr["IdPedido"]);
 
-                    p.IdUsuario =
+                    int idUsuario =
                         Convert.ToInt32(
-                            dr["IdUsuario"]);
+                            Session["IdUsuario"]);
 
                     p.IdConductor =
                         Convert.ToInt32(
@@ -58,7 +58,9 @@ namespace kinetix.Controllers
                         dr["NombreUsuario"].ToString();
 
                     p.NombreConductor =
-                        dr["NombreConductor"].ToString();
+                        dr["NombreConductor"] == DBNull.Value
+                        ? "Sin asignar"
+                        : dr["NombreConductor"].ToString();
 
                     p.Origen =
                         dr["Origen"].ToString();
@@ -90,75 +92,11 @@ namespace kinetix.Controllers
         // =========================
         public ActionResult Create()
         {
-            using (SqlConnection cn =
-                Conexion.ObtenerConexion())
+            if (Session["IdUsuario"] == null)
             {
-                cn.Open();
-
-                // USUARIOS
-                SqlCommand usuariosCmd =
-                    new SqlCommand(
-                        "SELECT * FROM Usuarios",
-                        cn);
-
-                SqlDataReader usuariosDr =
-                    usuariosCmd.ExecuteReader();
-
-                List<SelectListItem> usuarios =
-                    new List<SelectListItem>();
-
-                while (usuariosDr.Read())
-                {
-                    usuarios.Add(
-                        new SelectListItem
-                        {
-                            Text =
-                                usuariosDr["Nombre"]
-                                .ToString(),
-
-                            Value =
-                                usuariosDr["IdUsuario"]
-                                .ToString()
-                        });
-                }
-
-                usuariosDr.Close();
-
-
-                // CONDUCTORES DISPONIBLES
-                SqlCommand conductoresCmd =
-                    new SqlCommand(
-                        @"SELECT *
-                        FROM Conductores
-                        WHERE Estado='Disponible'",
-                        cn);
-
-                SqlDataReader conductoresDr =
-                    conductoresCmd.ExecuteReader();
-
-                List<SelectListItem> conductores =
-                    new List<SelectListItem>();
-
-                while (conductoresDr.Read())
-                {
-                    conductores.Add(
-                        new SelectListItem
-                        {
-                            Text =
-                                conductoresDr["Nombre"]
-                                .ToString(),
-
-                            Value =
-                                conductoresDr["IdConductor"]
-                                .ToString()
-                        });
-                }
-
-                ViewBag.Usuarios =
-                    usuarios;
-
-                ViewBag.Conductores =
-                    conductores;
+                return RedirectToAction(
+                    "Index",
+                    "Login");
             }
 
             return View();
@@ -172,15 +110,15 @@ namespace kinetix.Controllers
         public ActionResult Create(Pedido p)
         {
             using (SqlConnection cn =
-                Conexion.ObtenerConexion())
+        Conexion.ObtenerConexion())
             {
                 cn.Open();
 
-                // CALCULO AUTOMATICO
-                Random r = new Random();
+                int idUsuario =
+                    Convert.ToInt32(
+                        Session["IdUsuario"]);
 
-                decimal valor =
-                    r.Next(8000, 50000);
+                decimal valor = 15000;
 
                 SqlCommand cmd =
                     new SqlCommand(
@@ -188,7 +126,6 @@ namespace kinetix.Controllers
                     INSERT INTO Pedidos
                     (
                         IdUsuario,
-                        IdConductor,
                         Origen,
                         Destino,
                         Estado,
@@ -198,7 +135,6 @@ namespace kinetix.Controllers
                     VALUES
                     (
                         @idu,
-                        @idc,
                         @ori,
                         @des,
                         'Pendiente',
@@ -210,11 +146,7 @@ namespace kinetix.Controllers
 
                 cmd.Parameters.AddWithValue(
                     "@idu",
-                    p.IdUsuario);
-
-                cmd.Parameters.AddWithValue(
-                    "@idc",
-                    p.IdConductor);
+                    idUsuario);
 
                 cmd.Parameters.AddWithValue(
                     "@ori",
@@ -235,13 +167,10 @@ namespace kinetix.Controllers
                 cmd.ExecuteNonQuery();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("MisViajes");
         }
 
-
-        // =========================
         // CAMBIAR ESTADO
-        // =========================
         [HttpPost]
         public ActionResult CambiarEstado(
             int id,
@@ -276,26 +205,48 @@ namespace kinetix.Controllers
                 // CONDUCTOR OCUPADO
                 if (estado == "Aceptado")
                 {
-                    SqlCommand ocupadoCmd =
+                    int idUsuario =
+                    Convert.ToInt32(
+                        Session["IdUsuario"]);
+
+                    SqlCommand conductorCmd =
+                        new SqlCommand(
+                        @"SELECT IdConductor
+                          FROM Conductores
+                          WHERE IdUsuario=@idu",
+                        cn);
+
+                    conductorCmd.Parameters
+                        .AddWithValue(
+                            "@idu",
+                            idUsuario);
+
+                    int idConductor =
+                        Convert.ToInt32(
+                            conductorCmd.ExecuteScalar());
+
+                    SqlCommand asignarCmd =
                         new SqlCommand(
                         @"
-                        UPDATE Conductores
-                        SET Estado='Ocupado'
-                        WHERE IdConductor=
-                        (
-                            SELECT IdConductor
-                            FROM Pedidos
-                            WHERE IdPedido=@id
-                        )
+                        UPDATE Pedidos
+                        SET
+                            Estado='Aceptado',
+                            IdConductor=@idc
+                        WHERE IdPedido=@id
                         ",
                         cn);
 
-                    ocupadoCmd.Parameters
+                    asignarCmd.Parameters
+                        .AddWithValue(
+                            "@idc",
+                            idConductor);
+
+                    asignarCmd.Parameters
                         .AddWithValue(
                             "@id",
                             id);
 
-                    ocupadoCmd.ExecuteNonQuery();
+                    asignarCmd.ExecuteNonQuery();
                 }
 
 
@@ -413,6 +364,115 @@ namespace kinetix.Controllers
             return RedirectToAction(
             "DashboardConductor",
             "Home");
+        }
+
+        public ActionResult MisViajes()
+        {
+            if (Session["Rol"] == null ||
+                Session["Rol"].ToString() != "Conductor")
+            {
+                return RedirectToAction(
+                    "Index",
+                    "Login");
+            }
+
+            List<Pedido> lista =
+                new List<Pedido>();
+
+            using (SqlConnection cn =
+                Conexion.ObtenerConexion())
+            {
+                cn.Open();
+
+                SqlCommand cmd =
+                    new SqlCommand(
+                    @"
+            SELECT
+                p.*,
+                u.Nombre AS NombreUsuario,
+                ISNULL(c.Nombre,'Sin asignar')
+                    AS NombreConductor
+            FROM Pedidos p
+            INNER JOIN Usuarios u
+                ON p.IdUsuario = u.IdUsuario
+            LEFT JOIN Conductores c
+                ON p.IdConductor = c.IdConductor
+            WHERE
+
+                (
+                    p.Estado = 'Pendiente'
+                    AND p.IdConductor IS NULL
+                )
+
+                OR
+
+                (
+                    p.IdConductor =
+                    (
+                        SELECT IdConductor
+                        FROM Conductores
+                        WHERE IdUsuario = @idu
+                    )
+                )
+
+            ORDER BY p.IdPedido DESC
+            ",
+                    cn);
+
+                cmd.Parameters.AddWithValue(
+                    "@idu",
+                    Session["IdUsuario"]);
+
+                SqlDataReader dr =
+                    cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    Pedido p =
+                        new Pedido();
+
+                    p.IdPedido =
+                        Convert.ToInt32(
+                            dr["IdPedido"]);
+
+                    p.IdUsuario =
+                        Convert.ToInt32(
+                            dr["IdUsuario"]);
+
+                    p.IdConductor =
+                        dr["IdConductor"] == DBNull.Value
+                        ? 0
+                        : Convert.ToInt32(
+                            dr["IdConductor"]);
+
+                    p.NombreUsuario =
+                        dr["NombreUsuario"].ToString();
+
+                    p.NombreConductor =
+                        dr["NombreConductor"].ToString();
+
+                    p.Origen =
+                        dr["Origen"].ToString();
+
+                    p.Destino =
+                        dr["Destino"].ToString();
+
+                    p.Estado =
+                        dr["Estado"].ToString();
+
+                    p.Valor =
+                        Convert.ToDecimal(
+                            dr["Valor"]);
+
+                    p.Fecha =
+                        Convert.ToDateTime(
+                            dr["Fecha"]);
+
+                    lista.Add(p);
+                }
+            }
+
+            return View(lista);
         }
     }
 }
